@@ -1,22 +1,32 @@
 {
-  "name": "config",
-  "version": "1.0.0",
-  "description": "nodejs的配置中心",
-  "main": "index.js",
-  "scripts": {
-    "dev": "node index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cuo9958/node-config.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cuo9958/node-config/issues"
-  },
-  "homepage": "https://github.com/cuo9958/node-config#readme",
-  "dependencies": {
-    "koa": "^2.6.2"
-  }
+    "name": "node_config",
+    "version": "1.0.0",
+    "description": "nodejs的配置中心",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cuo9958/node-config.git"
+    },
+    "author": "",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/cuo9958/node-config/issues"
+    },
+    "homepage": "https://github.com/cuo9958/node-config#readme",
+    "dependencies": {
+        "art-template": "^4.13.2",
+        "config": "^2.0.1",
+        "koa": "^2.6.2",
+        "koa-art-template": "^1.1.1",
+        "koa-body": "^4.0.4",
+        "koa-router": "^7.4.0",
+        "koa-static": "^5.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^1.18.6"
+    }
 }
