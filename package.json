@@ -1,0 +1,22 @@
+{
+  "name": "config",
+  "version": "1.0.0",
+  "description": "nodejs的配置中心",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cuo9958/node-config.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cuo9958/node-config/issues"
+  },
+  "homepage": "https://github.com/cuo9958/node-config#readme",
+  "dependencies": {
+    "koa": "^2.6.2"
+  }
+}
