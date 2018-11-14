@@ -21,11 +21,38 @@ nodejs的配置中心
 
 也可以使用pm2来启动，项目根目录下提供了一份启动配置。使用`pm2 start pm2.json`可以启动。
 
-### 配置
+### 使用配置管理界面
 
-1.打开当前ip加端口3000的网址：`127.0.0.1:3000`。这个端口是可以自己修改的。
-2.添加或者修改配置。
-3.已连接的客户端会自动更新最新的配置。
+1. 打开当前ip加端口3000的网址：`127.0.0.1:3000`。这个端口是可以自己修改的。
+2. 添加或者修改配置。
+3. 已连接的客户端会自动更新最新的配置。
+
+### 修改本地配置
+
+本地配置在`config/default.js`文件中，也可以根据当前的`NODE_ENV`创建一个对应的配置文件：`developement.js`等。
+
+修改配置让项目更合适你的需要。
+```javascript
+module.exports = {
+    //项目名称
+    name: "node-config",
+    //中心端口
+    port: 3000,
+    //调试
+    debug: true,
+    //返回对象
+    body: {},
+    //api的前缀
+    prefix: "",
+    //心跳检测的配置
+    heart: {
+        //端口
+        port: 8000,
+        //令牌
+        token: ""
+    }
+}
+```
 
 ## client
 
@@ -38,6 +65,22 @@ nodejs的配置中心
 const node_config = require("tcp-node-config");
 const Client = node_config.Client;
 const client = new Client({}, function () {
+    console.log("已连接")
+});
+```
+
+也可以使用自定义的配置启动客户端。
+```javascript
+const cfg={
+        //远程地址
+        host: "127.0.0.1",
+        //心跳服务端口
+        port: 8000,
+        //接口所在的端口
+        server_port: 3000,
+        //验证用到的令
+}
+const client = new Client(cfg, function () {
     console.log("已连接")
 });
 ```
