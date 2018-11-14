@@ -12,4 +12,8 @@ module.exports = {
     body: {},
     //api的前缀
     prefix: "",
+    //登录用到的用户名
+    user: "admin",
+    //登录用到的密码
+    pwd: "admin"
 }
