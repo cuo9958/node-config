@@ -15,5 +15,12 @@ module.exports = {
     //登录用到的用户名
     user: "admin",
     //登录用到的密码
-    pwd: "admin"
+    pwd: "admin",
+    //心跳检测的配置
+    heart: {
+        //端口
+        port: 8000,
+        //令牌
+        token: ""
+    }
 }

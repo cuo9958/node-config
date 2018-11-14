@@ -24,7 +24,8 @@
         "koa-art-template": "^1.1.1",
         "koa-body": "^4.0.4",
         "koa-router": "^7.4.0",
-        "koa-static": "^5.0.0"
+        "koa-static": "^5.0.0",
+        "uuid": "^3.3.2"
     },
     "devDependencies": {
         "nodemon": "^1.18.6"
