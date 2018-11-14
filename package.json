@@ -22,6 +22,7 @@
         "art-template": "^4.13.2",
         "axios": "^0.18.0",
         "config": "^2.0.1",
+        "json5": "^2.1.0",
         "koa": "^2.6.2",
         "koa-art-template": "^1.1.1",
         "koa-body": "^4.0.4",
