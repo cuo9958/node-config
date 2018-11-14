@@ -1,0 +1,7 @@
+.data/
+.vscode/
+config/
+node_modules/
+public/
+views/
+pm2.json

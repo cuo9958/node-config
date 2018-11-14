@@ -1,5 +1,5 @@
 {
-    "name": "node_config",
+    "name": "tcp-node-config",
     "version": "1.0.0",
     "description": "nodejs的配置中心",
     "main": "index.js",
@@ -12,7 +12,7 @@
         "type": "git",
         "url": "git+https://github.com/cuo9958/node-config.git"
     },
-    "author": "",
+    "author": "疯狂紫萧",
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/cuo9958/node-config/issues"

@@ -12,9 +12,14 @@ nodejs的配置中心
 
 ## server
 
+### 下载
+将项目下载本地。可以从github上下载。[下载地址](https://github.com/cuo9958/node-config/archive/master.zip)
+
 ### 启动
 
 `node lib/server.js`或者`npm run start`
+
+也可以使用pm2来启动，项目根目录下提供了一份启动配置。使用`pm2 start pm2.json`可以启动。
 
 ### 配置
 
@@ -24,10 +29,14 @@ nodejs的配置中心
 
 ## client
 
+执行`npm install --save tcp-node-config`引入客户端库。
+
 ### 启动
 
 客户端需要实例化，传入服务端的地址和创建成功的可执行方法。
 ```javascript
+const node_config = require("tcp-node-config");
+const Client = node_config.Client;
 const client = new Client({}, function () {
     console.log("已连接")
 });
@@ -46,13 +55,13 @@ let data = await client.config("def", "a")
 可以监听数据变化或者服务停止等方法。
 ```javascript
 //监听数据变化
-client.on("data", function (key, data) {
-    console.log(key, data)
+client.on("data", function (namespace,key) {
+    console.log(key)
 })
-client.on("end", function (key, data) {
+client.on("end", function () {
     console.log("结束")
 })
-client.on("error", function (key, data) {
+client.on("error", function (err) {
     console.log("错误")
 })
 
@@ -60,6 +69,7 @@ client.on("error", function (key, data) {
 
 ## 可期待的特性
 
-1.多级配置自由获取
-2.使用sql、nosql数据库保存信息
-3.更完善的权限管理
+1. 多级配置自由获取
+2. 使用sql、nosql数据库保存信息
+3. 更完善的权限管理
+4. 更好看的界面
