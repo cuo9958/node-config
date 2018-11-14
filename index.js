@@ -1,7 +1,7 @@
-const server = require("./lib/server");
-const client = require("./lib/client");
+const Server = require("./lib/server");
+const Client = require("./lib/client");
 
 module.exports = {
-    server,
-    client
+    Server,
+    Client
 }
