@@ -7,7 +7,7 @@ module.exports = {
     //中心端口
     port: 3000,
     //调试
-    debug: false,
+    debug: true,
     //返回对象
     body: {},
     //api的前缀

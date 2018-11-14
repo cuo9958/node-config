@@ -7,20 +7,105 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>配置中心</title>
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        htlm,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #main {
+            background: #f7f7f7;
+        }
+
+        #nav {
+            padding: 10px 10px 0 10px;
+            border-bottom: solid 1px #ccc;
+            display: flex;
+        }
+
+        #nav .item {
+            border: solid 1px #ccc;
+            border-bottom: none;
+            padding: 5px 10px 0 10px;
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 0 2px 1px rgba(0, 0, 0, .2) inset;
+        }
+
+        #nav .item.active {
+            background: green;
+            color: #fff;
+        }
+
+        #box {
+            padding: 5px;
+        }
+
+        #txt {
+            width: 500px;
+        }
+    </style>
 </head>
 
 <body>
-    <div>
-        配置列表
-        <div id="list">
-
+    <div id="main">
+        <div id="nav"></div>
+        <div id="box">
+            <p>
+                <input type="text" id="namespace" /><button id="add">添加</button>
+            </p>
+            <p>
+                <textarea id="txt" rows="10"></textarea>
+            </p>
+            <p>
+                <button id="save">保存</button>
+            </p>
         </div>
     </div>
     <script>
         $(function () {
+            var curr_space = "";
+            //加载
+            function load(namespae) {
+                curr_space = namespae;
+                $.get("/all/" + namespae, function (res) {
+                    $("#txt").val(res.data);
+                    $("#namespace").val(namespae);
+                })
+            }
+            //点击加载
+            $("#nav").on("click", ".item", function () {
+                $("#nav .item").removeClass("active");
+                $(this).addClass("active");
+                load($(this).text());
+            })
+            //添加
+            $("#add").click(function () {
+                var txt = $("#txt").val();
+                var namespace = $("#namespace").val();
+                $.post("/all/" + namespace, {
+                    txt: txt
+                }, function (res) {
+                    alert("保存成功")
+                })
+            });
+            //保存
+            $("#save").click(function () {
+                var txt = $("#txt").val();
+                $.post("/all/" + curr_space, {
+                    txt: txt
+                }, function (res) {
+                    alert("保存成功")
+                })
+            });
+            //初始化获取所有项
             $.get("/list", function (res) {
-                console.log(res);
-                $("#list").text(res.data);
+                res.data.forEach(function (txt) {
+                    $("#nav").append("<div class='item'>" + txt + "</div>");
+                });
+                curr_space = res.data[0];
+                $("#nav .item").eq(0).addClass("active");
+                load(res.data[0])
             })
         });
     </script>

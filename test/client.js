@@ -16,7 +16,7 @@ client.on("error", function (key, data) {
 
 async function test() {
     //获取配置对象
-    let data = await client.config("aa")
+    let data = await client.config("def")
     console.log(data)
 }
 
