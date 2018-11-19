@@ -44,7 +44,12 @@
         #txt {
             width: 500px;
         }
+        #err{
+            font-size: 12px;
+            color: #bb0000;
+        }
     </style>
+    <link rel="stylesheet" href="/css/jsonformter.css">
 </head>
 
 <body>
@@ -58,19 +63,35 @@
                 <textarea id="txt" rows="10"></textarea>
             </p>
             <p>
+                <div id='container'></div>
+            </p>
+            <p>
                 <button id="save">保存</button>
+            </p>
+            <p id="err">
+
             </p>
         </div>
     </div>
+
+    <script src="/js/jsonformter.js"></script>
     <script>
         $(function () {
             var curr_space = "";
             //加载
             function load(namespae) {
                 curr_space = namespae;
+                $("#err").text("");
                 $.get("/all/" + namespae, function (res) {
                     $("#txt").val(res.data);
                     $("#namespace").val(namespae);
+                    var options = {
+                        dom: '#container' //对应容器的css选择器
+                    };
+                    var jf = new JsonFormater(options); //创建对象
+                    jf.doFormat(res.data, function (msg) {
+                        $("#err").text(msg);
+                    }); //格式化json
                 })
             }
             //点击加载
