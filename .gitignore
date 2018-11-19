@@ -63,3 +63,5 @@ typings/
 .data/
 
 .vscode/
+
+package-lock.json
