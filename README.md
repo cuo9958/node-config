@@ -109,6 +109,21 @@ client.on("error", function (err) {
 })
 
 ```
+## 存储协议
+
+`init()`，存储库的初始化方法。在项目启动的时候会第一时间调用。
+
+`list()`，获取命名空间列表。这里使用命名空间区分不同的配置文件。这里默认使用`def`来保存第一个文件。
+
+`all(namespace = "def")`，获取对应命名空间下的配置内容。
+
+`update(namespace, txt)`，更新一个命名空间的所有配置。这里传入的是字符串，保存的也是字符串。
+
+`get(key, namespace = "def")`，获取对应命名空间下的某个字段的内容。这里需要警惕，配置不一定是json对象的。
+
+`set(key, val, namespace = "def")`，设置对应命名空间下的某个字段的值。
+
+`login(user, pwd)`，登录判断，目前返回true或者false就可以了。
 
 ## 可期待的特性
 
