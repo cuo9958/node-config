@@ -120,7 +120,7 @@
             $("#nav").on("click", ".item", function () {
                 $("#nav .item").removeClass("active");
                 $(this).addClass("active");
-                load($(this).text());
+                load($(this).text().replace("x", ""));
             })
             //添加
             $("#add").click(function () {
