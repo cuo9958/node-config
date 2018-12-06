@@ -36,6 +36,19 @@
             background: green;
             color: #fff;
         }
+        #nav .item .close{
+            display: inline-block;
+            width: 17px;
+            height: 17px;
+            line-height: 16px;
+            margin-left: 20px;
+            background: #bb0000;
+            text-align: center;
+            color: #fff;
+            border-radius: 50%;
+            font-style: normal;
+            cursor: pointer;
+        }
 
         #box {
             padding: 5px;
@@ -94,6 +107,15 @@
                     }); //格式化json
                 })
             }
+            
+            $("#nav").on("click", ".close", function () {
+                $("#nav .item").removeClass("active");
+                $(this).parent().remove();
+                $.ajax({
+                    url: "/" + $(this).parent().text().replace("x", ""),
+                    type: "DELETE"
+                });
+            })
             //点击加载
             $("#nav").on("click", ".item", function () {
                 $("#nav .item").removeClass("active");
@@ -122,7 +144,8 @@
             //初始化获取所有项
             $.get("/list", function (res) {
                 res.data.forEach(function (txt) {
-                    $("#nav").append("<div class='item'>" + txt + "</div>");
+                    $("#nav").append("<div class='item'>" + txt +
+                        "<i class='close'>x</i></div>");
                 });
                 curr_space = res.data[0];
                 $("#nav .item").eq(0).addClass("active");
