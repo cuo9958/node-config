@@ -63,6 +63,7 @@
         }
     </style>
     <link rel="stylesheet" href="/css/jsonformter.css">
+    <link rel="stylesheet" href="/plugin/css/layui.css" />
 </head>
 
 <body>
@@ -107,7 +108,7 @@
                     }); //格式化json
                 })
             }
-            
+
             $("#nav").on("click", ".close", function () {
                 $("#nav .item").removeClass("active");
                 $(this).parent().remove();
@@ -151,6 +152,16 @@
                 $("#nav .item").eq(0).addClass("active");
                 load(res.data[0])
             })
+        });
+    </script>
+
+    <script src="/plugin/layui.js"></script>
+    <script>
+        layui.use(['layer', 'form'], function () {
+            var layer = layui.layer,
+                form = layui.form;
+
+            layer.msg('Hello World');
         });
     </script>
 </body>
