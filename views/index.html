@@ -12,10 +12,7 @@
         body {
             margin: 0;
             padding: 0;
-        }
-
-        #main {
-            background: #f7f7f7;
+            background: #F0F0F0;
         }
 
         #nav {
@@ -64,30 +61,96 @@
     </style>
     <link rel="stylesheet" href="/css/jsonformter.css">
     <link rel="stylesheet" href="/plugin/css/layui.css" />
+    <style>
+        .nav{
+        background: #393D49;
+        height: 50px;
+    }
+    .logo{
+        color: #fff;
+        font-size: 24px;
+        height: 50px;
+        line-height: 50px;
+        margin-left: 10px;
+    }
+    .top_menu{
+        text-align: right;
+    }
+    .top_menu .layui-icon-set-sm{
+        color: #fff;
+        font-size: 20px;
+    }
+    .logout{
+        height: 50px;
+        line-height: 50px;
+        margin-right: 5px;
+        width: 50px;
+        float: right;
+        text-align: center;
+    }
+    .logout:hover{
+        box-shadow:0 0 6px 20px rgba(0, 0, 0, .2) inset;
+    }
+    .container_box{
+        display: flex;
+    }
+    .container{
+        padding: 10px;
+        margin-left: 200px;
+    }
+    </style>
 </head>
 
 <body>
-    <div id="main">
-        <div id="nav"></div>
-        <div id="box">
-            <p>
-                <input type="text" id="namespace" /><button id="add">添加</button>
-            </p>
-            <p>
-                <textarea id="txt" rows="10"></textarea>
-            </p>
-            <p>
-                <div id='container'></div>
-            </p>
-            <p>
-                <button id="save">保存</button>
-            </p>
-            <p id="err">
+    <div class="layui-fluid" style="padding:0">
+        <div class="layui-row nav">
+            <div class="layui-col-md3">
+                <div class="logo">
+                    Logo
+                </div>
+            </div>
+            <div class="layui-col-md9 top_menu">
+                <div class="logout">
+                    <i class="layui-icon layui-icon-set-sm"></i>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row container_box">
+            <div class="">
+                <ul class="layui-nav layui-nav-tree layui-nav-side" style="top:50px;">
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;">默认展开</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="">默认</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item"><a href="">产品</a></li>
+                </ul>
+            </div>
+            <div class="container">
+                <div id="main">
+                    <div id="nav"></div>
+                    <div id="box">
+                        <p>
+                            <input type="text" id="namespace" /><button id="add">添加</button>
+                        </p>
+                        <p>
+                            <textarea id="txt" rows="10"></textarea>
+                        </p>
+                        <p>
+                            <div id='container'></div>
+                        </p>
+                        <p>
+                            <button id="save">保存</button>
+                        </p>
+                        <p id="err">
 
-            </p>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
     <script src="/js/jsonformter.js"></script>
     <script>
         $(function () {
@@ -157,9 +220,7 @@
 
     <script src="/plugin/layui.js"></script>
     <script>
-        layui.use(['layer', 'form'], function () {
-            var layer = layui.layer,
-                form = layui.form;
+        layui.use(['layer', 'element'], function () {
 
         });
     </script>
