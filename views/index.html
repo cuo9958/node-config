@@ -33,7 +33,8 @@
             background: green;
             color: #fff;
         }
-        #nav .item .close{
+
+        #nav .item .close {
             display: inline-block;
             width: 17px;
             height: 17px;
@@ -54,7 +55,8 @@
         #txt {
             width: 500px;
         }
-        #err{
+
+        #err {
             font-size: 12px;
             color: #bb0000;
         }
@@ -62,42 +64,48 @@
     <link rel="stylesheet" href="/css/jsonformter.css">
     <link rel="stylesheet" href="/plugin/css/layui.css" />
     <style>
-        .nav{
-        background: #393D49;
-        height: 50px;
-    }
-    .logo{
-        color: #fff;
-        font-size: 24px;
-        height: 50px;
-        line-height: 50px;
-        margin-left: 10px;
-    }
-    .top_menu{
-        text-align: right;
-    }
-    .top_menu .layui-icon-set-sm{
-        color: #fff;
-        font-size: 20px;
-    }
-    .logout{
-        height: 50px;
-        line-height: 50px;
-        margin-right: 5px;
-        width: 50px;
-        float: right;
-        text-align: center;
-    }
-    .logout:hover{
-        box-shadow:0 0 6px 20px rgba(0, 0, 0, .2) inset;
-    }
-    .container_box{
-        display: flex;
-    }
-    .container{
-        padding: 10px;
-        margin-left: 200px;
-    }
+        .nav {
+            background: #393D49;
+            height: 50px;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 24px;
+            height: 50px;
+            line-height: 50px;
+            margin-left: 10px;
+        }
+
+        .top_menu {
+            text-align: right;
+        }
+
+        .top_menu .layui-icon-set-sm {
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .logout {
+            height: 50px;
+            line-height: 50px;
+            margin-right: 5px;
+            width: 50px;
+            float: right;
+            text-align: center;
+        }
+
+        .logout:hover {
+            box-shadow: 0 0 6px 20px rgba(0, 0, 0, .2) inset;
+        }
+
+        .container {
+            padding: 10px;
+        }
+
+        .project_tab {
+            background: #fff;
+        }
     </style>
 </head>
 
@@ -115,53 +123,70 @@
                 </div>
             </div>
         </div>
-        <div class="layui-row container_box">
-            <div class="">
-                <ul class="layui-nav layui-nav-tree layui-nav-side" style="top:50px;">
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a href="javascript:;">默认展开</a>
-                        <dl class="layui-nav-child">
-                            <dd><a href="">默认</a></dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item"><a href="">产品</a></li>
-                </ul>
+        <div class="container">
+            <!--[预留多环境]-->
+            <!--[多项目]-->
+            <div class="layui-col-md9">
+                <button class="layui-btn" id="btn_add">
+                    <i class="layui-icon">&#xe608;</i> 添加
+                </button>
+                <div class="layui-tab layui-tab-brief" lay-allowClose="true" lay-filter="project">
+                    <ul class="layui-tab-title project_tab"></ul>
+                    <!-- <div class="layui-tab-content">
+                    </div> -->
+                </div>
             </div>
-            <div class="container">
-                <div id="main">
-                    <div id="nav"></div>
-                    <div id="box">
-                        <p>
-                            <input type="text" id="namespace" /><button id="add">添加</button>
-                        </p>
-                        <p>
-                            <textarea id="txt" rows="10"></textarea>
-                        </p>
-                        <p>
-                            <div id='container'></div>
-                        </p>
-                        <p>
-                            <button id="save">保存</button>
-                        </p>
-                        <p id="err">
+            <div id="main">
+                <div id="box">
+                    <p>
+                        <textarea id="txt" rows="10" class="layui-textarea"></textarea>
+                    </p>
+                    <p>
+                        <div id='container'></div>
+                    </p>
+                    <p>
+                        <button class="layui-btn" id="save">
+                            <i class="layui-icon">&#x1005;</i> 保存
+                        </button>
+                    </p>
+                    <p id="err">
 
-                        </p>
-                    </div>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
     <script src="/js/jsonformter.js"></script>
+    <script src="/plugin/layui.js"></script>
     <script>
-        $(function () {
+        layui.use(['layer', 'element'], function () {
+            var element = layui.element;
+            var projects = [];
             var curr_space = "";
-            //加载
-            function load(namespae) {
-                curr_space = namespae;
-                $("#err").text("");
-                $.get("/all/" + namespae, function (res) {
+            //加载所有项目
+            $.get("/list", function (res) {
+                projects = res.data;
+                res.data.forEach((item, index) => {
+                    element.tabAdd('project', {
+                        title: item,
+                        content: '', //支持传入html
+                        id: 'tab_' + index,
+                    });
+                })
+                //切换选择第一个行
+                element.tabChange('project', 'tab_0');
+            });
+
+            //监听Tab切换
+            element.on('tab(project)', function () {
+                let index = this.getAttribute('lay-id').replace("tab_", "");
+                let data = projects[index * 1];
+                if (!data) return;
+                curr_space = data;
+                //TODO:
+                $.get("/all/" + data, function (res) {
+                    $("#err").text("");
                     $("#txt").val(res.data);
-                    $("#namespace").val(namespae);
                     var options = {
                         dom: '#container' //对应容器的css选择器
                     };
@@ -170,58 +195,47 @@
                         $("#err").text(msg);
                     }); //格式化json
                 })
-            }
-
-            $("#nav").on("click", ".close", function () {
-                $("#nav .item").removeClass("active");
-                $(this).parent().remove();
+            });
+            //删除监听 
+            element.on('tabDelete(project)', function (data) {
+                let index = $(this).parent().attr("lay-id").replace("tab_", "");
+                let data = projects[index * 1];
+                if (!data) return;
                 $.ajax({
-                    url: "/" + $(this).parent().text().replace("x", ""),
+                    url: "/" + data,
                     type: "DELETE"
                 });
-            })
-            //点击加载
-            $("#nav").on("click", ".item", function () {
-                $("#nav .item").removeClass("active");
-                $(this).addClass("active");
-                load($(this).text().replace("x", ""));
-            })
-            //添加
-            $("#add").click(function () {
-                var txt = $("#txt").val();
-                var namespace = $("#namespace").val();
-                $.post("/all/" + namespace, {
-                    txt: txt
-                }, function (res) {
-                    alert("保存成功")
-                })
             });
-            //保存
+
+            //添加新项目
+            $("#btn_add").click(function () {
+                layer.prompt({
+                    title: "请输入配置名"
+                }, function (value, index, elem) {
+                    element.tabAdd('project', {
+                        title: value,
+                        content: '', //支持传入html
+                        id: 'tab_' + projects.length,
+                    });
+                    projects.push(value)
+                    var txt = $("#txt").val();
+                    $.post("/all/" + value, {
+                        txt: txt
+                    }, function (res) {
+                        layer.msg("保存成功")
+                    })
+                    layer.close(index);
+                });
+            })
+            //保存当前结果
             $("#save").click(function () {
                 var txt = $("#txt").val();
                 $.post("/all/" + curr_space, {
                     txt: txt
                 }, function (res) {
-                    alert("保存成功")
+                    layer.msg("保存成功")
                 })
             });
-            //初始化获取所有项
-            $.get("/list", function (res) {
-                res.data.forEach(function (txt) {
-                    $("#nav").append("<div class='item'>" + txt +
-                        "<i class='close'>x</i></div>");
-                });
-                curr_space = res.data[0];
-                $("#nav .item").eq(0).addClass("active");
-                load(res.data[0])
-            })
-        });
-    </script>
-
-    <script src="/plugin/layui.js"></script>
-    <script>
-        layui.use(['layer', 'element'], function () {
-
         });
     </script>
 </body>
