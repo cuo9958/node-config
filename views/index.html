@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>配置中心</title>
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/jsonformter.css">
+    <link rel="stylesheet" href="/plugin/css/layui.css" />
     <style>
         htlm,
         body {
@@ -15,55 +17,11 @@
             background: #F0F0F0;
         }
 
-        #nav {
-            padding: 10px 10px 0 10px;
-            border-bottom: solid 1px #ccc;
-            display: flex;
-        }
-
-        #nav .item {
-            border: solid 1px #ccc;
-            border-bottom: none;
-            padding: 5px 10px 0 10px;
-            border-radius: 5px 5px 0 0;
-            box-shadow: 0 0 2px 1px rgba(0, 0, 0, .2) inset;
-        }
-
-        #nav .item.active {
-            background: green;
-            color: #fff;
-        }
-
-        #nav .item .close {
-            display: inline-block;
-            width: 17px;
-            height: 17px;
-            line-height: 16px;
-            margin-left: 20px;
-            background: #bb0000;
-            text-align: center;
-            color: #fff;
-            border-radius: 50%;
-            font-style: normal;
-            cursor: pointer;
-        }
-
-        #box {
-            padding: 5px;
-        }
-
-        #txt {
-            width: 500px;
-        }
-
         #err {
             font-size: 12px;
             color: #bb0000;
         }
-    </style>
-    <link rel="stylesheet" href="/css/jsonformter.css">
-    <link rel="stylesheet" href="/plugin/css/layui.css" />
-    <style>
+
         .nav {
             background: #393D49;
             height: 50px;
@@ -104,7 +62,22 @@
         }
 
         .project_tab {
+            border-bottom-style: none;
+        }
+
+        .project_tab li {
+            margin-right: 10px;
+            background: #dfdfdf;
+            padding: 0 0 0 15px;
+        }
+
+        .project_tab li.layui-this {
             background: #fff;
+        }
+
+        .project_tab li .layui-tab-close {
+            float: right;
+            color: #333;
         }
     </style>
 </head>
@@ -197,7 +170,7 @@
                 })
             });
             //删除监听 
-            element.on('tabDelete(project)', function (data) {
+            element.on('tabDelete(project)', function () {
                 let index = $(this).parent().attr("lay-id").replace("tab_", "");
                 let data = projects[index * 1];
                 if (!data) return;
