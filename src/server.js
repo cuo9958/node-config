@@ -8,6 +8,7 @@ const uuid = require("uuid");
 const cmd = require("./cmd");
 
 const def = {
+    run: true,
     port: 8080,
     timeout: 1000,
     token: "123456"
@@ -19,6 +20,9 @@ function createSocket(socket) {
         socket,
         uid: uuid.v4(),
         timer: null,
+        send: function (...args) {
+            socket.write(cmd.push(...args));
+        }
     }
     return client;
 }
@@ -34,7 +38,7 @@ class TcpServer {
         this.clients = new Map();
 
         //自启动
-        this.run();
+        if (this.opt.run) this.run();
     }
     //启动服务
     run() {
@@ -64,18 +68,21 @@ class TcpServer {
     onData(data, client) {
         //创建命令
         const ag = cmd.create(data);
-        //认证
-        if (ag.name === "auther" && ag.value === this.opt.token) {
-            clearTimeout(client.timer);
-            client.socket.write(cmd.push("ok", client.uid, "a|b"));
-        }
+        //执行命令
         if (this[ag.name]) this[ag.name].call(this, ag, client);
     }
-
-    test(d, client) {
-        console.log(d)
+    //鉴权
+    _auther(ag, client) {
+        if (ag.value === this.opt.token) {
+            clearTimeout(client.timer);
+            client.send("ok", client.uid);
+        } else {
+            client.send("fail", "鉴权失败");
+        }
     }
-
+    _test(ag, client) {
+        client.send("test")
+    }
 }
 
 const server = new TcpServer({
