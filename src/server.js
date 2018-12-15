@@ -1,13 +1,11 @@
 /**
  * 测试tcp服务
  * tcp管理客户端接入和消息传递
- * 模拟2次握手协议
+ * 模拟2次握手协议:connect=>auther=>ok
  */
 const net = require("net");
 const uuid = require("uuid");
 const cmd = require("./cmd");
-
-
 
 const def = {
     port: 8080,
@@ -55,6 +53,7 @@ class TcpServer {
             client.socket.end()
             client.socket.destroy()
             this.clients.delete(client.uid);
+            console.log("未认证连接")
         }, this.opt.timeout);
         //加入池管理
         this.clients.set(client.uid, client);
@@ -63,10 +62,18 @@ class TcpServer {
     }
     //收到消息
     onData(data, client) {
-        const str = data.toString();
-        if (str === "auther|" + this.opt.token) {
+        //创建命令
+        const ag = cmd.create(data);
+        //认证
+        if (ag.name === "auther" && ag.value === this.opt.token) {
             clearTimeout(client.timer);
+            client.socket.write(cmd.push("ok", client.uid, "a|b"));
         }
+        if (this[ag.name]) this[ag.name].call(this, ag, client);
+    }
+
+    test(d, client) {
+        console.log(d)
     }
 
 }
