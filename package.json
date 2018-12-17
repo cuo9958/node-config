@@ -6,7 +6,8 @@
     "scripts": {
         "start": "node index.js",
         "dev": "nodemon index.js",
-        "client": "node test/client.js"
+        "client": "node test/client.js",
+        "watch": "nodemon --watch 'ts/*' -e ts,tsx --exec 'ts-node' ./ts/index.ts"
     },
     "repository": {
         "type": "git",
@@ -28,6 +29,8 @@
         "koa-body": "^4.0.4",
         "koa-router": "^7.4.0",
         "koa-static": "^5.0.0",
+        "ts-node": "^7.0.1",
+        "typescript": "^3.2.2",
         "uuid": "^3.3.2"
     },
     "devDependencies": {
