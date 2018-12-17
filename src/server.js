@@ -1,90 +1,82 @@
 /**
- * 测试tcp服务
- * tcp管理客户端接入和消息传递
- * 模拟2次握手协议:connect=>auther=>ok
+ * 服务中心，提供对外访问的接口
+ * 1.初始化服务
+ * 2.读取本地配置
+ * 3.开启定时存入配置，根据状态决定是否执行
+ * 4.开启接口并渲染网站
+ * 5.开启socket，监听连入的客户端
+ * 6.接口有更新，改变状态并发送通知
+ * 7.？加入签名等验证条件
  */
-const net = require("net");
-const uuid = require("uuid");
-const cmd = require("./cmd");
+const Koa = require("koa");
+const config = require("config");
+const server = require("koa-static");
+const KoaBody = require("koa-body");
+const render = require("koa-art-template");
+const api = require("./api");
+const data = require("./data");
 
-const def = {
-    run: true,
-    port: 8080,
-    timeout: 1000,
-    token: "123456"
-}
+const app = new Koa();
+const root_path = process.cwd();
+const port = config.get("port") || 3000;
 
-//创建对象
-function createSocket(socket) {
-    const client = {
-        socket,
-        uid: uuid.v4(),
-        timer: null,
-        send: function (...args) {
-            socket.write(cmd.push(...args));
-        }
-    }
-    return client;
-}
+data.init();
+/**
+ * 设置模版引擎
+ */
+render(app, {
+    root: root_path + "/views",
+    extname: ".html",
+    debug: config.get("debug")
+});
+/**
+ * 静态资源
+ */
+app.use(server(root_path + "/public"));
+/**
+ * 处理返回对象
+ */
+app.use(KoaBody(config.get("body")));
 
-class TcpServer {
-    constructor(opt) {
-        //初始化默认数值
-        //添加配置
-        this.opt = Object.assign({}, def, opt);
-        //服务对象
-        this.server = null;
-        //客户端对象池
-        this.clients = new Map();
+app.use(function (ctx, next) {
+    console.log("访问：" + ctx.url);
+    next();
+});
+app.use(api.routes()).use(api.allowedMethods());
 
-        //自启动
-        if (this.opt.run) this.run();
-    }
-    //启动服务
-    run() {
-        //创建服务
-        const server = net.createServer(this.join.bind(this));
-        //开启监听
-        server.listen(this.opt.port);
-        this.server = server;
-    }
-    //客户端加入
-    join(socket) {
-        //创建包装对象
-        let client = createSocket(socket);
-        //提前创建失败任务
-        client.timer = setTimeout(() => {
-            client.socket.end()
-            client.socket.destroy()
-            this.clients.delete(client.uid);
-            console.log("未认证连接")
-        }, this.opt.timeout);
-        //加入池管理
-        this.clients.set(client.uid, client);
-        //添加数据监听
-        socket.on("data", data => this.onData(data, client));
-    }
-    //收到消息
-    onData(data, client) {
-        //创建命令
-        const ag = cmd.create(data);
-        //执行命令
-        if (this[ag.name]) this[ag.name].call(this, ag, client);
-    }
-    //鉴权
-    _auther(ag, client) {
-        if (ag.value === this.opt.token) {
-            clearTimeout(client.timer);
-            client.send("ok", client.uid);
-        } else {
-            client.send("fail", "鉴权失败");
-        }
-    }
-    _test(ag, client) {
-        client.send("test")
-    }
-}
-
-const server = new TcpServer({
-    port: 8080,
+/**
+ * 错误处理页
+ */
+app.use(async function (ctx) {
+    await ctx.render("err");
+});
+/**
+ * koa错误
+ */
+app.on('error', (err, ctx) => {
+    console.warn('server error', err, ctx)
+});
+/**
+ * 监听
+ */
+app.listen(port, function () {
+    console.log(config.get("name") + "已启动:" + port);
+});
+/**
+ * 快捷键停止
+ */
+process.on('SIGINT', function () {
+    process.exit();
+});
+/**
+ * 其他退出
+ */
+process.on('exit', (code) => {
+    console.log("app已停止:" + code)
+});
+/**
+ * 其他错误
+ */
+process.on('uncaughtException', (code) => {
+    console.log("app已停止:" + code)
 });

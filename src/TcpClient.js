@@ -21,7 +21,7 @@ const def = {
     token: "123456"
 }
 
-class Client {
+module.exports = class Client {
     constructor(opt) {
         //初始化默认数值
         //添加配置
@@ -39,7 +39,7 @@ class Client {
         //发送鉴权
         socket.on("connect", () => this.auther(client));
         //添加数据监听
-        socket.on("data", data => this.onData(data, client));
+        socket.on("data", this.onData.bind(this));
         //对象包装
         this.client = client;
     }
@@ -48,18 +48,18 @@ class Client {
         client.send("auther", this.opt.token);
     }
     //收到消息
-    onData(data, client) {
+    onData(data) {
         //创建命令
         const ag = cmd.create(data);
         //执行命令
-        if (this[ag.name]) this[ag.name].call(this, ag, client);
+        if (this[ag.name]) this[ag.name].call(this, ag);
     }
     //连接正常
-    _ok(ag, client) {
-        client.uid = ag.value;
-        client.send("test")
+    _ok(ag) {
+        this.client.uid = ag.value;
+    }
+    //重新活一次
+    leave() {
+        this.client.send("test")
     }
 }
-
-
-const client = new Client();

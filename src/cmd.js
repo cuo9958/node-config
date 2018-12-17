@@ -20,7 +20,12 @@ module.exports = {
     push() {
         let list = Array.prototype.splice.call(arguments, 0);
         //转化|
-        list = list.map(item => item.replace("|", "丨"));
+        list = list.map(item => {
+            if (item) {
+                item = item.replace("|", "丨")
+            }
+            return item;
+        });
         return list.join("|");
     }
 }
