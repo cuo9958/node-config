@@ -62,4 +62,8 @@ module.exports = class Client {
     leave() {
         this.client.send("test")
     }
+    //添加监听
+    on(key, fn) {
+        this.client.socket.on(key, fn);
+    }
 }

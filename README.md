@@ -80,9 +80,7 @@ const cfg={
         server_port: 3000,
         //验证用到的令
 }
-const client = new Client(cfg, function () {
-    console.log("已连接")
-});
+const client = Client(cfg);
 ```
 
 ### 使用

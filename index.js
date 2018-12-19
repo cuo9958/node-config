@@ -1,5 +1,5 @@
-const Server = require("./lib/server");
-const Client = require("./lib/client");
+const Server = require("./src/server");
+const Client = require("./src/client");
 
 module.exports = {
     Server,
