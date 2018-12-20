@@ -21,7 +21,7 @@ module.exports = {
         let list = Array.prototype.splice.call(arguments, 0);
         //转化|
         list = list.map(item => {
-            if (item) {
+            if (typeof (item) === "string") {
                 item = item.replace("|", "丨")
             }
             return item;

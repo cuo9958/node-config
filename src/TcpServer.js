@@ -84,16 +84,44 @@ class TcpServer {
             client.send("fail", "鉴权失败");
         }
     }
-    //给所有用户发消息
+    /**
+     * 给所有用户发消息
+     * @param  {...any} list 
+     */
     send(...list) {
         this.clients.forEach(client => client.send(...list))
     }
-    //给其他用户广播消息
-    sendEx(...list) {
-        const uid = list.pop();
+    /**
+     * 给其他用户广播消息
+     * @param  {...any} list 
+     */
+    sendEx(uid, ...list) {
         this.clients.forEach(client => {
             if (client.uid !== uid) client.send(...list);
         });
+    }
+    /**
+     * 给一个用户发送消息
+     * @param {*} uid 
+     * @param  {...any} list 
+     */
+    sendTo(uid, ...list) {
+        this.clients.forEach(client => {
+            if (client.uid === uid) client.send(...list);
+        });
+    }
+    /**
+     * 排除自己之外随即发送一个
+     * @param {*} uid 
+     * @param  {...any} list 
+     */
+    sendRandom(uid, ...list) {
+        let list = this.clients.keys();
+        list = list.filter(item => item != uid);
+        let key = list[Math.round(Math.random() * list.length)];
+        let client = this.clients.get(key);
+        if (!client) return;
+        client.send(...list);
     }
     //结束客户端连接
     end(uid) {

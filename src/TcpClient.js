@@ -21,6 +21,11 @@ const def = {
     token: "123456"
 }
 
+const mq_def = {
+    type: "single", //single,broadcast,all
+    data: "",
+}
+
 module.exports = class Client {
     constructor(opt) {
         //初始化默认数值
@@ -37,20 +42,21 @@ module.exports = class Client {
         const socket = net.connect(this.opt.port);
         let client = createClient(socket);
         //发送鉴权
-        socket.on("connect", () => this.auther(client));
+        socket.on("connect", this.auther.bind(this));
         //添加数据监听
         socket.on("data", this.onData.bind(this));
         //对象包装
         this.client = client;
     }
     //鉴权
-    auther(client) {
-        client.send("auther", this.opt.token);
+    auther() {
+        this.client.send("auther", this.opt.token);
     }
     //收到消息
     onData(data) {
         //创建命令
         const ag = cmd.create(data);
+        console.log(ag)
         //执行命令
         if (this[ag.name]) this[ag.name].call(this, ag);
     }
@@ -65,5 +71,20 @@ module.exports = class Client {
     //添加监听
     on(key, fn) {
         this.client.socket.on(key, fn);
+    }
+    /**
+     * 发送命令
+     * @param  {...any} list 
+     */
+    send(...list) {
+        this.client.send(...list);
+    }
+    /**
+     * 发送mq消息
+     * @param {*} opt 
+     */
+    send_mq(opt) {
+        let opts = Object.assign({}, mq_def, opt);
+        this.client.send("mq_" + opts.type, opts.data);
     }
 }

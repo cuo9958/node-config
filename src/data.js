@@ -68,6 +68,7 @@ setInterval(function () {
 }, 10000);
 
 module.exports = {
+    tcpServer,
     /**
      * 启动的时候初始化，读取所有本地存储文件
      */
