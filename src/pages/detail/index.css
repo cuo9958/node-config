@@ -1,0 +1,24 @@
+#config_detail {
+    margin: 20px 30px;
+    border: solid 1px #ccc;
+    padding: 20px 10px;
+}
+#config_detail .slider {
+    width: 80%;
+}
+#config_detail .tags {
+    margin-right: 10px;
+}
+#config_detail .remark {
+    color: #999;
+    font-size: 12px;
+}
+#config_detail .upload_box {
+    display: flex;
+}
+#config_detail .upload_box .upload_btn {
+    width: 360px;
+}
+#config_detail .upload_box .img_res {
+    width: 300px;
+}
