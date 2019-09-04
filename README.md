@@ -6,6 +6,8 @@
 4. 使用redis保存内容
 
 
+想继续研究socket消息，rpg方案的可以查看另外一个项目：https://github.com/cuo9958/node-socket
+
 ## 第一版本
 
 1. 第一个版本没有使用客户端和服务器通讯的模式
