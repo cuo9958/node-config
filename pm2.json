@@ -1,7 +1,7 @@
 {
     "apps": [{
         "name": "node-config",
-        "script": "lib/server.js",
+        "script": "server/index.js",
         "args": []
     }]
 }
