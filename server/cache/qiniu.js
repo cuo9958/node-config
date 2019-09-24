@@ -7,7 +7,7 @@ const qiniu_key = 'qiniu_token';
 
 module.exports = {
     async update() {
-        const old_token = Redis.get(qiniu_key);
+        const old_token = await Redis.get(qiniu_key);
         if (old_token) return old_token;
         const mac = new qiniu.auth.digest.Mac(
             qiniu_config.accessKey,
@@ -19,6 +19,7 @@ module.exports = {
         const putPolicy = new qiniu.rs.PutPolicy(options);
         const token = putPolicy.uploadToken(mac);
         Redis.set(qiniu_key, token, 'EX', 3480);
+        console.log('设置七牛的token', token);
         return token;
     },
     async uploadStream(filename, readableStream, prefix = '') {
