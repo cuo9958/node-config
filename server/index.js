@@ -3,6 +3,7 @@ const Router = require('koa-router');
 const KoaBody = require('koa-body');
 require('./cache/update');
 require('./schedule/clearEnd');
+require('./schedule/qiniuUpdate');
 
 const app = new Koa();
 const router = new Router();
