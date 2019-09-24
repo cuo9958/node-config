@@ -1,7 +1,13 @@
 {
-    "apps": [{
-        "name": "node-config",
-        "script": "server/index.js",
-        "args": []
-    }]
+    "apps": [
+        {
+            "name": "node-config",
+            "script": "server/index.js",
+            "args": [],
+            "env": {
+                "NODE_ENV": "development",
+                "PORT": "8200"
+            }
+        }
+    ]
 }
