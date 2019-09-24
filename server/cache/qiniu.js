@@ -8,7 +8,7 @@ const qiniu_key = 'qiniu_token';
 module.exports = {
     async update() {
         const old_token = Redis.get(qiniu_key);
-        if (old_token) return;
+        if (old_token) return old_token;
         const mac = new qiniu.auth.digest.Mac(
             qiniu_config.accessKey,
             qiniu_config.secretKey
@@ -19,6 +19,7 @@ module.exports = {
         const putPolicy = new qiniu.rs.PutPolicy(options);
         const token = putPolicy.uploadToken(mac);
         Redis.set(qiniu_key, token, 'EX', 3480);
+        return token;
     },
     async uploadStream(filename, readableStream, prefix = '') {
         const Qconfig = new qiniu.conf.Config();
@@ -54,7 +55,8 @@ module.exports = {
         Qconfig.zone = qiniu.zone.Zone_z0;
         const formUploader = new qiniu.form_up.FormUploader(Qconfig);
         const putExtra = new qiniu.form_up.PutExtra();
-        const token = await Redis.get(qiniu_key);
+        let token = await Redis.get(qiniu_key);
+        if (!token) token = await this.update();
         return new Promise((a, b) => {
             formUploader.put(token, prefix + filename, buff, putExtra, function(
                 respErr,
