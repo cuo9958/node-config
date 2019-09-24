@@ -1,7 +1,14 @@
-import React from "react";
-import { Button, Dialog, Table, Pagination, Notification } from "element-react";
-import "./index.css";
-import request from "../../services/request";
+import React from 'react';
+import {
+    Button,
+    Dialog,
+    Table,
+    Pagination,
+    Notification,
+    Tooltip
+} from 'element-react';
+import './index.css';
+import request from '../../services/request';
 
 interface iProps {}
 interface iState {
@@ -19,8 +26,8 @@ interface iState {
 }
 
 function replaceDate(time: string) {
-    if (!time) return "";
-    return time.replace("T", " ").replace(".000Z", "");
+    if (!time) return '';
+    return time.replace('T', ' ').replace('.000Z', '');
 }
 
 export default class extends React.Component<iProps, iState> {
@@ -30,9 +37,9 @@ export default class extends React.Component<iProps, iState> {
             cid: props.match.params.id,
             form: {
                 id: 0,
-                title: "",
-                key: "",
-                remark: ""
+                title: '',
+                key: '',
+                remark: ''
             },
             count: 0,
             columns: this.columns,
@@ -46,48 +53,62 @@ export default class extends React.Component<iProps, iState> {
      */
     columns = [
         {
-            label: "频道",
-            prop: "channel_title",
-            className: "list_small"
+            label: '频道',
+            width: 100,
+            prop: 'channel_title',
+            className: 'list_small'
         },
         {
-            label: "标题",
-            prop: "title",
+            label: '标题',
+            prop: 'title',
             width: 150,
-            className: "list_small"
+            className: 'list_small'
         },
         {
-            label: "key",
-            prop: "key",
+            label: 'key',
+            prop: 'key',
             width: 120,
-            className: "list_small"
+            className: 'list_small'
         },
         {
-            label: "value",
-            prop: "val",
-            width: 120,
-            className: "list_small"
+            label: 'value',
+            prop: 'val',
+            className: 'list_small',
+            render: function(row: any) {
+                if (row.key_type !== 'image') return row.val;
+                return (
+                    <div className="table_img_box">
+                        <Tooltip content={row.val}>
+                            <img
+                                alt={row.val}
+                                className="table_img"
+                                src={row.val}
+                            />
+                        </Tooltip>
+                    </div>
+                );
+            }
         },
         {
-            label: "操作人",
-            prop: "nickname",
-            width: 80,
-            className: "list_small"
+            label: '操作人',
+            prop: 'nickname',
+            width: 100,
+            className: 'list_small'
         },
         {
-            label: "修改日期",
-            prop: "nickname",
+            label: '修改日期',
+            prop: 'nickname',
             width: 180,
-            className: "list_small",
+            className: 'list_small',
             render: function(row: any) {
                 return <span>{replaceDate(row.updatedAt)}</span>;
             }
         },
         {
-            label: "配置类型",
-            prop: "state",
+            label: '配置类型',
+            prop: 'state',
             width: 100,
-            className: "list_small",
+            className: 'list_small',
             render: function(row: any) {
                 if (row.state === 0)
                     return <span className="used">普通配置</span>;
@@ -96,7 +117,7 @@ export default class extends React.Component<iProps, iState> {
             }
         },
         {
-            label: "操作",
+            label: '操作',
             width: 90,
             render: (row: any) => {
                 return (
@@ -117,7 +138,7 @@ export default class extends React.Component<iProps, iState> {
             <div id="config_list">
                 <div className="bundle_box">
                     <Table
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         rowClassName={this.rowClassName.bind(this)}
                         columns={this.state.columns}
                         data={this.state.list}
@@ -164,7 +185,7 @@ export default class extends React.Component<iProps, iState> {
     async loadData(pageIndex: number) {
         try {
             this.pageIndex = pageIndex;
-            let data = await request.get("/record", {
+            let data = await request.get('/record', {
                 cid: this.state.cid,
                 limit: pageIndex
             });
@@ -182,7 +203,7 @@ export default class extends React.Component<iProps, iState> {
      * @param index
      */
     rowClassName(row: any, index: number) {
-        return "";
+        return '';
     }
     /**
      * 点击跳转页面
@@ -197,11 +218,11 @@ export default class extends React.Component<iProps, iState> {
     }
     async BackSure() {
         try {
-            await request.post("/record/back/" + this.id);
+            await request.post('/record/back/' + this.id);
             this.loadData(this.pageIndex);
         } catch (error) {
             Notification.error({
-                message: error.msg
+                message: error.message
             });
         }
         this.id = 0;

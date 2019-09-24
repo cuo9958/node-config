@@ -1,9 +1,9 @@
-const Sequelize = require("sequelize");
-const db = require("../db/mysql");
+const Sequelize = require('sequelize');
+const db = require('../db/mysql');
 const Op = Sequelize.Op;
 
 const Configs = db.define(
-    "fe_config_configs",
+    'fe_config_configs',
     {
         id: {
             type: Sequelize.INTEGER,
@@ -13,70 +13,70 @@ const Configs = db.define(
         channel: {
             type: Sequelize.STRING(20),
             defaultValue: 900,
-            comment: "频道key"
+            comment: '频道key'
         },
         channel_title: {
             type: Sequelize.STRING(20),
             defaultValue: 900,
-            comment: "频道标题"
+            comment: '频道标题'
         },
         title: {
             type: Sequelize.STRING,
-            defaultValue: "",
-            comment: "标题"
+            defaultValue: '',
+            comment: '标题'
         },
         key: {
             type: Sequelize.STRING,
-            defaultValue: "",
-            comment: "key名称"
+            defaultValue: '',
+            comment: 'key名称'
         },
         key_type: {
             type: Sequelize.STRING(10),
-            defaultValue: "",
-            comment: "key类型"
+            defaultValue: '',
+            comment: 'key类型'
         },
         val: {
             type: Sequelize.STRING,
-            defaultValue: "",
-            comment: "val值"
+            defaultValue: '',
+            comment: 'val值'
         },
         json_data: {
             type: Sequelize.TEXT,
-            comment: "json对象的值"
+            comment: 'json对象的值'
         },
         result_data: {
             type: Sequelize.TEXT,
-            comment: "发布之后的组合值"
+            comment: '发布之后的组合值'
         },
         task_start_time: {
             type: Sequelize.BIGINT,
             defaultValue: 0,
-            comment: "开始日期"
+            comment: '开始日期'
         },
         task_end_time: {
             type: Sequelize.BIGINT,
             defaultValue: 0,
-            comment: "结束日期"
+            comment: '结束日期'
         },
         state: {
             type: Sequelize.TINYINT,
             defaultValue: 0,
-            comment: "类型"
+            comment: '类型'
         },
         remark: {
             type: Sequelize.STRING,
-            defaultValue: "",
-            comment: "备注"
+            defaultValue: '',
+            comment: '备注'
         },
         nickname: {
             type: Sequelize.STRING(50),
-            defaultValue: "",
-            comment: "操作人"
+            defaultValue: '',
+            comment: '操作人'
         },
         status: {
             type: Sequelize.TINYINT,
             defaultValue: 0,
-            comment: "状态;9:删除，0:编辑;1:发布;2:有更新"
+            comment: '状态;9:删除，0:编辑;1:发布;2:有更新'
         }
     },
     {
@@ -112,10 +112,10 @@ module.exports = {
     search(channel) {
         return Configs.findAll({
             attributes: [
-                "result_data",
-                "task_start_time",
-                "task_end_time",
-                "state"
+                'result_data',
+                'task_start_time',
+                'task_end_time',
+                'state'
             ],
             where: {
                 channel,
@@ -128,22 +128,22 @@ module.exports = {
             limit: 20,
             offset: (limit - 1) * 20,
             attributes: [
-                "id",
-                "channel",
-                "channel_title",
-                "title",
-                "key",
-                "key_type",
-                "val",
-                "json_data",
-                "task_start_time",
-                "task_end_time",
-                "state",
-                "nickname",
-                "status",
-                "updatedAt"
+                'id',
+                'channel',
+                'channel_title',
+                'title',
+                'key',
+                'key_type',
+                'val',
+                'json_data',
+                'task_start_time',
+                'task_end_time',
+                'state',
+                'nickname',
+                'status',
+                'updatedAt'
             ],
-            order: [["id", "desc"]]
+            order: [['id', 'desc']]
         };
         config.where = opts;
         if (status && !isNaN(status * 1)) {
@@ -192,5 +192,23 @@ module.exports = {
                 id
             }
         });
+    },
+    /**
+     * 清除昨天之前已经失效的定时器
+     */
+    clear: function() {
+        return Configs.update(
+            { status: 9 },
+            {
+                where: {
+                    status: 1,
+                    state: 1,
+                    task_end_time: {
+                        [Op.gt]: 1000,
+                        [Op.lt]: Date.now() - 86400000
+                    }
+                }
+            }
+        );
     }
 };

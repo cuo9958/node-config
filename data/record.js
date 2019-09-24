@@ -109,6 +109,7 @@ module.exports = {
                 "title",
                 "key",
                 "val",
+                "key_type",
                 "json_data",
                 "state",
                 "nickname",

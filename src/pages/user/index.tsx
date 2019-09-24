@@ -272,7 +272,7 @@ export default class extends React.Component<iProps, iState> {
             });
         } catch (error) {
             Notification.error({
-                message: error.msg
+                message: error.message
             });
         }
     }
@@ -293,7 +293,7 @@ export default class extends React.Component<iProps, iState> {
             });
         } catch (error) {
             Notification.error({
-                message: error.msg
+                message: error.message
             });
         }
     }

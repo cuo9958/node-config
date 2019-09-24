@@ -67,7 +67,7 @@ export default class extends React.Component<iProps, iState> {
         } catch (error) {
             console.log(error);
             Notification.error({
-                message: error.msg
+                message: error.message
             });
         }
     };

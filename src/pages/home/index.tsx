@@ -1,7 +1,7 @@
 /**
  * 首页
  */
-import React from "react";
+import React from 'react';
 import {
     Button,
     Form,
@@ -13,11 +13,11 @@ import {
     Notification,
     Dialog,
     Tooltip
-} from "element-react";
-import "./index.css";
+} from 'element-react';
+import './index.css';
 
-import request from "../../services/request";
-import { iRouter } from "../../ts/react";
+import request from '../../services/request';
+import { iRouter } from '../../ts/react';
 
 interface iProps {
     history: iRouter;
@@ -33,8 +33,8 @@ interface iState {
 }
 
 function replaceDate(time: string) {
-    if (!time) return "";
-    return time.replace("T", " ").replace(".000Z", "");
+    if (!time) return '';
+    return time.replace('T', ' ').replace('.000Z', '');
 }
 
 function getDayTime(task_start_time: number, task_end_time: number) {
@@ -71,45 +71,47 @@ export default class extends React.Component<iProps, iState> {
      */
     columns = [
         {
-            label: "频道",
-            prop: "channel_title",
-            width: 100,
-            className: "list_small"
+            label: '频道',
+            prop: 'channel_title',
+            width: 90,
+            className: 'list_small'
         },
         {
-            label: "标题",
-            prop: "title",
+            label: '标题',
+            prop: 'title',
             width: 150,
-            className: "list_small"
+            className: 'list_small'
         },
         {
-            label: "key",
-            prop: "key",
+            label: 'key',
+            prop: 'key',
             width: 120,
-            className: "list_small"
+            className: 'list_small'
         },
         {
-            label: "value",
-            prop: "val",
-            className: "list_small",
+            label: 'value',
+            prop: 'val',
+            className: 'list_small',
             render: function(row: any) {
-                if (row.key_type !== "image") return row.val;
+                if (row.key_type !== 'image') return row.val;
                 return (
-                    <Tooltip content={row.val}>
-                        <img
-                            alt={row.val}
-                            className="table_img"
-                            src={row.val}
-                        />
-                    </Tooltip>
+                    <div className="table_img_box">
+                        <Tooltip content={row.val}>
+                            <img
+                                alt={row.val}
+                                className="table_img"
+                                src={row.val}
+                            />
+                        </Tooltip>
+                    </div>
                 );
             }
         },
         {
-            label: "操作人",
-            prop: "nickname",
+            label: '操作人',
+            prop: 'nickname',
             width: 120,
-            className: "list_small",
+            className: 'list_small',
             render: function(row: any) {
                 return (
                     <div className="item_nickname">
@@ -120,10 +122,10 @@ export default class extends React.Component<iProps, iState> {
             }
         },
         {
-            label: "配置类型",
-            prop: "state",
+            label: '配置类型',
+            prop: 'state',
             width: 100,
-            className: "list_small",
+            className: 'list_small',
             render: (row: any) => {
                 if (row.state === 0)
                     return <span className="used">普通配置</span>;
@@ -132,10 +134,10 @@ export default class extends React.Component<iProps, iState> {
             }
         },
         {
-            label: "状态",
-            prop: "status",
+            label: '状态',
+            prop: 'status',
             width: 90,
-            className: "list_small",
+            className: 'list_small',
             render: function(row: any) {
                 if (row.status === 0)
                     return <span className="notUse">未使用</span>;
@@ -151,10 +153,10 @@ export default class extends React.Component<iProps, iState> {
             }
         },
         {
-            label: "操作",
-            prop: "address",
+            label: '操作',
+            prop: 'address',
             width: 300,
-            className: "list_small",
+            className: 'list_small',
             render: (row: any) => {
                 return (
                     <div>
@@ -206,7 +208,7 @@ export default class extends React.Component<iProps, iState> {
                         </Button.Group>
                         <Button.Group>
                             <Button
-                                style={{ marginLeft: "10px" }}
+                                style={{ marginLeft: '10px' }}
                                 type="info"
                                 size="small"
                                 icon="menu"
@@ -216,7 +218,7 @@ export default class extends React.Component<iProps, iState> {
                                 历史
                             </Button>
                             <a
-                                href={"/api_config/resource/" + row.channel}
+                                href={'/api_config/resource/' + row.channel}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
@@ -242,14 +244,14 @@ export default class extends React.Component<iProps, iState> {
                                     value={this.state.form.channel}
                                     onChange={this.onChange.bind(
                                         this,
-                                        "channel"
+                                        'channel'
                                     )}
                                     placeholder="频道"
                                 >
                                     <Select.Option label="所有" value="" />
                                     {this.state.channel_list.map(item => (
                                         <Select.Option
-                                            key={item.id + ""}
+                                            key={item.id + ''}
                                             label={item.title}
                                             value={item.key}
                                         >
@@ -265,7 +267,7 @@ export default class extends React.Component<iProps, iState> {
                                 <Input
                                     value={this.state.form.key}
                                     placeholder="key"
-                                    onChange={this.onChange.bind(this, "key")}
+                                    onChange={this.onChange.bind(this, 'key')}
                                 />
                             </Form.Item>
                             <Form.Item>
@@ -274,7 +276,7 @@ export default class extends React.Component<iProps, iState> {
                                     placeholder="操作人"
                                     onChange={this.onChange.bind(
                                         this,
-                                        "nickname"
+                                        'nickname'
                                     )}
                                 />
                             </Form.Item>
@@ -282,7 +284,7 @@ export default class extends React.Component<iProps, iState> {
                                 <Select
                                     value={this.state.form.state}
                                     placeholder="类型"
-                                    onChange={this.onChange.bind(this, "state")}
+                                    onChange={this.onChange.bind(this, 'state')}
                                 >
                                     <Select.Option label="所有类型" value="" />
                                     <Select.Option label="普通" value="0" />
@@ -295,7 +297,7 @@ export default class extends React.Component<iProps, iState> {
                                     placeholder="状态"
                                     onChange={this.onChange.bind(
                                         this,
-                                        "status"
+                                        'status'
                                     )}
                                 >
                                     <Select.Option label="全部" value="" />
@@ -316,7 +318,7 @@ export default class extends React.Component<iProps, iState> {
                 </Layout.Row>
                 <div className="bundle_box">
                     <Table
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         rowClassName={this.rowClassName.bind(this)}
                         columns={this.state.columns}
                         data={this.state.list}
@@ -366,9 +368,9 @@ export default class extends React.Component<iProps, iState> {
     }
     async getChannel() {
         try {
-            const list = await request.get("/channel/all");
+            const list = await request.get('/channel/all');
             this.setState({
-                channel_list: [{ id: 0, title: "公共", key: "_g" }, ...list]
+                channel_list: [{ id: 0, title: '公共', key: '_g' }, ...list]
             });
         } catch (error) {}
     }
@@ -377,7 +379,7 @@ export default class extends React.Component<iProps, iState> {
         try {
             this.pageindex = pageindex;
             let data = await request.get(
-                "/configs",
+                '/configs',
                 Object.assign({ limit: pageindex }, this.state.form)
             );
             this.setState({
@@ -387,7 +389,7 @@ export default class extends React.Component<iProps, iState> {
         } catch (error) {
             console.log(error);
             Notification.error({
-                message: error.msg
+                message: error.message
             });
         }
     }
@@ -405,11 +407,11 @@ export default class extends React.Component<iProps, iState> {
      * @param index
      */
     rowClassName(row: any, index: number) {
-        if (index === 1) return "info-row";
+        if (index === 1) return 'info-row';
         if (index === 3) {
-            return "positive-row";
+            return 'positive-row';
         }
-        return "";
+        return '';
     }
     /**
      * 点击跳转页面
@@ -418,14 +420,14 @@ export default class extends React.Component<iProps, iState> {
         this.getList(currentPage);
     };
     goRecord(row: any) {
-        this.props.history.push("/record/" + row.id);
+        this.props.history.push('/record/' + row.id);
     }
     goDetail(id: number) {
-        this.props.history.push("/edit/" + id);
+        this.props.history.push('/edit/' + id);
     }
     async delBundle(id: number) {
         try {
-            await request.post("/bundle/del/" + id);
+            await request.post('/bundle/del/' + id);
             this.getList(this.pageindex);
         } catch (error) {
             console.log(error);
@@ -436,7 +438,7 @@ export default class extends React.Component<iProps, iState> {
     }
     async pause(id: number) {
         try {
-            await request.post("/configs/pause/" + id);
+            await request.post('/configs/pause/' + id);
             this.getList(this.pageindex);
         } catch (error) {
             console.log(error);
@@ -452,7 +454,7 @@ export default class extends React.Component<iProps, iState> {
         this.setState({ dialogVisible: false });
         if (!this.state.publishData || !this.state.publishData.id) return;
         try {
-            await request.post("/configs/publish/" + this.state.publishData.id);
+            await request.post('/configs/publish/' + this.state.publishData.id);
             this.getList(this.pageindex);
             this.setState({ publishData: null });
         } catch (error) {

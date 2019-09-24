@@ -1,6 +1,6 @@
-const UserModel = require("../../data/user");
-const Redis = require("../../db/redis");
-const config = require("config");
+const UserModel = require('../../data/user');
+const Redis = require('../../db/redis');
+const config = require('config');
 
 module.exports = {
     async get(username) {
@@ -47,11 +47,12 @@ module.exports = {
         RECORD: 4
     },
     async check(username, key) {
-        if (username === config.get("login.username")) return true;
-        if (username === undefined) throw new Error("请登录");
+        if (username === config.get('login.username')) return true;
+        if (username === undefined) throw new Error('请登录');
         const model = await this.get(username);
-        const qlist = model.qlist.split(",");
-        if (qlist.includes(key + "")) return true;
-        throw new Error("你没有操作权限");
+        if (!model) throw new Error('操作用户不存在');
+        const qlist = model.qlist.split(',');
+        if (qlist.includes(key + '')) return true;
+        throw new Error('你没有操作权限');
     }
 };

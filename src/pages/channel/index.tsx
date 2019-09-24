@@ -70,7 +70,7 @@ export default class extends React.Component<iProps, iState> {
         {
             label: "创建人",
             prop: "nickname",
-            width: 80,
+            width: 100,
             className: "list_small"
         },
         {
@@ -86,6 +86,7 @@ export default class extends React.Component<iProps, iState> {
         },
         {
             label: "操作",
+            width: 200,
             render: (row: any) => {
                 return (
                     <Button.Group>
@@ -266,7 +267,7 @@ export default class extends React.Component<iProps, iState> {
             });
         } catch (error) {
             Notification.error({
-                message: error.msg
+                message: error.message
             });
         }
     }
@@ -287,7 +288,7 @@ export default class extends React.Component<iProps, iState> {
             });
         } catch (error) {
             Notification.error({
-                message: error.msg
+                message: error.message
             });
         }
     }
@@ -297,7 +298,7 @@ export default class extends React.Component<iProps, iState> {
             this.loadData(this.pageIndex);
         } catch (error) {
             Notification.error({
-                message: error.msg
+                message: error.message
             });
         }
     }

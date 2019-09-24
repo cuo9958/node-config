@@ -349,7 +349,7 @@ export default class extends React.Component<iProps, iState> {
                 message: "请填写一个标题"
             });
         }
-        if (!/^[a-zA-Z]{1}[a-z0-9\_]{2,}$/.test(this.state.form.key)) {
+        if (!/^[a-zA-Z]{1}[a-zA-Z0-9\_]{2,}$/.test(this.state.form.key)) {
             return Notification.error({
                 message: "key的名称不符合规范"
             });
@@ -366,7 +366,7 @@ export default class extends React.Component<iProps, iState> {
             });
         } catch (error) {
             Notification.error({
-                message: error.msg
+                message: error.message
             });
         }
     };
