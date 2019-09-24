@@ -24,6 +24,11 @@ const User = db.define(
             defaultValue: "",
             comment: "发布人"
         },
+        pwd: {
+            type: Sequelize.STRING,
+            defaultValue: "",
+            comment: "密码"
+        },
         status: {
             type: Sequelize.TINYINT,
             defaultValue: 0,

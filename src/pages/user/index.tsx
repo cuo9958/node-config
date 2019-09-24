@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
     Button,
     Form,
@@ -8,9 +8,9 @@ import {
     Checkbox,
     Pagination,
     Notification
-} from "element-react";
-import "./index.css";
-import request from "../../services/request";
+} from 'element-react';
+import './index.css';
+import request from '../../services/request';
 
 interface iProps {}
 interface iState {
@@ -18,6 +18,7 @@ interface iState {
         username: string;
         qlist: string;
         id: number;
+        pwd: string;
     };
     columns: Array<any>;
     list: Array<any>;
@@ -26,11 +27,11 @@ interface iState {
 }
 
 const qlist_emus = [
-    "添加配置",
-    "发布暂停配置",
-    "频道管理",
-    "用户管理",
-    "历史记录管理"
+    '添加配置',
+    '发布暂停配置',
+    '频道管理',
+    '用户管理',
+    '历史记录管理'
 ];
 
 export default class extends React.Component<iProps, iState> {
@@ -39,8 +40,9 @@ export default class extends React.Component<iProps, iState> {
         this.state = {
             form: {
                 id: 0,
-                username: "",
-                qlist: ""
+                username: '',
+                qlist: '',
+                pwd: ''
             },
             count: 0,
             columns: this.columns,
@@ -54,50 +56,50 @@ export default class extends React.Component<iProps, iState> {
      */
     columns = [
         {
-            label: "用户名",
-            prop: "username",
+            label: '用户名',
+            prop: 'username',
             width: 120,
-            className: "list_small"
+            className: 'list_small'
         },
         {
-            label: "权限",
-            prop: "qlist",
-            className: "list_small",
+            label: '权限',
+            prop: 'qlist',
+            className: 'list_small',
             render: function(row: any) {
                 const list: string[] = [];
-                row.qlist.split(",").forEach((item: string) => {
+                row.qlist.split(',').forEach((item: string) => {
                     if (item && item !== undefined) {
                         list.push(qlist_emus[parseInt(item)]);
                     }
                 });
-                return list.join(",");
+                return list.join(',');
             }
         },
         {
-            label: "最后一次登录日期",
-            prop: "updatedAt",
+            label: '最后一次登录日期',
+            prop: 'updatedAt',
             width: 200,
-            className: "list_small"
+            className: 'list_small'
         },
         {
-            label: "创建人",
-            prop: "nickname",
+            label: '创建人',
+            prop: 'nickname',
             width: 80,
-            className: "list_small"
+            className: 'list_small'
         },
         {
-            label: "状态",
-            prop: "status",
+            label: '状态',
+            prop: 'status',
             width: 70,
-            className: "list_small",
+            className: 'list_small',
             render: function(row: any) {
-                if (row.status === 1) return "启用";
-                if (row.status === 0) return "禁止";
-                return "";
+                if (row.status === 1) return '启用';
+                if (row.status === 0) return '禁止';
+                return '';
             }
         },
         {
-            label: "操作",
+            label: '操作',
             width: 170,
             render: (row: any) => {
                 return (
@@ -143,6 +145,13 @@ export default class extends React.Component<iProps, iState> {
                                 />
                             </Form.Item>
                             <Form.Item>
+                                <Input
+                                    value={this.state.form.pwd}
+                                    placeholder="密码"
+                                    onChange={(e: any) => this.setPwd(e)}
+                                />
+                            </Form.Item>
+                            <Form.Item>
                                 <Checkbox.Group
                                     value={this.state.check_list}
                                     onChange={(e: any) => this.setQlist(e)}
@@ -183,7 +192,7 @@ export default class extends React.Component<iProps, iState> {
                 </Layout.Row>
                 <div className="bundle_box">
                     <Table
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         rowClassName={this.rowClassName.bind(this)}
                         columns={this.state.columns}
                         data={this.state.list}
@@ -208,7 +217,7 @@ export default class extends React.Component<iProps, iState> {
     async loadData(pageIndex: number) {
         try {
             this.pageIndex = pageIndex;
-            let data = await request.get("/user/all", { limit: pageIndex });
+            let data = await request.get('/user/all', { limit: pageIndex });
             this.setState({
                 count: data.count,
                 list: data.rows
@@ -223,6 +232,11 @@ export default class extends React.Component<iProps, iState> {
         form.username = e;
         this.setState({ form });
     }
+    setPwd(e: string) {
+        const form = this.state.form;
+        form.pwd = e;
+        this.setState({ form });
+    }
     setQlist(e: string[]) {
         const list: number[] = [];
         e.forEach(item => {
@@ -230,7 +244,7 @@ export default class extends React.Component<iProps, iState> {
             list.push(index);
         });
         const form = this.state.form;
-        form.qlist = list.join(",");
+        form.qlist = list.join(',');
         this.setState({ form });
     }
     //=====================================
@@ -245,9 +259,9 @@ export default class extends React.Component<iProps, iState> {
      * @param index
      */
     rowClassName(row: any, index: number) {
-        if (row.status === 0) return "not_use";
-        if (row.status === 1) return "used";
-        return "";
+        if (row.status === 0) return 'not_use';
+        if (row.status === 1) return 'used';
+        return '';
     }
     /**
      * 点击跳转页面
@@ -257,18 +271,19 @@ export default class extends React.Component<iProps, iState> {
     };
     async addChannel() {
         try {
-            await request.post("/user/add", this.state.form);
+            await request.post('/user/add', this.state.form);
             this.setState({
                 form: {
                     id: 0,
-                    username: "",
-                    qlist: ""
+                    username: '',
+                    qlist: '',
+                    pwd: ''
                 },
                 check_list: []
             });
             this.loadData(this.pageIndex);
             Notification.success({
-                message: "添加成功"
+                message: '添加成功'
             });
         } catch (error) {
             Notification.error({
@@ -278,18 +293,19 @@ export default class extends React.Component<iProps, iState> {
     }
     async modifyChannel() {
         try {
-            await request.post("/user/add", this.state.form);
+            await request.post('/user/add', this.state.form);
             this.setState({
                 form: {
                     id: 0,
-                    username: "",
-                    qlist: ""
+                    username: '',
+                    qlist: '',
+                    pwd: ''
                 },
                 check_list: []
             });
             this.loadData(this.pageIndex);
             Notification.success({
-                message: "修改成功"
+                message: '修改成功'
             });
         } catch (error) {
             Notification.error({
@@ -299,7 +315,7 @@ export default class extends React.Component<iProps, iState> {
     }
     async changeStatus(id: number, status: number) {
         try {
-            await request.post("/user/change/" + id, { status });
+            await request.post('/user/change/' + id, { status });
             this.loadData(this.pageIndex);
         } catch (error) {
             //
@@ -308,15 +324,16 @@ export default class extends React.Component<iProps, iState> {
 
     modify(data: any) {
         const list: string[] = [];
-        data.qlist.split(",").forEach((item: string) => {
-            if (item && item !== "underfind")
+        data.qlist.split(',').forEach((item: string) => {
+            if (item && item !== 'underfind')
                 list.push(qlist_emus[parseInt(item)]);
         });
         this.setState({
             form: {
                 id: data.id,
                 username: data.username,
-                qlist: data.qlist
+                qlist: data.qlist,
+                pwd: data.pwd
             },
             check_list: list
         });
@@ -326,8 +343,9 @@ export default class extends React.Component<iProps, iState> {
         this.setState({
             form: {
                 id: 0,
-                username: "",
-                qlist: ""
+                username: '',
+                qlist: '',
+                pwd: ''
             },
             check_list: []
         });

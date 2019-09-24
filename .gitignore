@@ -67,3 +67,5 @@ typings/
 package-lock.json
 
 build/
+
+config/development.json
