@@ -1,19 +1,10 @@
-import React from "react";
-import {
-    Button,
-    Form,
-    Input,
-    Select,
-    Radio,
-    Notification,
-    DatePicker,
-    Upload
-} from "element-react";
+import React from 'react';
+import { Button, Form, Input, Select, Radio, Notification, DatePicker, Upload, Slider } from 'element-react';
 
-import "./index.css";
+import './index.css';
 
-import request from "../../services/request";
-import { iRouter } from "../../ts/react";
+import request from '../../services/request';
+import { iRouter } from '../../ts/react';
 
 interface iProps {
     match: any;
@@ -32,6 +23,7 @@ interface iDetail {
     task_start_time: number;
     task_end_time: number;
     remark: string;
+    proption: number;
 }
 interface iState {
     form: iDetail;
@@ -46,17 +38,18 @@ export default class extends React.Component<iProps, iState> {
         this.state = {
             form: {
                 id: 0,
-                title: "",
-                channel: "",
-                channel_title: "",
-                key: "",
-                key_type: "",
-                val: "",
-                json_data: "",
+                title: '',
+                channel: '',
+                channel_title: '',
+                key: '',
+                key_type: '',
+                val: '',
+                json_data: '',
                 state: 0,
                 task_start_time: 0,
                 task_end_time: 0,
-                remark: ""
+                remark: '',
+                proption: 0
             },
             channel_list: [],
             start_date: null,
@@ -71,18 +64,9 @@ export default class extends React.Component<iProps, iState> {
             <div id="config_detail">
                 <Form ref={e => (this.form = e)} labelPosition="right">
                     <Form.Item label="频道" labelWidth="100px">
-                        <Select
-                            size="small"
-                            value={this.state.form.channel}
-                            placeholder="频道"
-                            onChange={e => this.setChannel(e)}
-                        >
+                        <Select size="small" value={this.state.form.channel} placeholder="频道" onChange={e => this.setChannel(e)}>
                             {this.state.channel_list.map(item => (
-                                <Select.Option
-                                    key={item.id + ""}
-                                    label={item.title}
-                                    value={item.key}
-                                >
+                                <Select.Option key={item.id + ''} label={item.title} value={item.key}>
                                     <span>
                                         {item.title} &nbsp;
                                         <small>{item.key}</small>
@@ -94,26 +78,26 @@ export default class extends React.Component<iProps, iState> {
                     <Form.Item label="标题" labelWidth="100px">
                         <Input
                             size="small"
-                            style={{ width: "190px" }}
+                            style={{ width: '190px' }}
                             value={this.state.form.title}
                             placeholder="标题说明"
-                            onChange={e => this.onChange("title", e)}
+                            onChange={e => this.onChange('title', e)}
                         />
                     </Form.Item>
                     <Form.Item label="key名" labelWidth="100px">
                         <Input
                             size="small"
-                            style={{ width: "190px" }}
+                            style={{ width: '190px' }}
                             value={this.state.form.key}
                             placeholder="key名"
-                            onChange={e => this.onChange("key", e)}
+                            onChange={e => this.onChange('key', e)}
                         />
                         <Select
-                            style={{ marginLeft: "10px" }}
+                            style={{ marginLeft: '10px' }}
                             size="small"
                             value={this.state.form.key_type}
                             placeholder="key类型"
-                            onChange={e => this.onChange("key_type", e)}
+                            onChange={e => this.onChange('key_type', e)}
                         >
                             <Select.Option label="字符串" value="text" />
                             <Select.Option label="数字" value="number" />
@@ -122,32 +106,29 @@ export default class extends React.Component<iProps, iState> {
                             <Select.Option label="json" value="json" />
                         </Select>
                         &nbsp;
-                        <span className="remark">
-                            字母开始的包含字母数字和_的字符串，长度3-18位
-                        </span>
+                        <span className="remark">字母开始的包含字母数字和_的字符串，长度3-18位</span>
                     </Form.Item>
                     <Form.Item label="val" labelWidth="100px">
-                        {this.state.form.key_type !== "json" &&
-                            this.state.form.key_type !== "image" && (
-                                <Input
-                                    size="small"
-                                    style={{ width: "500px" }}
-                                    value={this.state.form.val}
-                                    placeholder="val"
-                                    onChange={e => this.onChange("val", e)}
-                                />
-                            )}
-                        {this.state.form.key_type === "json" && (
+                        {this.state.form.key_type !== 'json' && this.state.form.key_type !== 'image' && (
+                            <Input
+                                size="small"
+                                style={{ width: '500px' }}
+                                value={this.state.form.val}
+                                placeholder="val"
+                                onChange={e => this.onChange('val', e)}
+                            />
+                        )}
+                        {this.state.form.key_type === 'json' && (
                             <Input
                                 size="small"
                                 type="textarea"
-                                style={{ width: "500px" }}
+                                style={{ width: '500px' }}
                                 value={this.state.form.json_data}
                                 placeholder="val"
-                                onChange={e => this.onChange("val", e)}
+                                onChange={e => this.onChange('val', e)}
                             />
                         )}
-                        {this.state.form.key_type === "image" && (
+                        {this.state.form.key_type === 'image' && (
                             <div className="upload_box">
                                 <Upload
                                     className="upload_btn"
@@ -159,22 +140,14 @@ export default class extends React.Component<iProps, iState> {
                                     onSuccess={this.uploaded}
                                     onError={this.uploadErr}
                                     onProgress={this.uploadProgress}
-                                    tip={
-                                        <div className="el-upload__tip">
-                                            只能上传jpg/png文件，且不超过500kb
-                                        </div>
-                                    }
+                                    tip={<div className="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>}
                                 >
                                     <i className="el-icon-upload"></i>
                                     <div className="el-upload__text">
                                         将文件拖到此处，或<em>点击上传</em>
                                     </div>
                                 </Upload>
-                                <img
-                                    className="img_res"
-                                    src={this.state.form.val}
-                                    alt=""
-                                />
+                                <img className="img_res" src={this.state.form.val} alt="" />
                             </div>
                         )}
                     </Form.Item>
@@ -182,20 +155,18 @@ export default class extends React.Component<iProps, iState> {
                         <Input
                             size="small"
                             type="textarea"
-                            style={{ width: "500px" }}
+                            style={{ width: '500px' }}
                             value={this.state.form.remark}
                             rows={4}
                             placeholder="备注说明"
-                            onChange={e => this.onChange("remark", e)}
+                            onChange={e => this.onChange('remark', e)}
                         />
                     </Form.Item>
                     <Form.Item label="配置类型" labelWidth="100px">
-                        <Radio.Group
-                            value={this.state.form.state}
-                            onChange={(e: string) => this.setDetailState(e)}
-                        >
+                        <Radio.Group value={this.state.form.state} onChange={(e: string) => this.setDetailState(e)}>
                             <Radio value="0">普通配置</Radio>
                             <Radio value="1">定时任务</Radio>
+                            <Radio value="2">灰度配置</Radio>
                         </Radio.Group>
                     </Form.Item>
                     {this.state.form.state === 1 && (
@@ -208,7 +179,7 @@ export default class extends React.Component<iProps, iState> {
                                 onChange={date => this.setStartTime(date)}
                             />
                             <DatePicker
-                                style={{ marginLeft: "10px" }}
+                                style={{ marginLeft: '10px' }}
                                 value={this.state.end_date}
                                 format="yyyy-MM-dd HH:mm:ss"
                                 placeholder="选择失效日期"
@@ -217,10 +188,21 @@ export default class extends React.Component<iProps, iState> {
                             />
                         </Form.Item>
                     )}
-
+                    {this.state.form.state === 2 && (
+                        <Form.Item label="灰度比例" labelWidth="100px">
+                            <Slider
+                                className="slider"
+                                onChange={(val: string) => this.onChange('proption', val)}
+                                value={this.state.form.proption}
+                                step="5"
+                                showStops={true}
+                            ></Slider>
+                            <span>{this.state.form.proption}%</span>
+                        </Form.Item>
+                    )}
                     <Form.Item label="" labelWidth="100px">
                         <Button onClick={this.add} type="primary">
-                            {this.state.form.id > 0 ? "编辑" : "添加"}
+                            {this.state.form.id > 0 ? '编辑' : '添加'}
                         </Button>
                         <Button onClick={this.goback} type="primary">
                             返回
@@ -233,18 +215,16 @@ export default class extends React.Component<iProps, iState> {
 
     async componentDidMount() {
         try {
-            const data = await request.get("/channel/all");
+            const data = await request.get('/channel/all');
             this.setState({
-                channel_list: [{ id: 0, title: "公共", key: "_g" }, ...data]
+                channel_list: [{ id: 0, title: '公共', key: '_g' }, ...data]
             });
         } catch (error) {
             console.log(error);
         }
         if (this.props.match.params.id) {
             try {
-                const data = await request.get(
-                    "/configs/" + this.props.match.params.id
-                );
+                const data = await request.get('/configs/' + this.props.match.params.id);
 
                 this.setState({
                     start_date: new Date(data.task_start_time),
@@ -261,7 +241,8 @@ export default class extends React.Component<iProps, iState> {
                         state: data.state,
                         task_start_time: data.task_start_time,
                         task_end_time: data.task_end_time,
-                        remark: data.remark
+                        remark: data.remark,
+                        proption: data.proption || 0
                     }
                 });
             } catch (error) {
@@ -311,6 +292,9 @@ export default class extends React.Component<iProps, iState> {
             form: Object.assign({}, this.state.form, { [key]: value })
         });
     };
+    onSliderChange = (val: string) => {
+        console.log(val);
+    };
 
     handleClose = () => {};
 
@@ -321,8 +305,8 @@ export default class extends React.Component<iProps, iState> {
         console.log(event);
     };
     uploaded = (res: any, file: any, list: any) => {
-        if (res.status === "0" || res.status === 0) {
-            this.onChange("val", res.data);
+        if (res.status === '0' || res.status === 0) {
+            this.onChange('val', res.data);
         } else {
             Notification.error({
                 message: res.msg
@@ -331,7 +315,7 @@ export default class extends React.Component<iProps, iState> {
     };
     uploadErr = (err: any) => {
         Notification.error({
-            message: "图片上传失败"
+            message: '图片上传失败'
         });
     };
     /**
@@ -341,28 +325,28 @@ export default class extends React.Component<iProps, iState> {
         console.log(this.state.form);
         if (!this.state.form.channel) {
             return Notification.error({
-                message: "请选择一个频道"
+                message: '请选择一个频道'
             });
         }
         if (!this.state.form.title) {
             return Notification.error({
-                message: "请填写一个标题"
+                message: '请填写一个标题'
             });
         }
         if (!/^[a-zA-Z]{1}[a-zA-Z0-9\_]{2,}$/.test(this.state.form.key)) {
             return Notification.error({
-                message: "key的名称不符合规范"
+                message: 'key的名称不符合规范'
             });
         }
         if (this.state.form.task_start_time > this.state.form.task_end_time) {
             return Notification.error({
-                message: "开始时间大于结束时间"
+                message: '开始时间大于结束时间'
             });
         }
         try {
-            await request.post("/configs/add", this.state.form);
+            await request.post('/configs/add', this.state.form);
             Notification.success({
-                message: "编辑完成,发布即可生效"
+                message: '编辑完成,发布即可生效'
             });
         } catch (error) {
             Notification.error({

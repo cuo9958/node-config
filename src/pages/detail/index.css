@@ -22,3 +22,6 @@
 #config_detail .upload_box .img_res {
     width: 300px;
 }
+#config_detail .slider{
+    width: 80%;
+}

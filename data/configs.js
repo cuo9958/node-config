@@ -40,6 +40,11 @@ const Configs = db.define(
             defaultValue: '',
             comment: 'val值'
         },
+        proption: {
+            type: Sequelize.TINYINT(3),
+            defaultValue: 0,
+            comment: '百分比'
+        },
         json_data: {
             type: Sequelize.TEXT,
             comment: 'json对象的值'
@@ -111,12 +116,7 @@ module.exports = {
     },
     search(channel) {
         return Configs.findAll({
-            attributes: [
-                'result_data',
-                'task_start_time',
-                'task_end_time',
-                'state'
-            ],
+            attributes: ['result_data', 'task_start_time', 'task_end_time', 'state', 'proption'],
             where: {
                 channel,
                 [Op.or]: [{ status: 1 }, { status: 2 }]
@@ -135,6 +135,7 @@ module.exports = {
                 'key',
                 'key_type',
                 'val',
+                'proption',
                 'json_data',
                 'task_start_time',
                 'task_end_time',

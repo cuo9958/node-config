@@ -2,18 +2,7 @@
  * 首页
  */
 import React from 'react';
-import {
-    Button,
-    Form,
-    Input,
-    Select,
-    Layout,
-    Table,
-    Pagination,
-    Notification,
-    Dialog,
-    Tooltip
-} from 'element-react';
+import { Button, Form, Input, Select, Layout, Table, Pagination, Notification, Dialog, Tooltip } from 'element-react';
 import './index.css';
 
 import request from '../../services/request';
@@ -97,11 +86,7 @@ export default class extends React.Component<iProps, iState> {
                 return (
                     <div className="table_img_box">
                         <Tooltip content={row.val}>
-                            <img
-                                alt={row.val}
-                                className="table_img"
-                                src={row.val}
-                            />
+                            <img alt={row.val} className="table_img" src={row.val} />
                         </Tooltip>
                     </div>
                 );
@@ -127,10 +112,9 @@ export default class extends React.Component<iProps, iState> {
             width: 100,
             className: 'list_small',
             render: (row: any) => {
-                if (row.state === 0)
-                    return <span className="used">普通配置</span>;
-                if (row.state === 1)
-                    return <span className="task">定时任务 </span>;
+                if (row.state === 0) return <span className="used">普通配置</span>;
+                if (row.state === 1) return <span className="task">定时任务 </span>;
+                if (row.state === 2) return <span className="gray">灰度配置 </span>;
             }
         },
         {
@@ -139,8 +123,7 @@ export default class extends React.Component<iProps, iState> {
             width: 90,
             className: 'list_small',
             render: function(row: any) {
-                if (row.status === 0)
-                    return <span className="notUse">未使用</span>;
+                if (row.status === 0) return <span className="notUse">未使用</span>;
                 if (row.status === 1) {
                     if (row.state !== 1) {
                         return <span className="used">生效中</span>;
@@ -161,47 +144,26 @@ export default class extends React.Component<iProps, iState> {
                 return (
                     <div>
                         <Button.Group>
-                            <Button
-                                onClick={() => this.goDetail(row.id)}
-                                plain={true}
-                                type="info"
-                                size="small"
-                            >
+                            <Button onClick={() => this.goDetail(row.id)} plain={true} type="info" size="small">
                                 查看
                             </Button>
                             {row.status === 0 && (
-                                <Button
-                                    onClick={() => this.publish(row)}
-                                    type="info"
-                                    size="small"
-                                >
+                                <Button onClick={() => this.publish(row)} type="info" size="small">
                                     发布
                                 </Button>
                             )}
                             {row.status === 1 && (
-                                <Button
-                                    onClick={() => this.pause(row.id)}
-                                    type="success"
-                                    size="small"
-                                >
+                                <Button onClick={() => this.pause(row.id)} type="success" size="small">
                                     暂停
                                 </Button>
                             )}
                             {row.status === 2 && (
-                                <Button
-                                    onClick={() => this.pause(row.id)}
-                                    type="success"
-                                    size="small"
-                                >
+                                <Button onClick={() => this.pause(row.id)} type="success" size="small">
                                     暂停
                                 </Button>
                             )}
                             {row.status === 2 && (
-                                <Button
-                                    onClick={() => this.publish(row)}
-                                    type="info"
-                                    size="small"
-                                >
+                                <Button onClick={() => this.publish(row)} type="info" size="small">
                                     更新
                                 </Button>
                             )}
@@ -217,11 +179,7 @@ export default class extends React.Component<iProps, iState> {
                             >
                                 历史
                             </Button>
-                            <a
-                                href={'/api_config/resource/' + row.channel}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            <a href={'/api_config/resource/' + row.channel} target="_blank" rel="noopener noreferrer">
                                 <Button type="info" size="small" icon="share">
                                     预览
                                 </Button>
@@ -240,21 +198,10 @@ export default class extends React.Component<iProps, iState> {
                     <Layout.Col span="24">
                         <Form inline={true} model={this.state.form}>
                             <Form.Item>
-                                <Select
-                                    value={this.state.form.channel}
-                                    onChange={this.onChange.bind(
-                                        this,
-                                        'channel'
-                                    )}
-                                    placeholder="频道"
-                                >
+                                <Select value={this.state.form.channel} onChange={this.onChange.bind(this, 'channel')} placeholder="频道">
                                     <Select.Option label="所有" value="" />
                                     {this.state.channel_list.map(item => (
-                                        <Select.Option
-                                            key={item.id + ''}
-                                            label={item.title}
-                                            value={item.key}
-                                        >
+                                        <Select.Option key={item.id + ''} label={item.title} value={item.key}>
                                             <span>
                                                 {item.title} &nbsp;
                                                 <small>{item.key}</small>
@@ -264,52 +211,27 @@ export default class extends React.Component<iProps, iState> {
                                 </Select>
                             </Form.Item>
                             <Form.Item>
-                                <Input
-                                    value={this.state.form.key}
-                                    placeholder="key"
-                                    onChange={this.onChange.bind(this, 'key')}
-                                />
+                                <Input value={this.state.form.key} placeholder="key" onChange={this.onChange.bind(this, 'key')} />
                             </Form.Item>
                             <Form.Item>
-                                <Input
-                                    value={this.state.form.nickname}
-                                    placeholder="操作人"
-                                    onChange={this.onChange.bind(
-                                        this,
-                                        'nickname'
-                                    )}
-                                />
+                                <Input value={this.state.form.nickname} placeholder="操作人" onChange={this.onChange.bind(this, 'nickname')} />
                             </Form.Item>
                             <Form.Item>
-                                <Select
-                                    value={this.state.form.state}
-                                    placeholder="类型"
-                                    onChange={this.onChange.bind(this, 'state')}
-                                >
+                                <Select value={this.state.form.state} placeholder="类型" onChange={this.onChange.bind(this, 'state')}>
                                     <Select.Option label="所有类型" value="" />
                                     <Select.Option label="普通" value="0" />
                                     <Select.Option label="定时任务" value="1" />
                                 </Select>
                             </Form.Item>
                             <Form.Item>
-                                <Select
-                                    value={this.state.form.status}
-                                    placeholder="状态"
-                                    onChange={this.onChange.bind(
-                                        this,
-                                        'status'
-                                    )}
-                                >
+                                <Select value={this.state.form.status} placeholder="状态" onChange={this.onChange.bind(this, 'status')}>
                                     <Select.Option label="全部" value="" />
                                     <Select.Option label="未使用" value="0" />
                                     <Select.Option label="生效中" value="1" />
                                 </Select>
                             </Form.Item>
                             <Form.Item>
-                                <Button
-                                    onClick={() => this.searchData()}
-                                    type="primary"
-                                >
+                                <Button onClick={() => this.searchData()} type="primary">
                                     查询
                                 </Button>
                             </Form.Item>
@@ -326,34 +248,15 @@ export default class extends React.Component<iProps, iState> {
                     />
                 </div>
                 <div className="bundle_footer">
-                    <Pagination
-                        layout="prev, pager, next, total"
-                        total={this.state.total}
-                        pageSize={20}
-                        onCurrentChange={this.onCurrentChange}
-                    />
+                    <Pagination layout="prev, pager, next, total" total={this.state.total} pageSize={20} onCurrentChange={this.onCurrentChange} />
                 </div>
-                <Dialog
-                    title="提示"
-                    size="tiny"
-                    visible={this.state.dialogVisible}
-                    onCancel={() => this.setState({ dialogVisible: false })}
-                >
+                <Dialog title="提示" size="tiny" visible={this.state.dialogVisible} onCancel={() => this.setState({ dialogVisible: false })}>
                     <Dialog.Body>
                         <span>确定要发布这次更新到线上？</span>
                     </Dialog.Body>
                     <Dialog.Footer>
-                        <Button
-                            onClick={() =>
-                                this.setState({ dialogVisible: false })
-                            }
-                        >
-                            取消
-                        </Button>
-                        <Button
-                            type="primary"
-                            onClick={() => this.publishSure()}
-                        >
+                        <Button onClick={() => this.setState({ dialogVisible: false })}>取消</Button>
+                        <Button type="primary" onClick={() => this.publishSure()}>
                             确定
                         </Button>
                     </Dialog.Footer>
@@ -378,10 +281,7 @@ export default class extends React.Component<iProps, iState> {
     async getList(pageindex: number) {
         try {
             this.pageindex = pageindex;
-            let data = await request.get(
-                '/configs',
-                Object.assign({ limit: pageindex }, this.state.form)
-            );
+            let data = await request.get('/configs', Object.assign({ limit: pageindex }, this.state.form));
             this.setState({
                 total: data.count,
                 list: data.rows

@@ -47,6 +47,8 @@ router.post("/add", async function(ctx, next) {
     }
     const data = ctx.request.body;
     const nickname = decodeURIComponent(ctx.cookies.get("nickname"));
+    let proption = data.proption * 1;
+    if (isNaN(proption)) proption = 0;
     const model = {
         channel: data.channel,
         channel_title: data.channel_title,
@@ -54,6 +56,7 @@ router.post("/add", async function(ctx, next) {
         key: data.key,
         key_type: data.key_type || "text",
         val: data.val,
+        proption,
         json_data: data.json_data,
         task_start_time: data.task_start_time,
         task_end_time: data.task_end_time,
