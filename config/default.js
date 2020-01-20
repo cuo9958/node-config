@@ -35,5 +35,12 @@ module.exports = {
         scope: '',
         //域名前缀
         path: ''
+    },
+    //mq的配置
+    amq: {
+        hostname: '127.0.0.1',
+        username: 'daling',
+        password: 'daling',
+        vhost: '/fe_dev'
     }
 };
