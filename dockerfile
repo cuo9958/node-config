@@ -7,7 +7,8 @@ ADD . /app/
 #进入到app目录下面，类似cd
 WORKDIR /app
 #安装依赖
-RUN npm i
+RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
+RUN cnpm i
 #对外暴露的端口
 EXPOSE 8200
 #设置环境变量
