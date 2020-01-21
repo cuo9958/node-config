@@ -1,5 +1,5 @@
 #制定node镜像的版本
-FROM node:10.15.3-alpine
+FROM node:12.14.1
 #声明作者
 MAINTAINER guofangchao
 #移动当前目录下面的文件到app目录下
