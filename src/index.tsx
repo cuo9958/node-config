@@ -4,8 +4,8 @@ import { Provider } from "mobx-react";
 import { HashRouter } from "react-router-dom";
 
 import stores from "./models/index";
-import getRoutes from "./routes";
 import * as serviceWorker from "./serviceWorker";
+import Routes from './routes';
 import "./index.css";
 import "element-theme-default";
 
@@ -17,7 +17,9 @@ class App extends React.Component {
     render() {
         return (
             <Provider {...stores}>
-                <HashRouter ref="navigator">{getRoutes()}</HashRouter>
+                <HashRouter>
+                    <Routes />
+                </HashRouter>
             </Provider>
         );
     }

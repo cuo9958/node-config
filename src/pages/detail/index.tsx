@@ -4,7 +4,7 @@ import { Button, Form, Input, Select, Radio, Notification, DatePicker, Upload, S
 import './index.css';
 
 import request from '../../services/request';
-import { iRouter } from '../../ts/react';
+import { iRouter } from '../../../@types/react';
 
 interface iProps {
     match: any;

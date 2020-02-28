@@ -1,55 +1,74 @@
-import React, { Fragment } from "react";
-import { observer, inject } from "mobx-react";
-import { Link } from "react-router-dom";
-import { iRouter } from "../../ts/react";
-import pathToRegexp from "path-to-regexp";
+import React, { Fragment } from 'react';
+import { observer, inject } from 'mobx-react';
+import { Link } from 'react-router-dom';
+import Utils from '../../services/utils';
+import { iRouter } from '../../../@types/react';
+import url_configs from '../../routes/config';
 
-import { Menu, Layout } from "element-react";
-import "./index.css";
+import { Layout } from 'element-react';
+import './index.less';
 
-import Router_config from "../../routes/config";
-
-interface iProps {
-    demo_show: boolean;
+interface iProps extends iRouter {
     history: iRouter;
     location: any;
     nickname: string;
     isLogin(): boolean;
 }
+interface IState {
+    active: string;
+    layout: boolean;
+}
+
+function Menus(item: any, onSelect: any, active: string) {
+    if (item.hide) return;
+    return (
+        <div key={item.name} className={'menu_item' + (active === item.name ? ' active' : '')} onClick={() => onSelect(item.path)}>
+            {item.title}
+        </div>
+    );
+}
 
 @inject((models: any) => ({
-    demo_show: models.demo.show,
     isLogin: models.user.isLogin,
     nickname: models.user.nickname
 }))
 @observer
-export default class extends React.Component<iProps> {
+export default class extends React.Component<iProps, IState> {
+    constructor(props: any) {
+        super(props);
+        const curr = Utils.checkUrl(props.location.pathname);
+        this.state = {
+            active: curr.name,
+            layout: !curr.hideLayout
+        };
+    }
+
     render() {
-        if (this.props.location.pathname === "/login") {
-            return this.props.children;
-        }
-        const RouterPath = Router_config.find(item =>
-            pathToRegexp(item.path).test(this.props.location.pathname)
-        ) || { name: "" };
+        if (!this.state.layout) return this.props.children;
         return (
             <Fragment>
                 <div id="top_box">
                     <Link to="/">
-                        <div className="logo">达令家CPM</div>
+                        <div className="logo">
+                            <img src="https://img1.daling.com/zin/public/specialTopic/2020/01/13/15/09/16/AHGUXXR000004757459.png" alt="" />
+                            <div className="tit">
+                                FNCM<small>v2.0</small>
+                            </div>
+                        </div>
                     </Link>
-                    <Menu
-                        defaultActive={RouterPath.name}
-                        className="top_menu"
-                        mode="horizontal"
-                        onSelect={this.onSelect}
-                    >
-                        <Menu.SubMenu index="me" title={this.props.nickname}>
-                            <Menu.Item index="quit">退出</Menu.Item>
-                        </Menu.SubMenu>
-                        <Menu.Item index="channel">频道管理</Menu.Item>
-                        <Menu.Item index="detail">添加配置</Menu.Item>
-                        <Menu.Item index="home">发布列表</Menu.Item>
-                    </Menu>
+                    <div className="menus">
+                        {url_configs.map((item, index) => Menus(item, this.onSelect, this.state.active))}
+                        {this.props.isLogin && (
+                            <div onClick={this.quit} className="menu_item">
+                                退出
+                            </div>
+                        )}
+                        {!this.props.isLogin && (
+                            <div onClick={this.quit} className="menu_item">
+                                登录
+                            </div>
+                        )}
+                    </div>
                 </div>
                 <Layout.Row justify="center" type="flex">
                     <Layout.Col span="20" lg="20" md="24" sm="24" xs="24">
@@ -60,36 +79,19 @@ export default class extends React.Component<iProps> {
         );
     }
 
-    onSelect = (key: string) => {
-        if (key === "home") this.list();
-        if (key === "detail") this.editor();
-        if (key === "channel") this.goPage("/channel");
-        if (key === "user") this.goPage("/user");
-        if (key === "quit") this.quit();
-    };
+    componentWillReceiveProps(pp: any) {
+        const curr = Utils.checkUrl(pp.location.pathname);
+        // this.props.check();
+        this.setState({
+            active: curr.name,
+            layout: !curr.hideLayout
+        });
+    }
 
-    goPage(pathname: string) {
-        this.props.history.push(pathname);
-    }
-    /**
-     * 查看列表
-     */
-    list() {
-        this.props.history.push("/");
-    }
-    /**
-     * 新增
-     */
-    editor() {
-        this.props.history.push("/detail");
-    }
-    /**
-     * 用户管理
-     */
-    manger() {
-        console.log("go manger");
-    }
-    quit() {
-        this.props.history.push("/login");
-    }
+    onSelect = (index: string) => {
+        this.props.history.push(index);
+    };
+    quit = () => {
+        this.props.history.push('/login');
+    };
 }

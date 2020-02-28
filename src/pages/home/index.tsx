@@ -6,7 +6,7 @@ import { Button, Form, Input, Select, Layout, Table, Pagination, Notification, D
 import './index.css';
 
 import request from '../../services/request';
-import { iRouter } from '../../ts/react';
+import { iRouter } from '../../../@types/react';
 
 interface iProps {
     history: iRouter;

@@ -142,8 +142,7 @@ export default class extends React.Component<iProps, iState> {
                                 <Input
                                     value={this.state.form.remark}
                                     placeholder="备注说明"
-                                    style={{ width: "400px" }}
-                                    type="textarea"
+                                    style={{ width: "500px" }}
                                     onChange={(e: any) => this.setRemark(e)}
                                 />
                             </Form.Item>

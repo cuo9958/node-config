@@ -19,6 +19,10 @@
 
 想继续研究 socket 消息，rpg 方案的可以查看另外一个项目：https://github.com/cuo9958/node-socket
 
+## 示例展示
+
+![首页](https://github.com/cuo9958/node-config/raw/master/images/demo1.png)
+
 ## 第一版本 v1.0
 
 1. 第一个版本没有使用客户端和服务器通讯的模式

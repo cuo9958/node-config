@@ -1,0 +1,45 @@
+#top_box {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: #eef1f6;
+
+    .logo {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        background: #559acc;
+        height: 60px;
+
+        .tit {
+            color: #fff;
+            padding: 0 10px;
+            line-height: 60px;
+            font-size: 20px;
+
+            small {
+                font-size: 10px;
+                margin-left: 2px;
+            }
+        }
+        img {
+            height: 60px;
+        }
+    }
+    .menus {
+        margin-top: 10px;
+        display: flex;
+        height: 40px;
+        line-height: 40px;
+
+        .menu_item {
+            margin: 0 10px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #333;
+        }
+        .active {
+            border-bottom: solid 2px #559acc;
+        }
+    }
+}
