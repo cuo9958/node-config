@@ -4,7 +4,7 @@
     "scripts": {
         "start": "node scripts/start.js",
         "dev": "node scripts/start.js",
-        "server": "node server/index.js",
+        "server": "export NODE_ENV=development && node server/index.js",
         "build": "node scripts/build.js"
     },
     "dependencies": {
@@ -17,9 +17,6 @@
         "@types/react-dom": "16.9.0",
         "@typescript-eslint/eslint-plugin": "2.10.0",
         "@typescript-eslint/parser": "2.10.0",
-        "imagemin-gifsicle": "6.0.1",
-        "imagemin-jpegtran": "6.0.0",
-        "imagemin-optipng": "7.0.0",
         "axios": "0.19.2",
         "babel-eslint": "10.0.3",
         "babel-loader": "8.0.6",

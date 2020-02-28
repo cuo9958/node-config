@@ -16,7 +16,8 @@
     "login": {
         "username": "admin",
         "pwd": "admin123",
-        "token": "adw278vwfer7iere7ui"
+        "token": "adw278vwfer7iere7ui",
+        "headimg": ""
     },
     "pre_upload": "config_api2/",
     "qiniu": {

@@ -43,7 +43,7 @@ router.use('/api_config/test', test.routers);
 app.use(router.routes()).use(router.allowedMethods());
 
 app.on('error', (err, ctx) => console.error('server error', err));
-const port = process.env.PORT || '18062';
+const port = process.env.PORT || '8200';
 app.listen(port, function() {
     console.log(`服务器运行在http://127.0.0.1:${port}`);
 });

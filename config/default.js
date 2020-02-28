@@ -17,7 +17,8 @@ module.exports = {
     login: {
         username: 'admin',
         pwd: 'admin',
-        token: 'adw278vwfer7iere7ui'
+        token: 'adw278vwfer7iere7ui',
+        headimg: ''
     },
     //图片的路径前缀
     pre_upload: 'test/',

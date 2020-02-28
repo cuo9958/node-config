@@ -46,7 +46,6 @@ export default class extends React.Component<iProps> {
                         <Menu.SubMenu index="me" title={this.props.nickname}>
                             <Menu.Item index="quit">退出</Menu.Item>
                         </Menu.SubMenu>
-                        <Menu.Item index="user">用户管理</Menu.Item>
                         <Menu.Item index="channel">频道管理</Menu.Item>
                         <Menu.Item index="detail">添加配置</Menu.Item>
                         <Menu.Item index="home">发布列表</Menu.Item>

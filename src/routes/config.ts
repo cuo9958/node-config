@@ -1,7 +1,6 @@
 import Home from "../pages/home";
 import Detail from "../pages/detail";
 import Channel from "../pages/channel";
-import User from "../pages/user";
 import Login from "../pages/login";
 import Record from "../pages/record";
 import Test from "../pages/test";
@@ -27,11 +26,6 @@ export default [
         name: "channel",
         path: "/channel",
         component: Channel
-    },
-    {
-        name: "user",
-        path: "/user",
-        component: User
     },
     {
         name: "record",
