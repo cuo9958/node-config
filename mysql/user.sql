@@ -1,2 +1,0 @@
- CREATE TABLE IF NOT EXISTS `fe_config_user` (`id` INTEGER auto_increment , `username` VARCHAR(255) DEFAULT '' COMMENT '用户名', `qlist` VARCHAR(255) DEFAULT '' COMMENT '权限列表', `nickname` VARCHAR(255) DEFAULT '' COMMENT '发布人', `status` TINYINT DEFAULT 0 COMMENT '状态;0:失效;1:使用', `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;
-Executing (default): SHOW INDEX FROM `fe_config_user`
