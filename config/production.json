@@ -1,0 +1,31 @@
+{
+    "db": {
+        "master": {
+            "host": "127.0.0.1",
+            "user": "node_config_b",
+            "password": "iCECN5wbyi4fFE8A",
+            "database": "node_config_b",
+            "connectionLimit": 2
+        }
+    },
+    "redis": {
+        "host": "39.105.125.190",
+        "port": 6379,
+        "password": "zixiao521"
+    },
+    "auth": {
+        "group": "app_bundle"
+    },
+    "login": {
+        "username": "admin",
+        "pwd": "admin123",
+        "token": "adw278vwfer7iere7ui"
+    },
+    "pre_upload": "config_api2/",
+    "qiniu": {
+        "accessKey": "9P4ey5ob9BfDggWTDvVq9YmlU9Stz4hCFbuVxAVz",
+        "secretKey": "M9NRub-xBaDo2c3REWp1YOf4mZP4B6-AIIiqFatE",
+        "scope": "huocheju",
+        "path": "http://img.bxiaob.top"
+    }
+}
