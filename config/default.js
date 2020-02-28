@@ -33,7 +33,7 @@ module.exports = {
         //域名前缀
         path: ''
     },
-    //mq的配置
+    //mq的配置,单机情况下可以将值设置为false
     amq: {
         hostname: '127.0.0.1',
         username: 'daling',

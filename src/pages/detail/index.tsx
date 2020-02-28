@@ -305,7 +305,7 @@ export default class extends React.Component<iProps, iState> {
         if (!this.state.form.title) {
             return Message.error('请填写一个标题');
         }
-        if (!/^[a-zA-Z]{1}[a-zA-Z0-9\_]{2,}$/.test(this.state.form.key)) {
+        if (!/^[a-zA-Z]{1}[a-zA-Z0-9_]{2,}$/.test(this.state.form.key)) {
             return Message.error('key的名称不符合规范');
         }
         if (this.state.form.task_start_time > this.state.form.task_end_time) {

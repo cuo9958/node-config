@@ -10,7 +10,7 @@
 1. 下载项目：[https://github.com/cuo9958/node-config/archive/master.zip](https://github.com/cuo9958/node-config/archive/master.zip)
 2. 解压并安装依赖：`npm install`
 3. 创建自己的配置文件并修改对应的配置
-4. 启动项目,依赖pm2的可以修改pm2.json文件，依赖docker的可以修改docker文件
+4. 启动项目,依赖 pm2 的可以修改 pm2.json 文件，依赖 docker 的可以修改 docker 文件
 
 ## 版本 v1.1
 
@@ -37,8 +37,9 @@
 1. 修改新的模式
 2. 增加访客模式，用户名密码不再调用数据库，改用配置，后期增加用户鉴权的插件
 3. 图片压缩库需要梯子才能下载，下载内容位于 github 上面。目前暂时关闭
+4. 增加不使用 mq 的场景
 
-``` json
+```json
     // "imagemin-gifsicle": "6.0.1",
     // "imagemin-jpegtran": "6.0.0",
     // "imagemin-optipng": "7.0.0",
