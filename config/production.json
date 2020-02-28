@@ -13,9 +13,6 @@
         "port": 6379,
         "password": "zixiao521"
     },
-    "auth": {
-        "group": "app_bundle"
-    },
     "login": {
         "username": "admin",
         "pwd": "admin123",

@@ -1,0 +1,2 @@
+require('./clearEnd');
+require('./qiniuUpdate');

@@ -13,18 +13,14 @@ module.exports = {
     redis: 'redis://127.0.0.1:6379',
     //redis集群配置
     redisCluster: [],
-    //ladp账户的组
-    auth: {
-        group: 'app_bundle'
-    },
     //后门账户
     login: {
         username: 'admin',
         pwd: 'admin',
         token: 'adw278vwfer7iere7ui'
     },
-    //默认前缀，暂时无用
-    pre_upload: 'config_api/',
+    //图片的路径前缀
+    pre_upload: 'test/',
     //七牛的配置
     qiniu: {
         //key
