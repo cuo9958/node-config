@@ -2,8 +2,8 @@ const Router = require('koa-router');
 const ConfigsModel = require('../model/configs');
 const RecordModel = require('../model/record');
 const JSON5 = require('json5');
-const UserCache = require('../cache/user');
 const mq = require('../db/mq');
+const AuthMiddle = require('../middleware/auth');
 
 const router = new Router();
 
@@ -34,16 +34,7 @@ router.get('/', async function(ctx, next) {
     };
 });
 
-router.post('/add', async function(ctx, next) {
-    try {
-        const username = ctx.cookies.get('username');
-        await UserCache.check(username, UserCache.qlist.ADD_CONFIG);
-    } catch (error) {
-        return (ctx.body = {
-            status: 1,
-            msg: error.message
-        });
-    }
+router.post('/add', AuthMiddle, async function(ctx, next) {
     const data = ctx.request.body;
     const nickname = decodeURIComponent(ctx.cookies.get('nickname'));
     let proption = data.proption * 1;
@@ -76,16 +67,7 @@ router.post('/add', async function(ctx, next) {
     };
 });
 //发布
-router.post('/publish/:id', async function(ctx, next) {
-    try {
-        const username = ctx.cookies.get('username');
-        await UserCache.check(username, UserCache.qlist.PUB_CONFIG);
-    } catch (error) {
-        return (ctx.body = {
-            status: 1,
-            msg: error.message
-        });
-    }
+router.post('/publish/:id', AuthMiddle, async function(ctx, next) {
     const id = ctx.params.id;
 
     const model = await ConfigsModel.get(id);
@@ -138,16 +120,7 @@ router.post('/publish/:id', async function(ctx, next) {
         data: {}
     };
 });
-router.post('/pause/:id', async function(ctx, next) {
-    try {
-        const username = ctx.cookies.get('username');
-        await UserCache.check(username, UserCache.qlist.PUB_CONFIG);
-    } catch (error) {
-        return (ctx.body = {
-            status: 1,
-            msg: error.message
-        });
-    }
+router.post('/pause/:id', AuthMiddle, async function(ctx, next) {
     const id = ctx.params.id;
     await ConfigsModel.unUse(id);
 

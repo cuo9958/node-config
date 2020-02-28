@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, Select, Radio, Notification, DatePicker, Upload, Slider } from 'element-react';
+import { Button, Form, Input, Select, Radio, Message, Notification, DatePicker, Upload, Slider } from 'element-react';
 
 import './index.css';
 
@@ -76,29 +76,11 @@ export default class extends React.Component<iProps, iState> {
                         </Select>
                     </Form.Item>
                     <Form.Item label="标题" labelWidth="100px">
-                        <Input
-                            size="small"
-                            style={{ width: '190px' }}
-                            value={this.state.form.title}
-                            placeholder="标题说明"
-                            onChange={e => this.onChange('title', e)}
-                        />
+                        <Input size="small" style={{ width: '190px' }} value={this.state.form.title} placeholder="标题说明" onChange={e => this.onChange('title', e)} />
                     </Form.Item>
                     <Form.Item label="key名" labelWidth="100px">
-                        <Input
-                            size="small"
-                            style={{ width: '190px' }}
-                            value={this.state.form.key}
-                            placeholder="key名"
-                            onChange={e => this.onChange('key', e)}
-                        />
-                        <Select
-                            style={{ marginLeft: '10px' }}
-                            size="small"
-                            value={this.state.form.key_type}
-                            placeholder="key类型"
-                            onChange={e => this.onChange('key_type', e)}
-                        >
+                        <Input size="small" style={{ width: '190px' }} value={this.state.form.key} placeholder="key名" onChange={e => this.onChange('key', e)} />
+                        <Select style={{ marginLeft: '10px' }} size="small" value={this.state.form.key_type} placeholder="key类型" onChange={e => this.onChange('key_type', e)}>
                             <Select.Option label="字符串" value="text" />
                             <Select.Option label="数字" value="number" />
                             <Select.Option label="布尔" value="bool" />
@@ -110,13 +92,7 @@ export default class extends React.Component<iProps, iState> {
                     </Form.Item>
                     <Form.Item label="val" labelWidth="100px">
                         {this.state.form.key_type !== 'json' && this.state.form.key_type !== 'image' && (
-                            <Input
-                                size="small"
-                                style={{ width: '500px' }}
-                                value={this.state.form.val}
-                                placeholder="val"
-                                onChange={e => this.onChange('val', e)}
-                            />
+                            <Input size="small" style={{ width: '500px' }} value={this.state.form.val} placeholder="val" onChange={e => this.onChange('val', e)} />
                         )}
                         {this.state.form.key_type === 'json' && (
                             <Input
@@ -324,30 +300,20 @@ export default class extends React.Component<iProps, iState> {
     add = async () => {
         console.log(this.state.form);
         if (!this.state.form.channel) {
-            return Notification.error({
-                message: '请选择一个频道'
-            });
+            return Message.error('请选择一个频道');
         }
         if (!this.state.form.title) {
-            return Notification.error({
-                message: '请填写一个标题'
-            });
+            return Message.error('请填写一个标题');
         }
         if (!/^[a-zA-Z]{1}[a-zA-Z0-9\_]{2,}$/.test(this.state.form.key)) {
-            return Notification.error({
-                message: 'key的名称不符合规范'
-            });
+            return Message.error('key的名称不符合规范');
         }
         if (this.state.form.task_start_time > this.state.form.task_end_time) {
-            return Notification.error({
-                message: '开始时间大于结束时间'
-            });
+            return Message.error('开始时间大于结束时间');
         }
         try {
             await request.post('/configs/add', this.state.form);
-            Notification.success({
-                message: '编辑完成,发布即可生效'
-            });
+            return Message.success('编辑完成');
         } catch (error) {
             Notification.error({
                 message: error.message

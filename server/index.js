@@ -24,21 +24,19 @@ app.use(async (ctx, next) => {
     }
 });
 
-const test = require('./api/index');
-const user = require('./api/user');
+const user = require('./api/index');
 const channel = require('./api/channel');
-const configs = require('./api/configs');
 const record = require('./api/record');
 const resource = require('./api/resource');
 const imgs = require('./api/imgs');
+const configs = require('./api/configs');
 
-router.use('/api_config/user', user.routers);
 router.use('/api_config/channel', channel.routers);
-router.use('/api_config/configs', configs.routers);
 router.use('/api_config/record', record.routers);
 router.use('/api_config/resource', resource.routers);
 router.use('/api_config/imgs', imgs.routers);
-router.use('/api_config/test', test.routers);
+router.use('/api_config/user', user.routers);
+router.use('/api_config/configs', configs.routers);
 
 app.use(router.routes()).use(router.allowedMethods());
 

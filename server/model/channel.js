@@ -1,8 +1,8 @@
-const Sequelize = require("sequelize");
-const db = require("../db/mysql");
+const Sequelize = require('sequelize');
+const db = require('../db/mysql');
 
 const Channel = db.define(
-    "fe_config_channel",
+    'fe_config_channel',
     {
         id: {
             type: Sequelize.INTEGER,
@@ -11,28 +11,28 @@ const Channel = db.define(
         },
         title: {
             type: Sequelize.STRING,
-            defaultValue: "",
-            comment: "标题"
+            defaultValue: '',
+            comment: '标题'
         },
         key: {
             type: Sequelize.STRING(20),
-            defaultValue: "",
-            comment: "key值"
+            defaultValue: '',
+            comment: 'key值'
         },
         remark: {
             type: Sequelize.STRING,
-            defaultValue: "",
-            comment: "备注"
+            defaultValue: '',
+            comment: '备注'
         },
         nickname: {
             type: Sequelize.STRING,
-            defaultValue: "",
-            comment: "发布人"
+            defaultValue: '',
+            comment: '发布人'
         },
         status: {
             type: Sequelize.TINYINT,
             defaultValue: 0,
-            comment: "状态;0:失效;1:使用"
+            comment: '状态;0:失效;1:使用'
         }
     },
     {
@@ -66,14 +66,14 @@ module.exports = {
             where: {
                 status: 1
             },
-            attributes: ["id", "title", "key"]
+            attributes: ['id', 'title', 'key']
         });
     },
     getCount(limit = 1, opts = {}) {
         let config = {
             limit: 20,
             offset: (limit - 1) * 20,
-            order: [["status", "desc"], ["id", "desc"]]
+            order: [['id', 'desc']]
         };
         return Channel.findAndCountAll(config);
     },

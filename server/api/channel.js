@@ -1,10 +1,10 @@
-const Router = require("koa-router");
-const ChannelModel = require("../model/channel");
-const UserCache = require("../cache/user");
+const Router = require('koa-router');
+const ChannelModel = require('../model/channel');
+const AuthMiddle = require('../middleware/auth');
 
 const router = new Router();
 
-router.get("/", async function(ctx, next) {
+router.get('/', async function(ctx, next) {
     const limit = ctx.query.limit;
     const data = await ChannelModel.getCount(limit);
 
@@ -14,7 +14,7 @@ router.get("/", async function(ctx, next) {
     };
 });
 
-router.get("/all", async function(ctx, next) {
+router.get('/all', async function(ctx, next) {
     const data = await ChannelModel.getAll();
     ctx.body = {
         status: 0,
@@ -22,41 +22,31 @@ router.get("/all", async function(ctx, next) {
     };
 });
 
-router.post("/", async function(ctx, next) {
-    try {
-        const username = ctx.cookies.get("username");
-        await UserCache.check(username, UserCache.qlist.CHANNEL);
-    } catch (error) {
-        return (ctx.body = {
-            status: 1,
-            msg: error.message
-        });
-    }
-
-    const { id = 0, title, key, remark = "" } = ctx.request.body;
-    if (!ctx.cookies.get("token")) {
+router.post('/', AuthMiddle, async function(ctx, next) {
+    const { id = 0, title, key, remark = '' } = ctx.request.body;
+    if (!ctx.cookies.get('token')) {
         ctx.body = {
             status: 1,
-            msg: "请登录"
+            msg: '请登录'
         };
         return;
     }
     if (!title) {
         ctx.body = {
             status: 1,
-            msg: "请填写标题"
+            msg: '请填写标题'
         };
         return;
     }
     if (!key) {
         ctx.body = {
             status: 1,
-            msg: "请填写key"
+            msg: '请填写key'
         };
         return;
     }
     try {
-        const nickname = decodeURIComponent(ctx.cookies.get("nickname"));
+        const nickname = decodeURIComponent(ctx.cookies.get('nickname'));
         if (id > 0) {
             await ChannelModel.update({ id, title, key, remark, nickname });
         } else {
@@ -74,29 +64,20 @@ router.post("/", async function(ctx, next) {
     }
 });
 
-router.post("/change/:id", async function(ctx, next) {
-    try {
-        const username = ctx.cookies.get("username");
-        await UserCache.check(username, UserCache.qlist.CHANNEL);
-    } catch (error) {
-        return (ctx.body = {
-            status: 1,
-            msg: error.message
-        });
-    }
+router.post('/change/:id', AuthMiddle, async function(ctx, next) {
     const { id } = ctx.params;
     const { status } = ctx.request.body;
     if (!status) {
         ctx.body = {
             status: 1,
-            msg: "状态有错"
+            msg: '状态有错'
         };
         return;
     }
-    if (!ctx.cookies.get("token")) {
+    if (!ctx.cookies.get('token')) {
         ctx.body = {
             status: 1,
-            msg: "请登录"
+            msg: '请登录'
         };
         return;
     }

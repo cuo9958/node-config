@@ -8,7 +8,6 @@ const HealthcheckPath = path.resolve(__dirname, '../../healthcheck.html');
 
 router.get('/', async function(ctx, next) {
     const data = await SearchCache.search();
-
     ctx.body = {
         status: 0,
         data

@@ -2,6 +2,7 @@ const config = require('config');
 
 const pre_upload = config.get('pre_upload');
 const Qiniu = require('../cache/qiniu');
+const AuthMiddle = require('../middleware/auth');
 
 const Router = require('koa-router');
 const fs = require('fs');
@@ -15,7 +16,7 @@ const fs = require('fs');
 
 const router = new Router();
 
-router.post('/upload', async function(ctx, next) {
+router.post('/upload', AuthMiddle, async function(ctx, next) {
     const file = ctx.request.files.file;
     if (!file) {
         return (ctx.body = {
