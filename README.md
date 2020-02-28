@@ -5,12 +5,19 @@
 3. 使用数据库保存内容
 4. 使用 redis 保存内容
 
-想继续研究 socket 消息，rpg 方案的可以查看另外一个项目：https://github.com/cuo9958/node-socket
+## 使用方式
+
+1. 下载项目：[https://github.com/cuo9958/node-config/archive/master.zip](https://github.com/cuo9958/node-config/archive/master.zip)
+2. 解压并安装依赖：`npm install`
+3. 创建自己的配置文件并修改对应的配置
+4. 启动项目,依赖pm2的可以修改pm2.json文件，依赖docker的可以修改docker文件
 
 ## 版本 v1.1
 
 1. 添加灰度配置
 2. 根据用户的 head 中的 clientid 和 uid 做灰度
+
+想继续研究 socket 消息，rpg 方案的可以查看另外一个项目：https://github.com/cuo9958/node-socket
 
 ## 第一版本 v1.0
 
