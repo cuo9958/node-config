@@ -1,5 +1,7 @@
 # 全新的 nodejs 开发的轻量级配置中心
 
+![星星数](https://img.shields.io/github/stars/cuo9958/node-config?style=social)
+
 1. 全新改版，使用到的技术全部替换
 2. 新的客户端和服务端通讯方式
 3. 使用数据库保存内容
