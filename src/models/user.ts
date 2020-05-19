@@ -19,13 +19,15 @@ class User {
         this.nickname = db.nickname;
         this.token = db.token;
         this.headimg = db.headimg;
-        localStorage.setItem('username', db.username);
-        localStorage.setItem('nickname', db.nickname);
-        localStorage.setItem('token', db.token);
-        localStorage.setItem('headimg', db.headimg);
+        localStorage.setItem('cfg_username', db.username);
+        localStorage.setItem('cfg_nickname', db.nickname);
+        localStorage.setItem('cfg_token', db.token);
+        localStorage.setItem('cfg_headimg', db.headimg);
+        console.log(db);
     };
 
     isLogin = () => {
+        this.token = localStorage.getItem('cfg_token');
         return !!this.token;
     };
 
@@ -33,15 +35,12 @@ class User {
         try {
             await request.post('/user/auth');
         } catch (error) {
-            localStorage.removeItem('username');
-            localStorage.removeItem('nickname');
-            localStorage.removeItem('token');
-            localStorage.removeItem('headimg');
+            console.log('鉴权失败', error);
+            localStorage.removeItem('cfg_username');
+            localStorage.removeItem('cfg_nickname');
+            localStorage.removeItem('cfg_token');
+            localStorage.removeItem('cfg_headimg');
         }
     };
-
-    getToken() {
-        return this.token;
-    }
 }
 export default new User();

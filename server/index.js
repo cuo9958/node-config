@@ -24,7 +24,8 @@ app.use(async (ctx, next) => {
     }
 });
 
-const user = require('./api/index');
+const test = require('./api/index');
+const user = require('./api/user');
 const channel = require('./api/channel');
 const record = require('./api/record');
 const resource = require('./api/resource');

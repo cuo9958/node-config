@@ -1,6 +1,5 @@
 import axios from 'axios';
 import JSON5 from 'json5';
-import UserModels from '../models/user';
 
 axios.defaults.timeout = 5000;
 
@@ -85,8 +84,16 @@ class Request {
     }
     getHeaders(ispost = false) {
         let headers: any = {};
-        const token = UserModels.getToken();
-        if (token) headers.token = token;
+        const token = localStorage.getItem('cfg_token') || '';
+        const username = localStorage.getItem('cfg_username') || '';
+        const nickname = localStorage.getItem('cfg_nickname') || '';
+        console.log(token);
+        headers['token'] = token;
+        headers['username'] = username;
+        headers['nickname'] = encodeURIComponent(nickname);
+        // if (ispost) {
+        //     headers["Content-Type"] = "application/x-www-form-urlencoded";
+        // }
         return headers;
     }
 
@@ -100,7 +107,7 @@ class Request {
         return this._request(url, {
             method: 'GET',
             credentials: 'include',
-            headers: this.getHeaders()
+            headers: this.getHeaders(),
         });
     }
 
@@ -109,7 +116,7 @@ class Request {
             method: 'POST',
             credentials: 'include',
             headers: this.getHeaders(true),
-            data: encoded(data)
+            data: encoded(data),
         });
     }
 }
