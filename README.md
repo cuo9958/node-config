@@ -1,6 +1,8 @@
 # 全新的 nodejs 开发的轻量级配置中心
 
 ![星星数](https://img.shields.io/github/stars/cuo9958/node-config?style=social)
+![reactjs](https://img.shields.io/badge/react-16.13.0-brightgreen)
+![nodejs](https://img.shields.io/badge/nodejs-%3E8.0.0-blue)
 
 1. 全新改版，使用到的技术全部替换
 2. 新的客户端和服务端通讯方式
