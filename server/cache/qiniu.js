@@ -3,23 +3,11 @@ const config = require('config');
 const Redis = require('../db/redis');
 
 const qiniu_config = config.get('qiniu');
-const qiniu_key = 'qiniu_token';
+const qiniu_key = 'qiniu_token_huocheju';
 
 module.exports = {
     async update() {
-        const old_token = await Redis.get(qiniu_key);
-        if (old_token) return old_token;
-        const mac = new qiniu.auth.digest.Mac(
-            qiniu_config.accessKey,
-            qiniu_config.secretKey
-        );
-        const options = {
-            scope: qiniu_config.scope
-        };
-        const putPolicy = new qiniu.rs.PutPolicy(options);
-        const token = putPolicy.uploadToken(mac);
-        Redis.set(qiniu_key, token, 'EX', 3480);
-        console.log('设置七牛的token', token);
+        const token = await Redis.get(qiniu_key);
         return token;
     },
     async uploadStream(filename, readableStream, prefix = '') {
