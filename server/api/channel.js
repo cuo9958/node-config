@@ -67,13 +67,6 @@ router.post('/change/:id', AuthMiddle, async function (ctx, next) {
         };
         return;
     }
-    if (!ctx.cookies.get('token')) {
-        ctx.body = {
-            status: 1,
-            msg: '请登录',
-        };
-        return;
-    }
     try {
         await ChannelModel.change(status, id);
         ctx.body = {
