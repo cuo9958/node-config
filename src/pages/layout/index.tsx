@@ -33,7 +33,7 @@ export default class extends React.Component<iProps> {
             <Fragment>
                 <div id="top_box">
                     <Link to="/">
-                        <div className="logo">配置中心v2</div>
+                        <div className="logo">配置中心<small>v2</small></div>
                     </Link>
                     <Menu
                         defaultActive={RouterPath.name}
