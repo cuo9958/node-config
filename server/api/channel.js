@@ -39,7 +39,7 @@ router.post('/', AuthMiddle, async function (ctx, next) {
         return;
     }
     try {
-        const nickname = decodeURIComponent(ctx.cookies.get('nickname'));
+        const nickname = decodeURIComponent(ctx.headers.nickname);
         if (id > 0) {
             await ChannelModel.update({ id, title, key, remark, nickname });
         } else {

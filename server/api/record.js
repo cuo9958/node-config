@@ -18,7 +18,7 @@ router.get('/', async function(ctx, next) {
 router.post('/back/:id', AuthMiddle, async function(ctx, next) {
     const { id } = ctx.params;
     const record = await RecordModel.get(id);
-    const nickname = decodeURIComponent(ctx.cookies.get('nickname'));
+    const nickname = decodeURIComponent(ctx.headers.nickname);
     const model = {
         channel: record.channel,
         channel_title: record.channel_title,

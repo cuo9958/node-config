@@ -36,7 +36,7 @@ router.get('/', async function(ctx, next) {
 
 router.post('/add', AuthMiddle, async function(ctx, next) {
     const data = ctx.request.body;
-    const nickname = decodeURIComponent(ctx.cookies.get('nickname'));
+    const nickname = decodeURIComponent(ctx.headers.nickname);
     let proption = data.proption * 1;
     if (isNaN(proption)) proption = 0;
     const model = {
@@ -72,7 +72,7 @@ router.post('/publish/:id', AuthMiddle, async function(ctx, next) {
 
     const model = await ConfigsModel.get(id);
 
-    const nickname = decodeURIComponent(ctx.cookies.get('nickname'));
+    const nickname = decodeURIComponent(ctx.headers.nickname);
     const record = {
         cid: model.id,
         channel: model.channel,
