@@ -66,17 +66,6 @@ class Request {
         return json;
     }
     _checkServerStatus(json: any) {
-        if (json.status === 4002) {
-            console.log('跳转鉴权');
-            throw new Error('需要登录才可以哦');
-        }
-        if (json.status === 403 || json.status === 444) {
-            console.log('跳转鉴权');
-        }
-        if (json.status === 510) {
-            console.log('服务器错误');
-            throw new Error('响应失败，请稍后再试');
-        }
         if (json.status !== 0) {
             console.log('返回状态报错', json.status);
             throw new RequestError(json.msg, json.status, json.data);

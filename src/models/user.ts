@@ -9,10 +9,10 @@ interface iUser {
 }
 
 class User {
-    @observable username = localStorage.getItem('username');
-    @observable nickname = localStorage.getItem('nickname');
-    @observable token = localStorage.getItem('token');
-    @observable headimg = localStorage.getItem('headimg');
+    @observable username = localStorage.getItem('cfg_username');
+    @observable nickname = localStorage.getItem('cfg_nickname');
+    @observable token = localStorage.getItem('cfg_token');
+    @observable headimg = localStorage.getItem('cfg_headimg');
 
     @action login = (db: iUser) => {
         this.username = db.username;

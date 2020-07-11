@@ -66,11 +66,11 @@ router.post('/auth', async function (ctx, next) {
         const res = await UserService.check(token, username);
         if (res) {
             ctx.body = {
-                status: 1,
+                status: 0,
             };
         } else {
             ctx.body = {
-                status: 0,
+                status: 1,
                 msg: '登录失效',
             };
         }
