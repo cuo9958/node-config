@@ -31,7 +31,7 @@ export default class extends React.Component<iProps, iState> {
         return (
             <div id="login">
                 <div className="box">
-                    <div className="title">登&nbsp;&nbsp;&nbsp;录</div>
+                    <div className="title">配置管理系统</div>
                     <div className="group">
                         <Radio.Group value={this.state.type} onChange={this.onChange.bind(this)}>
                             <Radio value="">LDAP登录</Radio>
