@@ -4,44 +4,37 @@ const AuthMiddle = require('../middleware/auth');
 
 const router = new Router();
 
-router.get('/', async function(ctx, next) {
+router.get('/', async function (ctx, next) {
     const limit = ctx.query.limit;
     const data = await ChannelModel.getCount(limit);
 
     ctx.body = {
         status: 0,
-        data
+        data,
     };
 });
 
-router.get('/all', async function(ctx, next) {
+router.get('/all', async function (ctx, next) {
     const data = await ChannelModel.getAll();
     ctx.body = {
         status: 0,
-        data
+        data,
     };
 });
 
-router.post('/', AuthMiddle, async function(ctx, next) {
+router.post('/', AuthMiddle, async function (ctx, next) {
     const { id = 0, title, key, remark = '' } = ctx.request.body;
-    if (!ctx.cookies.get('token')) {
-        ctx.body = {
-            status: 1,
-            msg: '请登录'
-        };
-        return;
-    }
     if (!title) {
         ctx.body = {
             status: 1,
-            msg: '请填写标题'
+            msg: '请填写标题',
         };
         return;
     }
     if (!key) {
         ctx.body = {
             status: 1,
-            msg: '请填写key'
+            msg: '请填写key',
         };
         return;
     }
@@ -54,30 +47,30 @@ router.post('/', AuthMiddle, async function(ctx, next) {
         }
         ctx.body = {
             status: 0,
-            data: {}
+            data: {},
         };
     } catch (error) {
         ctx.body = {
             status: 1,
-            msg: error.message
+            msg: error.message,
         };
     }
 });
 
-router.post('/change/:id', AuthMiddle, async function(ctx, next) {
+router.post('/change/:id', AuthMiddle, async function (ctx, next) {
     const { id } = ctx.params;
     const { status } = ctx.request.body;
-    if (!status) {
+    if (isNaN(status)) {
         ctx.body = {
             status: 1,
-            msg: '状态有错'
+            msg: '状态有错',
         };
         return;
     }
     if (!ctx.cookies.get('token')) {
         ctx.body = {
             status: 1,
-            msg: '请登录'
+            msg: '请登录',
         };
         return;
     }
@@ -85,12 +78,12 @@ router.post('/change/:id', AuthMiddle, async function(ctx, next) {
         await ChannelModel.change(status, id);
         ctx.body = {
             status: 0,
-            data: {}
+            data: {},
         };
     } catch (error) {
         ctx.body = {
             status: 1,
-            msg: error.message
+            msg: error.message,
         };
     }
 });
