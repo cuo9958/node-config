@@ -1,5 +1,9 @@
-import test from '../pages/App';
+import React from 'react';
+import test from '../pages/test';
+import app from '../pages/App';
 import Error from '../pages/error';
+
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 
 export interface IRouteConfig {
     /**
@@ -14,6 +18,10 @@ export interface IRouteConfig {
      * 匹配的路径
      */
     path: string;
+    /**
+     * 图标
+     */
+    Icon?: any;
     /**
      * 匹配的内容
      */
@@ -34,9 +42,18 @@ export interface IRouteConfig {
 
 const routes: IRouteConfig[] = [
     {
-        name: 'test',
+        name: 'app',
         title: '测试内容',
         path: '/',
+        Icon: <AccountBalanceIcon fontSize="small" />,
+        layout: true,
+        page: app,
+    },
+    {
+        name: 'test2',
+        title: '测试内容2',
+        path: '/test',
+        Icon: <AccountBalanceIcon fontSize="small" />,
         layout: true,
         page: test,
     },
@@ -46,6 +63,7 @@ const routes: IRouteConfig[] = [
         path: '*',
         exact: false,
         page: Error,
+        hide: true,
     },
 ];
 export default routes;

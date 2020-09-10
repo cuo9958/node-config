@@ -9,7 +9,6 @@ import test from './test';
 export default class App extends React.Component<any> {
     constructor(props: any) {
         super(props);
-        console.log(props);
     }
     render() {
         return (
