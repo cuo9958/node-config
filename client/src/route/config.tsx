@@ -2,6 +2,7 @@ import React from 'react';
 import test from '../pages/test';
 import app from '../pages/App';
 import Error from '../pages/error';
+import Login from '../pages/login';
 
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 
@@ -58,10 +59,19 @@ const routes: IRouteConfig[] = [
         page: test,
     },
     {
+        name: 'login',
+        title: '登录',
+        path: '/login',
+        Icon: <AccountBalanceIcon fontSize="small" />,
+        page: Login,
+        hide: true,
+    },
+    {
         name: 'Error',
         title: '任务列表',
         path: '*',
         exact: false,
+        layout: false,
         page: Error,
         hide: true,
     },
