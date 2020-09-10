@@ -10,6 +10,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import RouteConfigs, { IRouteConfig } from '../../route/config';
 import Utils from '../../service/Utils';
+import Avatar from '@material-ui/core/Avatar';
+import Badge from '@material-ui/core/Badge';
 
 const theme = createMuiTheme({
     palette: {
@@ -40,7 +42,23 @@ export default function (props: any) {
     return (
         <ThemeProvider theme={theme}>
             <div id="container">
-                <header id="header">头部</header>
+                <header id="header">
+                    头部
+                    <div>
+                        <Badge
+                            color="primary"
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                            }}
+                            variant="dot"
+                            overlap="circle"
+                            invisible={true}
+                        >
+                            <Avatar>N</Avatar>
+                        </Badge>
+                    </div>
+                </header>
                 <div id="menus">
                     <div className="left-box-btn">
                         <ArrowBackIosIcon fontSize="small" />
