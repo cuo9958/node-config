@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import './index.less';
 import Divider from '@material-ui/core/Divider';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -46,7 +46,7 @@ export default function (props: any) {
                         <ArrowBackIosIcon fontSize="small" />
                     </div>
                     <Divider light={true} />
-                    <MenuList autoFocusItem>{RouteConfigs.map((Route, index) => Routes(Route, Route.name, curr.name === Route.name, go))}</MenuList>
+                    <MenuList autoFocusItem>{RouteConfigs.map((Route) => Routes(Route, Route.name, curr.name === Route.name, go))}</MenuList>
                 </div>
                 <div id="content">
                     <div className="header"></div>
