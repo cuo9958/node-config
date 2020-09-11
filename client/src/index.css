@@ -1,0 +1,9 @@
+.flex-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#footer {
+    font-size: 12px;
+    color: #ababab;
+}
