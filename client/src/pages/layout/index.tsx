@@ -40,25 +40,25 @@ export default function (props: any) {
     const curr = Utils.checkUrl(location.pathname);
 
     return (
-        <ThemeProvider theme={theme}>
-            <div id="container">
-                <header id="header">
-                    头部
-                    <div>
-                        <Badge
-                            color="primary"
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
-                            }}
-                            variant="dot"
-                            overlap="circle"
-                            invisible={true}
-                        >
-                            <Avatar>N</Avatar>
-                        </Badge>
-                    </div>
-                </header>
+        <div id="container">
+            <header id="header">
+                头部
+                <div>
+                    <Badge
+                        color="primary"
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        }}
+                        variant="dot"
+                        overlap="circle"
+                        invisible={true}
+                    >
+                        <Avatar>N</Avatar>
+                    </Badge>
+                </div>
+            </header>
+            <ThemeProvider theme={theme}>
                 <div id="menus">
                     <div className="left-box-btn">
                         <ArrowBackIosIcon fontSize="small" />
@@ -66,11 +66,11 @@ export default function (props: any) {
                     <Divider light={true} />
                     <MenuList autoFocusItem>{RouteConfigs.map((Route) => Routes(Route, Route.name, curr.name === Route.name, go))}</MenuList>
                 </div>
-                <div id="content">
-                    <div className="header"></div>
-                    <Container className="content-main">{props.children}</Container>
-                </div>
+            </ThemeProvider>
+            <div id="content">
+                <div className="header"></div>
+                <Container className="content-main">{props.children}</Container>
             </div>
-        </ThemeProvider>
+        </div>
     );
 }
