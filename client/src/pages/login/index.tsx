@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Footer from '../../plugin/Footer';
 
-export default class extends React.Component {
+export default class extends React.Component<IRoute> {
     render() {
         return (
             <Container maxWidth="sm" id="login">
@@ -57,7 +57,7 @@ export default class extends React.Component {
                         </label>
                     </div>
                     <div className="item">
-                        <Button variant="contained" color="primary" fullWidth>
+                        <Button variant="contained" color="primary" fullWidth onClick={this.login}>
                             登&nbsp;&nbsp;&nbsp;&nbsp;录
                         </Button>
                     </div>
@@ -80,5 +80,9 @@ export default class extends React.Component {
 
     onInputChange = (e: any) => {
         console.log(e.target.value);
+    };
+
+    login = () => {
+        this.props.history.push('/');
     };
 }
