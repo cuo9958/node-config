@@ -58,7 +58,7 @@ export default class App extends React.Component<any, IState> {
                 <div className="top-box">
                     <FormControl className="item">
                         <InputLabel id="label-channel">频道</InputLabel>
-                        <Select labelId="label-channel" value={this.state.channel} onChange={this.onProjectChange} className="channel">
+                        <Select labelId="label-channel" value={this.state.channel} onChange={(e) => this.onSearchChange(e, 'channel')} className="channel">
                             <MenuItem value={''}>
                                 <span className="project-item">所有</span>
                             </MenuItem>
@@ -184,6 +184,10 @@ export default class App extends React.Component<any, IState> {
         }
     }
     limit = 1;
+    /**
+     * 获取页面列表
+     * @param pageIndex 页码
+     */
     async getList(pageIndex?: number) {
         if (pageIndex) {
             this.limit = pageIndex;
@@ -224,11 +228,7 @@ export default class App extends React.Component<any, IState> {
         };
         this.setState(data);
     };
-    onProjectChange = (elem: React.ChangeEvent<{ value: unknown }>) => {
-        this.setState({
-            channel: elem.target.value as string,
-        });
-    };
+
     goEdit(id: number) {
         this.props.history.push('/test');
     }
