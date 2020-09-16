@@ -17,9 +17,10 @@ import PauseIcon from '@material-ui/icons/Pause';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
 import './App.less';
 
-import { get } from '../service/Request';
+import { get, post } from '../service/Request';
 import Utils from '../service/Utils';
 import { TagError, TagSuccess } from '../plugin/Tag';
 
@@ -32,6 +33,8 @@ interface IState {
     key: string;
     state: number | string;
     status: number | string;
+    open: boolean;
+    message: string;
 }
 
 export default class App extends React.Component<any, IState> {
@@ -45,6 +48,8 @@ export default class App extends React.Component<any, IState> {
             key: '',
             state: '',
             status: '',
+            open: false,
+            message: '',
         };
     }
     render() {
@@ -137,12 +142,12 @@ export default class App extends React.Component<any, IState> {
                                                 <EditIcon />
                                             </Button>
                                             {item.status === 0 && (
-                                                <Button color="primary" onClick={() => this.test(item.id)}>
+                                                <Button color="primary" onClick={() => this.goPublish(item.id)}>
                                                     <PlayArrowIcon />
                                                 </Button>
                                             )}
                                             {item.status === 1 && (
-                                                <Button color="primary" onClick={() => this.test(item.id)}>
+                                                <Button color="primary" onClick={() => this.goPause(item.id)}>
                                                     <PauseIcon />
                                                 </Button>
                                             )}
@@ -159,6 +164,7 @@ export default class App extends React.Component<any, IState> {
                 <div className="table-footer">
                     <Pagination className="pagination" count={this.state.count} shape="rounded" />
                 </div>
+                <Snackbar open={this.state.open} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} message={this.state.message} onClose={this.onMessageClose} />
             </div>
         );
     }
@@ -166,6 +172,9 @@ export default class App extends React.Component<any, IState> {
         this.getAllChannel();
         this.getList();
     }
+    /**
+     * 获取所有的频道列表
+     */
     async getAllChannel() {
         try {
             const channel_list = await get('/channel/all');
@@ -223,7 +232,55 @@ export default class App extends React.Component<any, IState> {
     goEdit(id: number) {
         this.props.history.push('/test');
     }
-
+    /**
+     * 发布
+     * @param id id
+     */
+    async goPublish(id: number) {
+        try {
+            const data = await post('/configs/publish/' + id);
+            console.log(data);
+            this.getList();
+            this.showMessage('已启动');
+        } catch (error) {
+            console.log(error);
+            this.showMessage(error.message);
+        }
+    }
+    /**
+     * 暂停
+     * @param id id
+     */
+    async goPause(id: number) {
+        try {
+            const data = await post('/configs/pause/' + id);
+            console.log(data);
+            this.getList();
+            this.showMessage('已暂停');
+        } catch (error) {
+            console.log(error);
+            this.showMessage(error.message);
+        }
+    }
+    /**
+     * 展示消息
+     * @param msg 消息内容
+     */
+    showMessage(msg: string) {
+        this.setState({
+            message: msg,
+            open: true,
+        });
+    }
+    /**
+     * 关闭消息
+     */
+    onMessageClose = () => {
+        this.setState({
+            message: '',
+            open: false,
+        });
+    };
     test(id: number) {
         console.log(id);
     }

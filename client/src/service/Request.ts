@@ -64,3 +64,17 @@ export async function get(url: string, data: any = {}) {
         headers: getHeaders(),
     });
 }
+export async function post(url: string, data: any = {}) {
+    if (data) data = QS.stringify(data);
+    if (url.indexOf('?') < 0 && data) {
+        url += '?' + data;
+    } else if (data) {
+        url += '&' + data;
+    }
+    return _request(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: getHeaders(true),
+        data: data,
+    });
+}
