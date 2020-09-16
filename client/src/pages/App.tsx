@@ -109,7 +109,7 @@ export default class App extends React.Component<any, IState> {
                                 <TableCell>标题</TableCell>
                                 <TableCell>字段名</TableCell>
                                 <TableCell align="center">内容</TableCell>
-                                <TableCell align="center">状态</TableCell>
+                                <TableCell>状态</TableCell>
                                 <TableCell align="center">操作人</TableCell>
                                 <TableCell align="center">操作</TableCell>
                             </TableRow>
