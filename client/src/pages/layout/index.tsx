@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import './index.less';
 import Divider from '@material-ui/core/Divider';
@@ -12,6 +12,7 @@ import RouteConfigs, { IRouteConfig } from '../../route/config';
 import Utils from '../../service/Utils';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
+import Select from '@material-ui/core/Select';
 
 const theme = createMuiTheme({
     palette: {
@@ -33,17 +34,31 @@ function Routes(Route: IRouteConfig, key: string, selected: boolean, go: any) {
 export default function (props: any) {
     const history = useHistory();
     const location = useLocation();
+    const [projectId, setProjectId] = useState(0);
 
     const go = (RoutePath: string) => {
         history.push(RoutePath);
     };
     const curr = Utils.checkUrl(location.pathname);
-
+    function onProjectChange(elem: React.ChangeEvent<{ value: unknown }>) {
+        setProjectId(elem.target.value as number);
+    }
     return (
         <div id="container">
             <header id="header">
-                头部
-                <div>
+                {curr.title}
+                <div className="header-right">
+                    <Select className="header-item" value={projectId} onChange={onProjectChange}>
+                        <MenuItem value={0}>
+                            <span className="project-item">默认项目</span>
+                        </MenuItem>
+                        <MenuItem value={1}>
+                            <span className="project-item">测试项目</span>
+                        </MenuItem>
+                        <MenuItem value={2}>
+                            <span className="project-item">生产项目</span>
+                        </MenuItem>
+                    </Select>
                     <Badge
                         color="primary"
                         anchorOrigin={{

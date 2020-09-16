@@ -44,7 +44,7 @@ export interface IRouteConfig {
 const routes: IRouteConfig[] = [
     {
         name: 'app',
-        title: '测试内容',
+        title: '配置列表',
         path: '/',
         Icon: <AccountBalanceIcon fontSize="small" />,
         layout: true,
@@ -52,7 +52,7 @@ const routes: IRouteConfig[] = [
     },
     {
         name: 'test2',
-        title: '测试内容2',
+        title: '频道列表',
         path: '/test',
         Icon: <AccountBalanceIcon fontSize="small" />,
         layout: true,
