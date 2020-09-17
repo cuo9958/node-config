@@ -14,15 +14,15 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import EditIcon from '@material-ui/icons/Edit';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+// import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
-import './App.less';
+import './index.less';
 
-import { get, post } from '../service/Request';
-import Utils from '../service/Utils';
-import { TagError, TagSuccess } from '../plugin/Tag';
+import { get, post } from '../../service/Request';
+import Utils from '../../service/Utils';
+import { TagError, TagSuccess } from '../../plugin/Tag';
 
 interface IState {
     [key: string]: any;
@@ -151,9 +151,9 @@ export default class App extends React.Component<any, IState> {
                                                     <PauseIcon />
                                                 </Button>
                                             )}
-                                            <Button color="secondary">
+                                            {/* <Button color="secondary">
                                                 <DeleteForeverIcon />
-                                            </Button>
+                                            </Button> */}
                                         </ButtonGroup>
                                     </TableCell>
                                 </TableRow>

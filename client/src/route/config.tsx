@@ -1,6 +1,7 @@
 import React from 'react';
 import test from '../pages/test';
-import app from '../pages/App';
+import Home from '../pages/confs';
+import Channel from '../pages/channel';
 import Error from '../pages/error';
 import Login from '../pages/login';
 
@@ -43,20 +44,28 @@ export interface IRouteConfig {
 
 const routes: IRouteConfig[] = [
     {
-        name: 'app',
+        name: 'home',
         title: '配置列表',
         path: '/',
         Icon: <AccountBalanceIcon fontSize="small" />,
         layout: true,
-        page: app,
+        page: Home,
     },
     {
-        name: 'test2',
+        name: 'channel',
         title: '频道列表',
-        path: '/test',
+        path: '/channel',
         Icon: <AccountBalanceIcon fontSize="small" />,
         layout: true,
+        page: Channel,
+    },
+    {
+        name: 'test',
+        title: '登录',
+        path: '/test',
+        Icon: <AccountBalanceIcon fontSize="small" />,
         page: test,
+        hide: true,
     },
     {
         name: 'login',
