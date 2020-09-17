@@ -14,10 +14,13 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import EditIcon from '@material-ui/icons/Edit';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
-// import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import './index.less';
 
 import { get, post } from '../../service/Request';
@@ -34,6 +37,7 @@ interface IState {
     status: number | string;
     open: boolean;
     message: string;
+    show: boolean;
 }
 
 export default class App extends React.Component<any, IState> {
@@ -48,6 +52,7 @@ export default class App extends React.Component<any, IState> {
             status: '',
             open: false,
             message: '',
+            show: false,
         };
     }
     render() {
@@ -101,6 +106,37 @@ export default class App extends React.Component<any, IState> {
                 <div className="table-footer">
                     <Pagination className="pagination" count={this.state.count} shape="rounded" />
                 </div>
+                <Dialog open={this.state.show} aria-labelledby="form-dialog-title">
+                    <DialogTitle id="form-dialog-title">编辑内容</DialogTitle>
+                    <DialogContent>
+                        <div className="dialog-item">
+                            <TextField label="频道名" size="small" fullWidth value={this.state.key} onChange={(e) => this.onSearchChange(e, 'key')} />
+                        </div>
+                        <div className="dialog-item">
+                            <TextField label="频道key" size="small" fullWidth value={this.state.key} onChange={(e) => this.onSearchChange(e, 'key')} />
+                        </div>
+                        <div className="dialog-item">
+                            <TextField
+                                label="备注"
+                                size="small"
+                                fullWidth
+                                multiline
+                                rows={4}
+                                value={this.state.key}
+                                onChange={(e) => this.onSearchChange(e, 'key')}
+                                placeholder="请填写备注"
+                            />
+                        </div>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.closeDialog} >
+                            取消
+                        </Button>
+                        <Button onClick={this.saveDialog} color="primary">
+                            确定
+                        </Button>
+                    </DialogActions>
+                </Dialog>
                 <Snackbar open={this.state.open} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} message={this.state.message} onClose={this.onMessageClose} />
             </div>
         );
@@ -144,8 +180,20 @@ export default class App extends React.Component<any, IState> {
     };
 
     goEdit(id: number) {
-        this.props.history.push('/test');
+        this.setState({
+            show: true,
+        });
     }
+    saveDialog = () => {
+        this.setState({
+            show: false,
+        });
+    };
+    closeDialog = () => {
+        this.setState({
+            show: false,
+        });
+    };
     /**
      * 启用
      * @param id id
