@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import './index.less';
@@ -9,8 +9,31 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Footer from '../../plugin/Footer';
+import { inject } from 'mobx-react';
+import { IUser } from '../../models/user';
 
-export default class extends React.Component<IRoute> {
+import { post } from '../../service/Request';
+
+interface IState {
+    [index: string]: string;
+    username: string;
+    pwd: string;
+}
+interface IProps extends IRoute {
+    login(data: IUser): void;
+}
+
+@inject((models: any) => ({
+    login: models.user.login,
+}))
+export default class extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
+        this.state = {
+            username: '',
+            pwd: '',
+        };
+    }
     render() {
         return (
             <Container maxWidth="sm" id="login">
@@ -21,7 +44,7 @@ export default class extends React.Component<IRoute> {
                         <TextField
                             variant="outlined"
                             label="用户名"
-                            onChange={this.onInputChange}
+                            onChange={(e) => this.onChange(e, 'username')}
                             placeholder="请输入用户名"
                             fullWidth
                             InputProps={{
@@ -38,7 +61,7 @@ export default class extends React.Component<IRoute> {
                             type="password"
                             variant="outlined"
                             label="密码"
-                            onChange={this.onInputChange}
+                            onChange={(e) => this.onChange(e, 'pwd')}
                             placeholder="请输入密码"
                             fullWidth
                             InputProps={{
@@ -81,8 +104,24 @@ export default class extends React.Component<IRoute> {
     onInputChange = (e: any) => {
         console.log(e.target.value);
     };
-
-    login = () => {
-        this.props.history.push('/');
+    onChange = (elem: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, keyName: string) => {
+        const data = {
+            [keyName]: elem.target.value,
+        };
+        this.setState(data);
+    };
+    login = async () => {
+        try {
+            const data = await post('/user/login', {
+                username: this.state.username,
+                pwd: this.state.pwd,
+                type: 'admin',
+            });
+            this.props.login(data);
+            this.props.history.push('/');
+        } catch (error) {
+            console.log(error);
+            alert(error.message);
+        }
     };
 }

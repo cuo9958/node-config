@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import QS from 'querystring';
+import user from '../models/user';
 
 Axios.defaults.timeout = 5000;
 
@@ -46,9 +47,9 @@ function _checkStatus(resp: any, url: string) {
 function getHeaders(ispost = false) {
     let headers: any = {};
 
-    // headers['uid'] = model.uid;
-    // headers['token'] = model.token;
-    // headers['nickname'] = encodeURIComponent(model.nickname);
+    headers['token'] = user.token;
+    headers['nickname'] = encodeURIComponent(user.nickname);
+    headers['username'] = user.username;
     return headers;
 }
 export async function get(url: string, data: any = {}) {
