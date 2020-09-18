@@ -13,6 +13,7 @@ import Utils from '../../service/Utils';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 import Select from '@material-ui/core/Select';
+import Menu from '@material-ui/core/Menu';
 
 const theme = createMuiTheme({
     palette: {
@@ -35,13 +36,22 @@ export default function (props: any) {
     const history = useHistory();
     const location = useLocation();
     const [projectId, setProjectId] = useState(0);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const go = (RoutePath: string) => {
         history.push(RoutePath);
     };
     const curr = Utils.checkUrl(location.pathname);
+
     function onProjectChange(elem: React.ChangeEvent<{ value: unknown }>) {
         setProjectId(elem.target.value as number);
+    }
+    function handleClick(event: React.MouseEvent<HTMLDivElement>) {
+        setAnchorEl(event.currentTarget);
+    }
+    function handleClose() {
+        setAnchorEl(null);
+        history.push('/login');
     }
     return (
         <div id="container">
@@ -68,9 +78,13 @@ export default function (props: any) {
                         variant="dot"
                         overlap="circle"
                         invisible={true}
+                        onClick={(e) => handleClick(e)}
                     >
                         <Avatar>N</Avatar>
                     </Badge>
+                    <Menu open={Boolean(anchorEl)} anchorEl={anchorEl} keepMounted onClose={handleClose}>
+                        <MenuItem onClick={handleClose}>退出</MenuItem>
+                    </Menu>
                 </div>
             </header>
             <ThemeProvider theme={theme}>
