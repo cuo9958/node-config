@@ -51,6 +51,9 @@ export default function (props: any) {
     }
     function handleClose() {
         setAnchorEl(null);
+    }
+    function logout() {
+        setAnchorEl(null);
         history.push('/login');
     }
     return (
@@ -83,7 +86,7 @@ export default function (props: any) {
                         <Avatar>N</Avatar>
                     </Badge>
                     <Menu open={Boolean(anchorEl)} anchorEl={anchorEl} keepMounted onClose={handleClose}>
-                        <MenuItem onClick={handleClose}>退出</MenuItem>
+                        <MenuItem onClick={logout}>退出</MenuItem>
                     </Menu>
                 </div>
             </header>

@@ -10,11 +10,11 @@ import stores from './models';
 import Routes from './route';
 
 ReactDOM.render(
-    <React.StrictMode>
+    <>
         <CssBaseline />
         <Provider {...stores}>
             <HashRouter>{Routes()}</HashRouter>
         </Provider>
-    </React.StrictMode>,
+    </>,
     document.getElementById('root')
 );
