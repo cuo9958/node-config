@@ -111,8 +111,7 @@ export default class App extends React.Component<any, IState> {
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">频道</TableCell>
-                                <TableCell>标题</TableCell>
-                                <TableCell>字段名</TableCell>
+                                <TableCell>标题和key</TableCell>
                                 <TableCell align="center">内容</TableCell>
                                 <TableCell>状态</TableCell>
                                 <TableCell align="center">操作人</TableCell>
@@ -123,8 +122,10 @@ export default class App extends React.Component<any, IState> {
                             {this.state.list.map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell>{item.channel_title}</TableCell>
-                                    <TableCell>{item.title}</TableCell>
-                                    <TableCell>{item.key}</TableCell>
+                                    <TableCell>
+                                        <p>{item.title}</p>
+                                        <small>{item.key}</small>
+                                    </TableCell>
                                     <TableCell>
                                         <div className="item-val">
                                             {item.key_type === 'image' && <img className="img" src={item.val} alt="" />}

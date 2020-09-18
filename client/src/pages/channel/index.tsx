@@ -27,17 +27,24 @@ import { get, post } from '../../service/Request';
 import Utils from '../../service/Utils';
 import { TagError, TagSuccess } from '../../plugin/Tag';
 
+interface IModel {
+    [key: string]: number | string;
+    id: number;
+    key: string;
+    title: string;
+    remark: string;
+}
+
 interface IState {
-    [key: string]: any;
     list: any[];
     count: number;
     channel: string;
-    key: string;
     state: number | string;
     status: number | string;
     open: boolean;
     message: string;
     show: boolean;
+    model: IModel;
 }
 
 export default class App extends React.Component<any, IState> {
@@ -47,17 +54,25 @@ export default class App extends React.Component<any, IState> {
             list: [],
             count: 0,
             channel: '',
-            key: '',
             state: '',
             status: '',
             open: false,
             message: '',
             show: false,
+            model: {
+                id: 0,
+                key: '',
+                title: '',
+                remark: '',
+            },
         };
     }
     render() {
         return (
             <div id="channel">
+                <Button className="btn-search" variant="contained" color="primary" onClick={() => this.goAdd()}>
+                    添加
+                </Button>
                 <TableContainer>
                     <Table stickyHeader className="table-list">
                         <TableHead>
@@ -83,7 +98,7 @@ export default class App extends React.Component<any, IState> {
                                     <TableCell>{item.status === 1 ? <TagSuccess val="启用" /> : <TagError val="禁用" />}</TableCell>
                                     <TableCell>
                                         <ButtonGroup size="small" aria-label="">
-                                            <Button color="primary" onClick={() => this.goEdit(item.id)}>
+                                            <Button color="primary" onClick={() => this.goEdit(item)}>
                                                 <EditIcon />
                                             </Button>
                                             {item.status === 0 && (
@@ -110,10 +125,10 @@ export default class App extends React.Component<any, IState> {
                     <DialogTitle id="form-dialog-title">编辑内容</DialogTitle>
                     <DialogContent>
                         <div className="dialog-item">
-                            <TextField label="频道名" size="small" fullWidth value={this.state.key} onChange={(e) => this.onSearchChange(e, 'key')} />
+                            <TextField label="频道名" size="small" fullWidth value={this.state.model.title} onChange={(e) => this.onSearchChange(e, 'key')} />
                         </div>
                         <div className="dialog-item">
-                            <TextField label="频道key" size="small" fullWidth value={this.state.key} onChange={(e) => this.onSearchChange(e, 'key')} />
+                            <TextField label="频道key" size="small" fullWidth value={this.state.model.key} onChange={(e) => this.onSearchChange(e, 'key')} />
                         </div>
                         <div className="dialog-item">
                             <TextField
@@ -122,16 +137,14 @@ export default class App extends React.Component<any, IState> {
                                 fullWidth
                                 multiline
                                 rows={4}
-                                value={this.state.key}
+                                value={this.state.model.remark}
                                 onChange={(e) => this.onSearchChange(e, 'key')}
                                 placeholder="请填写备注"
                             />
                         </div>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.closeDialog} >
-                            取消
-                        </Button>
+                        <Button onClick={this.closeDialog}>取消</Button>
                         <Button onClick={this.saveDialog} color="primary">
                             确定
                         </Button>
@@ -172,23 +185,53 @@ export default class App extends React.Component<any, IState> {
      * @param elem 来源
      * @param keyName 键名
      */
-    onSearchChange = (elem: React.ChangeEvent<{ value: unknown }>, keyName: string) => {
-        const data = {
-            [keyName]: elem.target.value,
-        };
-        this.setState(data);
+    onSearchChange = (elem: React.ChangeEvent<{ value: string }>, keyName: string) => {
+        let model: IModel = Object.assign({}, this.state.model);
+        model[keyName] = elem.target.value;
+        this.setState({ model });
     };
-
-    goEdit(id: number) {
+    /**
+     * 添加内容
+     */
+    goAdd() {
         this.setState({
             show: true,
+            model: {
+                id: 0,
+                title: '',
+                key: '',
+                remark: '',
+            },
         });
     }
-    saveDialog = () => {
+    /**
+     * 准备编辑内容
+     * @param data 要编辑的内容
+     */
+    goEdit(data: IModel) {
         this.setState({
-            show: false,
+            show: true,
+            model: data,
         });
+    }
+    /**
+     * 保存弹层数据
+     */
+    saveDialog = async () => {
+        try {
+            await post('/channel', this.state.model);
+            this.setState({
+                show: false,
+            });
+            this.showMessage('保存成功');
+        } catch (error) {
+            console.log(error);
+            this.showMessage(error.message);
+        }
     };
+    /**
+     * 关闭弹层
+     */
     closeDialog = () => {
         this.setState({
             show: false,
