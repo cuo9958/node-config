@@ -20,9 +20,22 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Slider from '@material-ui/core/Slider';
+import Uppy from '@uppy/core';
+import { DashboardModal } from '@uppy/react';
+import XHRUpload from '@uppy/xhr-upload';
+import '@uppy/core/dist/style.css';
+import '@uppy/dashboard/dist/style.css';
+
+import { inject } from 'mobx-react';
 
 import Utils from '../../service/Utils';
 import { get, post } from '../../service/Request';
+
+const opts: any = {
+    meta: { type: 'avatar' },
+    restrictions: { maxNumberOfFiles: 1 },
+    autoProceed: true,
+};
 
 interface IModel {
     [key: string]: string | number;
@@ -35,19 +48,34 @@ interface IModel {
     state: number;
     remark: string;
     proption: number;
+    task_start_time: number;
+    task_end_time: number;
 }
 interface IState {
     model: IModel;
     channel_list: any[];
+    showUpload: boolean;
 }
 interface IParams {
     id?: number;
 }
-export default class extends React.Component<IRoute, IState> {
-    constructor(props: IRoute) {
+interface IProps extends IRoute {
+    token: string;
+    nickname: string;
+    username: string;
+}
+
+@inject((models: any) => ({
+    token: models.user.token,
+    nickname: models.user.nickname,
+    username: models.user.username,
+}))
+export default class extends React.Component<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             channel_list: [],
+            showUpload: false,
             model: {
                 channel: '',
                 title: '',
@@ -58,11 +86,28 @@ export default class extends React.Component<IRoute, IState> {
                 state: 0,
                 remark: '',
                 proption: 0,
+                task_start_time: 0,
+                task_end_time: 0,
             },
         };
         this.params = (Utils.parseParams(props.location.search).query || {}) as IParams;
+        const uppy: any = Uppy(opts);
+
+        uppy.use(XHRUpload, {
+            endpoint: '/api_config/imgs/upload',
+            fieldName: 'file',
+            headers: {
+                token: props.token,
+                nickname: encodeURIComponent(props.nickname),
+                username: props.username,
+            },
+        });
+
+        uppy.on('complete', this.uploaded);
+        this.uppy = uppy;
     }
     params: IParams = {};
+    uppy?: any;
     render() {
         return (
             <div id="detail">
@@ -128,6 +173,26 @@ export default class extends React.Component<IRoute, IState> {
                         />
                     )}
                 </div>
+                {this.state.model.key_type === 'image' && (
+                    <div className="item">
+                        <img className="upload-img" src={this.state.model.val} alt="" />
+                        <div>
+                            <Button size="small" className="btn-search" variant="contained" color="primary" onClick={() => this.setState({ showUpload: true })}>
+                                {this.state.model.val.length > 10 ? '重新上传' : '上传图片'}
+                            </Button>
+                        </div>
+                        <DashboardModal
+                            closeModalOnClickOutside
+                            onRequestClose={() => this.setState({ showUpload: false })}
+                            open={this.state.showUpload}
+                            uppy={this.uppy}
+                            height="330px"
+                            thumbnailWidth={30}
+                            width="90%"
+                            locale={{ strings: { dropPasteFiles: '拖动文件或者 %{browse}浏览' } }}
+                        />
+                    </div>
+                )}
                 <div className="item">
                     <TextField
                         label="备注"
@@ -170,6 +235,7 @@ export default class extends React.Component<IRoute, IState> {
                         />
                     </div>
                 )}
+
                 <div className="item">
                     <Button className="btn-search" variant="contained" color="primary" onClick={() => this.onSave()}>
                         保存
@@ -196,12 +262,22 @@ export default class extends React.Component<IRoute, IState> {
                     state: data.state,
                     remark: data.remark,
                     proption: data.proption,
+                    task_start_time: data.task_start_time,
+                    task_end_time: data.task_end_time,
                 },
             });
         } catch (error) {
             console.log(error);
         }
     }
+    uploaded = (result: any) => {
+        const data = result.successful[0].response.body;
+        if (data.status === 0) {
+            this.onChange(data.data, 'val');
+        } else {
+            alert(data.msg);
+        }
+    };
     /**
      * 获取所有的频道列表
      */
