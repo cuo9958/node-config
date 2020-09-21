@@ -1,5 +1,6 @@
 import { pathToRegexp } from 'path-to-regexp';
 import RouteConfigs from '../route/config';
+import urlParse from "url-parse";
 
 function DateFormart(time: Date, formart = 'yyyy-MM-dd hh:mm:ss') {
     formart = formart.replace('yyyy', time.getFullYear() + '');
@@ -16,6 +17,9 @@ export default {
         const curr = RouteConfigs.find((item) => pathToRegexp(item.path).test(url));
         if (!curr) return RouteConfigs[0];
         return curr;
+    },
+    parseParams(url: string) {
+        return urlParse(url, true);
     },
     DateFormartNumber: (ts: number, formart = 'yyyy-MM-dd hh:mm:ss') => {
         if (!ts || isNaN(ts)) return '';

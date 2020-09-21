@@ -4,8 +4,10 @@ import Home from '../pages/confs';
 import Channel from '../pages/channel';
 import Error from '../pages/error';
 import Login from '../pages/login';
+import Detail from '../pages/detail';
 
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import ViewListIcon from '@material-ui/icons/ViewList';
 
 export interface IRouteConfig {
     /**
@@ -52,18 +54,25 @@ const routes: IRouteConfig[] = [
         page: Home,
     },
     {
+        name: 'home',
+        title: '配置详情',
+        path: '/detail',
+        layout: true,
+        page: Detail,
+        hide: true,
+    },
+    {
         name: 'channel',
         title: '频道列表',
         path: '/channel',
-        Icon: <AccountBalanceIcon fontSize="small" />,
+        Icon: <ViewListIcon fontSize="small" />,
         layout: true,
         page: Channel,
     },
     {
         name: 'test',
-        title: '登录',
+        title: '测试',
         path: '/test',
-        Icon: <AccountBalanceIcon fontSize="small" />,
         page: test,
         hide: true,
     },
@@ -71,7 +80,6 @@ const routes: IRouteConfig[] = [
         name: 'login',
         title: '登录',
         path: '/login',
-        Icon: <AccountBalanceIcon fontSize="small" />,
         page: Login,
         hide: true,
     },

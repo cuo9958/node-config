@@ -121,7 +121,7 @@ export default class App extends React.Component<any, IState> {
                     <DialogTitle id="form-dialog-title">编辑内容</DialogTitle>
                     <DialogContent>
                         <div className="dialog-item">
-                            <TextField label="频道名" size="small" fullWidth value={this.state.model.title} onChange={(e) => this.onSearchChange(e, 'key')} />
+                            <TextField label="频道名" size="small" fullWidth value={this.state.model.title} onChange={(e) => this.onSearchChange(e, 'title')} />
                         </div>
                         <div className="dialog-item">
                             <TextField label="频道key" size="small" fullWidth value={this.state.model.key} onChange={(e) => this.onSearchChange(e, 'key')} />
@@ -134,7 +134,7 @@ export default class App extends React.Component<any, IState> {
                                 multiline
                                 rows={4}
                                 value={this.state.model.remark}
-                                onChange={(e) => this.onSearchChange(e, 'key')}
+                                onChange={(e) => this.onSearchChange(e, 'remark')}
                                 placeholder="请填写备注"
                             />
                         </div>
@@ -220,6 +220,7 @@ export default class App extends React.Component<any, IState> {
                 show: false,
             });
             this.showMessage('保存成功');
+            this.getList();
         } catch (error) {
             console.log(error);
             this.showMessage(error.message);

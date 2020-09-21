@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import './index.less';
 import Divider from '@material-ui/core/Divider';
@@ -12,7 +12,7 @@ import RouteConfigs, { IRouteConfig } from '../../route/config';
 import Utils from '../../service/Utils';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
-import Select from '@material-ui/core/Select';
+// import Select from '@material-ui/core/Select';
 import Menu from '@material-ui/core/Menu';
 
 const theme = createMuiTheme({
@@ -35,7 +35,6 @@ function Routes(Route: IRouteConfig, key: string, selected: boolean, go: any) {
 export default function (props: any) {
     const history = useHistory();
     const location = useLocation();
-    const [projectId, setProjectId] = useState(0);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const go = (RoutePath: string) => {
@@ -43,9 +42,6 @@ export default function (props: any) {
     };
     const curr = Utils.checkUrl(location.pathname);
 
-    function onProjectChange(elem: React.ChangeEvent<{ value: unknown }>) {
-        setProjectId(elem.target.value as number);
-    }
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
         setAnchorEl(event.currentTarget);
     }
@@ -61,7 +57,7 @@ export default function (props: any) {
             <header id="header">
                 {curr.title}
                 <div className="header-right">
-                    <Select className="header-item" value={projectId} onChange={onProjectChange}>
+                    {/* <Select className="header-item" value={projectId} onChange={onProjectChange}>
                         <MenuItem value={0}>
                             <span className="project-item">默认项目</span>
                         </MenuItem>
@@ -71,7 +67,7 @@ export default function (props: any) {
                         <MenuItem value={2}>
                             <span className="project-item">生产项目</span>
                         </MenuItem>
-                    </Select>
+                    </Select> */}
                     <Badge
                         color="primary"
                         anchorOrigin={{

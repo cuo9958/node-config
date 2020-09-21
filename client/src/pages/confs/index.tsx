@@ -231,7 +231,7 @@ export default class App extends React.Component<any, IState> {
     };
 
     goEdit(id: number) {
-        this.props.history.push('/test');
+        this.props.history.push('/detail?id=' + id);
     }
     /**
      * 发布
