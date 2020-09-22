@@ -22,7 +22,7 @@ import './index.less';
 
 import { get, post } from '../../service/Request';
 import Utils from '../../service/Utils';
-import { TagError, TagSuccess } from '../../plugin/Tag';
+import { TagError, TagSuccess, TagInfo, TagRem, TagBlu } from '../../plugin/Tag';
 
 interface IState {
     [key: string]: any;
@@ -113,6 +113,7 @@ export default class App extends React.Component<any, IState> {
                                 <TableCell align="center">频道</TableCell>
                                 <TableCell>标题和key</TableCell>
                                 <TableCell align="center">内容</TableCell>
+                                <TableCell>类型</TableCell>
                                 <TableCell>状态</TableCell>
                                 <TableCell align="center">操作人</TableCell>
                                 <TableCell align="center">操作</TableCell>
@@ -131,6 +132,11 @@ export default class App extends React.Component<any, IState> {
                                             {item.key_type === 'image' && <img className="img" src={item.val} alt="" />}
                                             {item.key_type !== 'image' && <span className="txts">{item.val}</span>}
                                         </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        {item.state === 0 && <TagInfo val="普通任务" />}
+                                        {item.state === 1 && <TagRem val="定时任务" />}
+                                        {item.state === 2 && <TagBlu val="灰度任务" />}
                                     </TableCell>
                                     <TableCell>{item.status === 1 ? <TagSuccess val="生效" /> : <TagError val="暂停" />}</TableCell>
                                     <TableCell>
