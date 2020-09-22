@@ -1,15 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import EditIcon from '@material-ui/icons/Edit';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import PauseIcon from '@material-ui/icons/Pause';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import './index.less';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -25,7 +17,6 @@ import { DashboardModal } from '@uppy/react';
 import XHRUpload from '@uppy/xhr-upload';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
-
 import { inject } from 'mobx-react';
 
 import Utils from '../../service/Utils';
@@ -55,6 +46,8 @@ interface IState {
     model: IModel;
     channel_list: any[];
     showUpload: boolean;
+    message: string;
+    open: boolean;
 }
 interface IParams {
     id?: number;
@@ -64,7 +57,6 @@ interface IProps extends IRoute {
     nickname: string;
     username: string;
 }
-
 @inject((models: any) => ({
     token: models.user.token,
     nickname: models.user.nickname,
@@ -76,6 +68,8 @@ export default class extends React.Component<IProps, IState> {
         this.state = {
             channel_list: [],
             showUpload: false,
+            message: '',
+            open: false,
             model: {
                 channel: '',
                 title: '',
@@ -189,6 +183,7 @@ export default class extends React.Component<IProps, IState> {
                             height="330px"
                             thumbnailWidth={30}
                             width="90%"
+                            closeAfterFinish
                             locale={{ strings: { dropPasteFiles: '拖动文件或者 %{browse}浏览' } }}
                         />
                     </div>
@@ -235,12 +230,35 @@ export default class extends React.Component<IProps, IState> {
                         />
                     </div>
                 )}
-
+                {this.state.model.state === 1 && (
+                    <div className="item">
+                        <TextField
+                            label="开始时间"
+                            type="datetime-local"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            className="first"
+                            value={Utils.DateFormartNumber(this.state.model.task_start_time, 'yyyy-MM-ddThh:mm')}
+                            onChange={(e) => this.onChange(new Date(e.target.value).getTime(), 'task_start_time')}
+                        />
+                        <TextField
+                            label="结束时间"
+                            type="datetime-local"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            value={Utils.DateFormartNumber(this.state.model.task_end_time, 'yyyy-MM-ddThh:mm')}
+                            onChange={(e) => this.onChange(new Date(e.target.value).getTime(), 'task_end_time')}
+                        />
+                    </div>
+                )}
                 <div className="item">
                     <Button className="btn-search" variant="contained" color="primary" onClick={() => this.onSave()}>
                         保存
                     </Button>
                 </div>
+                <Snackbar open={this.state.open} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} message={this.state.message} onClose={this.onMessageClose} />
             </div>
         );
     }
@@ -275,7 +293,7 @@ export default class extends React.Component<IProps, IState> {
         if (data.status === 0) {
             this.onChange(data.data, 'val');
         } else {
-            alert(data.msg);
+            this.showMessage(data.msg);
         }
     };
     /**
@@ -294,29 +312,37 @@ export default class extends React.Component<IProps, IState> {
         data[keyName] = value;
         this.setState({ model: data });
     };
-    //id: 165
-    // title: test2
-    // channel: test
-    // channel_title: 测试相关
-    // key: test2
-    // key_type: json
-    // val:
-    // json_data: {a:1}
-    // state: 0
-    // task_start_time: 0
-    // task_end_time: 0
-    // remark:
-    // proption: 0
+
     async onSave() {
         try {
             const data = Object.assign({}, this.state.model, { id: 0 });
             if (this.params.id) {
                 data.id = this.params.id * 1;
             }
-            console.log(data);
-            // await post('/add', data);
+            await post('/add', data);
+            this.showMessage('保存成功');
         } catch (error) {
             console.log(error);
+            this.showMessage(error.message);
         }
     }
+    /**
+     * 展示消息
+     * @param msg 消息内容
+     */
+    showMessage(msg: string) {
+        this.setState({
+            message: msg,
+            open: true,
+        });
+    }
+    /**
+     * 关闭消息
+     */
+    onMessageClose = () => {
+        this.setState({
+            message: '',
+            open: false,
+        });
+    };
 }
