@@ -4,7 +4,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "dev": "node scripts/start.js",
-    "server": "export NODE_ENV=development && node server/index.js",
+    "server": "export NODE_ENV=development && node servers/index.js",
     "build": "node scripts/build.js"
   },
   "dependencies": {

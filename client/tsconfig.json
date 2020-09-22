@@ -21,7 +21,7 @@
         "jsx": "react"
     },
     "include": [
-        "src", "@types/react.ts",
+        "src",
         "@types"
     ]
 }
