@@ -47,4 +47,6 @@ module.exports = {
         searchDn: 'dc=daling,dc=com',
         usernameKey: 'uid',
     },
+    //获取缓存数据的接口
+    data: 'http://127.0.0.1:8200',
 };

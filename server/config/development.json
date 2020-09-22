@@ -37,5 +37,6 @@
         "bindPassword": "daling.com",
         "searchDn": "dc=daling,dc=com",
         "usernameKey": "uid"
-    }
+    },
+    "data": "http://data.guofangchao.com/api/data/qiniu"
 }
