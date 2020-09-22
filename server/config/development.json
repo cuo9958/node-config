@@ -1,0 +1,41 @@
+{
+    "db": {
+        "master": {
+            "host": "l-fe2.dev.bj6.daling.com",
+            "user": "fe_pub",
+            "password": "YXMerZesnykifbmB",
+            "database": "fe_pub",
+            "connectionLimit": 2
+        }
+    },
+    "redis": "redis://l-fe2.dev.bj6.daling.com:6379",
+    "redisCluster": [],
+    "auth": {
+        "group": "app_bundle"
+    },
+    "login": {
+        "username": "admin",
+        "pwd": "admin",
+        "token": "adw278vwfer7iere7ui"
+    },
+    "upload_server": "http://upload.qa.daling.com/upload_img/image/upload_v3?authtype=token&sysname=zin&systoken=F9NB3H4127P1HJC&uploadFileSizeLimit=4MB&op=(origin)&bizcode=appsub",
+    "pre_upload": "config_api_",
+    "upload_host": ["imgbeta"],
+    "public_url": "",
+    "amq": {
+        "hostname": "rabbitmq.qa.daling.com",
+        "username": "daling",
+        "password": "daling",
+        "vhost": "/fe_dev"
+    },
+    "rpc": {
+        "sport": 4000
+    },
+    "ldap": {
+        "server": "ldap://ldap.srv.daling.com",
+        "baseDn": "cn=admin,dc=daling,dc=com",
+        "bindPassword": "daling.com",
+        "searchDn": "dc=daling,dc=com",
+        "usernameKey": "uid"
+    }
+}
