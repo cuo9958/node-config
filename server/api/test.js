@@ -6,4 +6,4 @@ router.get('/', async function (ctx, next) {
     ctx.body = 'ok';
 });
 
-exports.routers = router.routes();
+module.exports = router;
