@@ -138,7 +138,12 @@ export default class App extends React.Component<any, IState> {
                                         {item.state === 1 && <TagRem val="定时任务" />}
                                         {item.state === 2 && <TagBlu val="灰度任务" />}
                                     </TableCell>
-                                    <TableCell>{item.status === 1 ? <TagSuccess val="生效" /> : <TagError val="暂停" />}</TableCell>
+                                    <TableCell>
+                                        {item.status === 1 ? <TagSuccess val="生效" /> : <TagError val="暂停" />}
+                                        <a className="linkto" href={'/api_config/configs/' + item.id} target="_blank" rel="noopener noreferrer">
+                                            预览
+                                        </a>
+                                    </TableCell>
                                     <TableCell>
                                         <p>{item.nickname}</p>
                                         <small>{Utils.DateFormartString(item.updatedAt, 'yyyy.MM.dd hh:mm')}</small>
