@@ -57,6 +57,10 @@ function transform(model) {
     if (model.key_type === 'json') {
         data.result_data = JSON5.parse(model.json_data);
     }
+
+    if (data.result_data) {
+        data.result_data = JSON5.stringify(data.result_data);
+    }
     return data;
 }
 

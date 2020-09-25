@@ -23,7 +23,7 @@ const Snapshot = db.define(
         },
         ...MData,
     },
-    { freezeTableName: true, indexes: [{ unique: true, fields: ['key'] }] }
+    { freezeTableName: true, indexes: [{ unique: true, fields: ['id'] }] }
 );
 
 // Snapshot.sync({ force: true });
@@ -46,7 +46,6 @@ module.exports = {
     },
     search(channel) {
         return Snapshot.findAll({
-            // attributes: ['result_data', 'task_start_time', 'task_end_time', 'state', 'proption'],
             where: {
                 channel,
             },
@@ -56,6 +55,10 @@ module.exports = {
         return Snapshot.findAll();
     },
     del(id) {
-        return Snapshot.destroy();
+        return Snapshot.findOne({
+            where: { id },
+        }).then(function (res) {
+            return res.destroy();
+        });
     },
 };
