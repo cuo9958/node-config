@@ -14,7 +14,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import EditIcon from '@material-ui/icons/Edit';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
-// import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -163,9 +163,9 @@ export default class App extends React.Component<any, IState> {
                                                     <PauseIcon />
                                                 </Button>
                                             )}
-                                            {/* <Button color="secondary">
+                                            <Button color="secondary" disabled={item.status !== 0} onClick={() => this.goDelete(item.id)}>
                                                 <DeleteForeverIcon />
-                                            </Button> */}
+                                            </Button>
                                         </ButtonGroup>
                                     </TableCell>
                                 </TableRow>
@@ -269,6 +269,17 @@ export default class App extends React.Component<any, IState> {
             console.log(data);
             this.getList();
             this.showMessage('已暂停');
+        } catch (error) {
+            console.log(error);
+            this.showMessage(error.message);
+        }
+    }
+    async goDelete(id: number) {
+        try {
+            const data = await post('/configs/del/' + id);
+            console.log(data);
+            this.getList();
+            this.showMessage('已删除');
         } catch (error) {
             console.log(error);
             this.showMessage(error.message);

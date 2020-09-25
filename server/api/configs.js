@@ -10,7 +10,7 @@ const router = new Router();
 function updateCatchClause(channel) {
     MQService.publish('cpm_publish', channel);
 }
-
+//获取列表
 router.get('/', async function (ctx) {
     const { limit, channel, key, nickname, state, status } = ctx.query;
     const opts = {};
@@ -33,7 +33,7 @@ router.get('/', async function (ctx) {
         data,
     };
 });
-
+//添加、更新
 router.post('/add', AuthMiddle, async function (ctx, next) {
     const data = ctx.request.body;
     const nickname = decodeURIComponent(ctx.headers.nickname);
@@ -120,6 +120,7 @@ router.post('/publish/:id', AuthMiddle, async function (ctx, next) {
         data: {},
     };
 });
+//暂停
 router.post('/pause/:id', AuthMiddle, async function (ctx, next) {
     const id = ctx.params.id;
     await ConfigsModel.unUse(id);
@@ -133,7 +134,7 @@ router.post('/pause/:id', AuthMiddle, async function (ctx, next) {
         data: {},
     };
 });
-
+//获取单个
 router.get('/:id', async function (ctx, next) {
     const id = ctx.params.id;
     const data = await ConfigsModel.get(id);
@@ -142,5 +143,18 @@ router.get('/:id', async function (ctx, next) {
         data,
     };
 });
+//删除
+router.post('/del/:id', AuthMiddle, async function (ctx, next) {
+    const id = ctx.params.id;
+    await ConfigsModel.del(id);
 
+    ConfigsModel.get(id).then((model) => {
+        updateCatchClause(model.channel);
+    });
+
+    ctx.body = {
+        status: 0,
+        data: {},
+    };
+});
 module.exports = router;

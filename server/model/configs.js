@@ -2,90 +2,95 @@ const Sequelize = require('sequelize');
 const db = require('../db/mysql');
 const Op = Sequelize.Op;
 
+const MData = {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    channel: {
+        type: Sequelize.STRING(20),
+        defaultValue: 900,
+        comment: '频道key',
+    },
+    key: {
+        type: Sequelize.STRING,
+        defaultValue: '',
+        comment: 'key名称',
+    },
+    proption: {
+        type: Sequelize.TINYINT(3),
+        defaultValue: 0,
+        comment: '百分比',
+    },
+    result_data: {
+        type: Sequelize.TEXT,
+        comment: '发布之后的组合值',
+    },
+    task_start_time: {
+        type: Sequelize.BIGINT,
+        defaultValue: 0,
+        comment: '开始日期',
+    },
+    task_end_time: {
+        type: Sequelize.BIGINT,
+        defaultValue: 0,
+        comment: '结束日期',
+    },
+};
+exports.MData = MData;
+
 const Configs = db.define(
     'fe_config_configs',
     {
-        id: {
-            type: Sequelize.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        channel: {
-            type: Sequelize.STRING(20),
-            defaultValue: 900,
-            comment: '频道key'
-        },
         channel_title: {
             type: Sequelize.STRING(20),
             defaultValue: 900,
-            comment: '频道标题'
+            comment: '频道标题',
         },
         title: {
             type: Sequelize.STRING,
             defaultValue: '',
-            comment: '标题'
-        },
-        key: {
-            type: Sequelize.STRING,
-            defaultValue: '',
-            comment: 'key名称'
+            comment: '标题',
         },
         key_type: {
             type: Sequelize.STRING(10),
             defaultValue: '',
-            comment: 'key类型'
+            comment: 'key类型',
         },
         val: {
             type: Sequelize.STRING,
             defaultValue: '',
-            comment: 'val值'
-        },
-        proption: {
-            type: Sequelize.TINYINT(3),
-            defaultValue: 0,
-            comment: '百分比'
+            comment: 'val值',
         },
         json_data: {
             type: Sequelize.TEXT,
-            comment: 'json对象的值'
-        },
-        result_data: {
-            type: Sequelize.TEXT,
-            comment: '发布之后的组合值'
-        },
-        task_start_time: {
-            type: Sequelize.BIGINT,
-            defaultValue: 0,
-            comment: '开始日期'
-        },
-        task_end_time: {
-            type: Sequelize.BIGINT,
-            defaultValue: 0,
-            comment: '结束日期'
+            comment: 'json对象的值',
         },
         state: {
             type: Sequelize.TINYINT,
             defaultValue: 0,
-            comment: '类型'
+            comment: '类型',
         },
         remark: {
             type: Sequelize.STRING,
             defaultValue: '',
-            comment: '备注'
+            comment: '备注',
         },
         nickname: {
             type: Sequelize.STRING(50),
             defaultValue: '',
-            comment: '操作人'
+            comment: '操作人',
         },
         status: {
             type: Sequelize.TINYINT,
             defaultValue: 0,
-            comment: '状态;9:删除，0:编辑;1:发布;2:有更新'
-        }
+            comment: '状态;9:删除，0:编辑;1:发布;2:有更新',
+        },
+        ...MData,
     },
     {
-        freezeTableName: true
+        freezeTableName: true,
         // indexes: [
         //     {
         //         unique: true,
@@ -99,19 +104,19 @@ const Configs = db.define(
 // Configs.sync({ force: true });
 
 module.exports = {
-    insert: function(model) {
+    insert: function (model) {
         return Configs.create(model);
     },
-    update: function(model, id) {
+    update: function (model, id) {
         return Configs.update(model, {
-            where: { id }
+            where: { id },
         });
     },
-    get: function(id) {
+    get: function (id) {
         return Configs.findOne({
             where: {
-                id
-            }
+                id,
+            },
         });
     },
     search(channel) {
@@ -119,8 +124,8 @@ module.exports = {
             attributes: ['result_data', 'task_start_time', 'task_end_time', 'state', 'proption'],
             where: {
                 channel,
-                [Op.or]: [{ status: 1 }, { status: 2 }]
-            }
+                [Op.or]: [{ status: 1 }, { status: 2 }],
+            },
         });
     },
     getCount(limit = 1, opts = {}, status) {
@@ -142,9 +147,9 @@ module.exports = {
                 'state',
                 'nickname',
                 'status',
-                'updatedAt'
+                'updatedAt',
             ],
-            order: [['id', 'desc']]
+            order: [['id', 'desc']],
         };
         config.where = opts;
         if (status && !isNaN(status * 1)) {
@@ -153,51 +158,51 @@ module.exports = {
             }
             if (status * 1 === 1) {
                 config.where.status = {
-                    [Op.in]: [1, 2]
+                    [Op.in]: [1, 2],
                 };
             }
         } else {
             config.where.status = {
-                [Op.not]: 9
+                [Op.not]: 9,
             };
         }
         return Configs.findAndCountAll(config);
     },
-    unUse: function(id) {
+    unUse: function (id) {
         const model = {
-            status: 0
+            status: 0,
         };
         return Configs.update(model, {
             where: {
-                id
-            }
+                id,
+            },
         });
     },
-    use: function(id, result_data) {
+    use: function (id, result_data) {
         const model = {
             status: 1,
-            result_data
+            result_data,
         };
         return Configs.update(model, {
             where: {
-                id
-            }
+                id,
+            },
         });
     },
-    del: function(id) {
+    del: function (id) {
         const model = {
-            status: 9
+            status: 9,
         };
         return Configs.update(model, {
             where: {
-                id
-            }
+                id,
+            },
         });
     },
     /**
      * 清除昨天之前已经失效的定时器
      */
-    clear: function() {
+    clear: function () {
         return Configs.update(
             { status: 9 },
             {
@@ -206,10 +211,10 @@ module.exports = {
                     state: 1,
                     task_end_time: {
                         [Op.gt]: 1000,
-                        [Op.lt]: Date.now() - 86400000
-                    }
-                }
+                        [Op.lt]: Date.now() - 86400000,
+                    },
+                },
             }
         );
-    }
+    },
 };
