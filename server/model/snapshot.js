@@ -25,11 +25,14 @@ module.exports = {
         });
     },
     search(channel) {
-        return Configs.findAll({
+        return Snapshot.findAll({
             // attributes: ['result_data', 'task_start_time', 'task_end_time', 'state', 'proption'],
             where: {
                 channel,
             },
         });
+    },
+    getAll() {
+        return Snapshot.findAll();
     },
 };

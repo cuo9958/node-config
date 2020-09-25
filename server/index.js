@@ -1,8 +1,11 @@
 const Koa = require('koa');
 const KoaBody = require('koa-body');
 const router = require('./api');
+const UpdateService = require('./service/update');
 
 const app = new Koa();
+
+UpdateService.init();
 
 app.use(
     KoaBody({

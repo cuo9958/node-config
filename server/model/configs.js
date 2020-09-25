@@ -38,7 +38,6 @@ const MData = {
         comment: '结束日期',
     },
 };
-exports.MData = MData;
 
 const Configs = db.define(
     'fe_config_configs',
@@ -104,6 +103,7 @@ const Configs = db.define(
 // Configs.sync({ force: true });
 
 module.exports = {
+    MData,
     insert: function (model) {
         return Configs.create(model);
     },
@@ -168,9 +168,10 @@ module.exports = {
         }
         return Configs.findAndCountAll(config);
     },
-    unUse: function (id) {
+    unUse: function (id, nickname) {
         const model = {
             status: 0,
+            nickname,
         };
         return Configs.update(model, {
             where: {
@@ -178,10 +179,11 @@ module.exports = {
             },
         });
     },
-    use: function (id, result_data) {
+    use: function (id, result_data, nickname) {
         const model = {
             status: 1,
             result_data,
+            nickname,
         };
         return Configs.update(model, {
             where: {

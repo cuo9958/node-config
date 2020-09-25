@@ -1,15 +1,15 @@
+/**
+ * 配置的增删改查接口层
+ * 1. 修改数据库中存储的数据
+ * 2. 调用update服务，通知对方更新等
+ */
 const Router = require('koa-router');
 const ConfigsModel = require('../model/configs');
-// const RecordModel = require('../model/record');
-const JSON5 = require('json5');
 const AuthMiddle = require('../middleware/auth');
-const MQService = require('../service/mq');
+const UpdateService = require('../service/update');
 
 const router = new Router();
 
-function updateCatchClause(channel) {
-    MQService.publish('cpm_publish', channel);
-}
 //获取列表
 router.get('/', async function (ctx) {
     const { limit, channel, key, nickname, state, status } = ctx.query;
@@ -73,47 +73,11 @@ router.post('/publish/:id', AuthMiddle, async function (ctx, next) {
     const model = await ConfigsModel.get(id);
 
     const nickname = decodeURIComponent(ctx.headers.nickname);
-    // const record = {
-    //     cid: model.id,
-    //     channel: model.channel,
-    //     channel_title: model.channel_title,
-    //     title: model.title,
-    //     key: model.key,
-    //     key_type: model.key_type,
-    //     val: model.val,
-    //     json_data: model.json_data,
-    //     task_start_time: model.task_start_time,
-    //     task_end_time: model.task_end_time,
-    //     state: model.state,
-    //     remark: model.remark,
-    //     nickname,
-    // };
-    // await RecordModel.insert(record);
 
-    const result_data = {
-        key: model.key,
-    };
-    if (model.key_type === 'text') {
-        result_data.val = model.val;
-    }
-    if (model.key_type === 'image') {
-        result_data.val = model.val;
-    }
-    if (model.key_type === 'number') {
-        result_data.val = model.val * 1;
-        if (isNaN(result_data.val)) {
-            result_data.val = 0;
-        }
-    }
-    if (model.key_type === 'bool') {
-        result_data.val = model.val === 'true' ? true : false;
-    }
-    if (model.key_type === 'json') {
-        result_data.val = JSON5.parse(model.json_data);
-    }
-    await ConfigsModel.use(id, JSON.stringify(result_data));
+    const result_data = UpdateService.transform(model);
+    await ConfigsModel.use(id, JSON.stringify(result_data), nickname);
 
-    updateCatchClause(model.channel);
+    UpdateService.updateByData(model);
 
     ctx.body = {
         status: 0,
@@ -121,13 +85,13 @@ router.post('/publish/:id', AuthMiddle, async function (ctx, next) {
     };
 });
 //暂停
-router.post('/pause/:id', AuthMiddle, async function (ctx, next) {
+router.post('/pause/:id', AuthMiddle, async function (ctx) {
     const id = ctx.params.id;
-    await ConfigsModel.unUse(id);
+    const nickname = decodeURIComponent(ctx.headers.nickname);
 
-    ConfigsModel.get(id).then((model) => {
-        updateCatchClause(model.channel);
-    });
+    await ConfigsModel.unUse(id, nickname);
+
+    UpdateService.removeByID(id);
 
     ctx.body = {
         status: 0,
@@ -148,9 +112,7 @@ router.post('/del/:id', AuthMiddle, async function (ctx, next) {
     const id = ctx.params.id;
     await ConfigsModel.del(id);
 
-    ConfigsModel.get(id).then((model) => {
-        updateCatchClause(model.channel);
-    });
+    UpdateService.removeByID(id);
 
     ctx.body = {
         status: 0,
