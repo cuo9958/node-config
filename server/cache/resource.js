@@ -28,11 +28,15 @@ module.exports = {
         let data_tmp = {};
         list.forEach((model) => {
             try {
-                const data = JSON5.parse(model.result_data);
                 if (!data_tmp[model.channel]) data_tmp[model.channel] = {};
-                data_tmp[model.channel][data.key] = data.val;
+                if (model.result_data) {
+                    const data = JSON5.parse(model.result_data);
+                    data_tmp[model.channel][model.key] = data.val;
+                } else {
+                    data_tmp[model.channel][model.key] = '';
+                }
             } catch (error) {
-                console.log('setAll', error);
+                console.log('setAll', model.result_data, error);
             }
         });
         for (const channel in data_tmp) {

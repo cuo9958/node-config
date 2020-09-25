@@ -58,7 +58,8 @@ module.exports = {
         return Snapshot.findOne({
             where: { id },
         }).then(function (res) {
-            return res.destroy();
+            res.destroy();
+            return res;
         });
     },
 };

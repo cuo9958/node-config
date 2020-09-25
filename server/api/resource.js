@@ -3,6 +3,7 @@ const SearchCache = require('../cache/search');
 const fs = require('fs');
 const path = require('path');
 
+
 const router = new Router();
 const HealthcheckPath = path.resolve(__dirname, '../../healthcheck.html');
 

@@ -56,7 +56,7 @@ router.post('/add', AuthMiddle, async function (ctx, next) {
         nickname: nickname,
     };
     if (data.id && data.id !== '0') {
-        model.status = 2;
+        // model.status = 2;
         await ConfigsModel.update(model, data.id * 1);
     } else {
         await ConfigsModel.insert(model);
@@ -99,8 +99,8 @@ router.post('/pause/:id', AuthMiddle, async function (ctx) {
 
     try {
         await ConfigsModel.unUse(id, nickname);
-        await SnapshotModel.del(id);
-        UpdateService.removeByID(id);
+        const data = await SnapshotModel.del(id);
+        UpdateService.removeByKey(data.key, data.channel);
         ctx.body = {
             status: 0,
             data: {},

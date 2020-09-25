@@ -11,15 +11,18 @@ const MQService = require('./mq');
 const JSON5 = require('json5');
 const ResourceCache = require('../cache/resource');
 const ConfigsModel = require('../model/configs');
+const MQ = require('../db/mq');
 
 //是否发起MQ通知：开发环境关闭
 const IS_MQ_OPEN = process.env.NODE_ENV !== 'development';
 
-MQService.onMsg('cpm_publish', function (channel) {
-    console.log('收到', channel);
+if (IS_MQ_OPEN) {
+    MQ.onMsg('cpm_publish', function (channel) {
+        console.log('收到', channel);
+        updateByChannle(channel);
+    });
+}
 
-    updateByChannle(channel);
-});
 /**
  * 通知频道更新
  * @param {*} channel 频道
@@ -64,7 +67,7 @@ function transform(model) {
     }
 
     if (data.result_data) {
-        data.result_data = JSON5.stringify(data.result_data);
+        data.result_data = JSON5.stringify({ val: data.result_data });
     }
     return data;
 }

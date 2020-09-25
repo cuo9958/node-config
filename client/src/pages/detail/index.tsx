@@ -319,7 +319,7 @@ export default class extends React.Component<IProps, IState> {
             if (this.params.id) {
                 data.id = this.params.id * 1;
             }
-            await post('/add', data);
+            await post('/configs/add', data);
             this.showMessage('保存成功');
         } catch (error) {
             console.log(error);
