@@ -15,6 +15,11 @@ const ConfigsModel = require('../model/configs');
 //是否发起MQ通知：开发环境关闭
 const IS_MQ_OPEN = process.env.NODE_ENV !== 'development';
 
+MQService.onMsg('cpm_publish', function (channel) {
+    console.log('收到', channel);
+
+    updateByChannle(channel);
+});
 /**
  * 通知频道更新
  * @param {*} channel 频道
@@ -63,7 +68,19 @@ function transform(model) {
     }
     return data;
 }
-
+/**
+ * 更新频道数据
+ * @param {*} channel 频道
+ */
+async function updateByChannle(channel) {
+    try {
+        const list = await SnapshotModel.search(channel);
+        ResourceCache.setAll(list);
+        updateCacheFromMaster(channel);
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports = {
     /**
      * 拉起所有到本地内存
@@ -102,19 +119,7 @@ module.exports = {
             console.log(error);
         }
     },
-    /**
-     * 更新频道数据
-     * @param {*} channel 频道
-     */
-    async updateByChannle(channel) {
-        try {
-            const list = await SnapshotModel.search(channel);
-            ResourceCache.setAll(list);
-            updateCacheFromMaster(channel);
-        } catch (error) {
-            console.log(error);
-        }
-    },
+    updateByChannle,
     /**
      * 根据key和频道删除内容
      * @param {*} key key
