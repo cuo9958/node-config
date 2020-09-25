@@ -4,7 +4,27 @@ const Op = Sequelize.Op;
 const MData = require('./configs').MData;
 
 //快照，内存留存的备份
-const Snapshot = db.define('fe_configs_snapshot', { ...MData }, { freezeTableName: true, indexes: [{ unique: true, fields: ['key'] }] });
+const Snapshot = db.define(
+    'fe_configs_snapshot',
+    {
+        xid: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        id: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0,
+            comment: '来源id',
+        },
+        result_data: {
+            type: Sequelize.TEXT,
+            comment: '发布之后的组合值',
+        },
+        ...MData,
+    },
+    { freezeTableName: true, indexes: [{ unique: true, fields: ['key'] }] }
+);
 
 // Snapshot.sync({ force: true });
 
@@ -34,5 +54,8 @@ module.exports = {
     },
     getAll() {
         return Snapshot.findAll();
+    },
+    del(id) {
+        return Snapshot.destroy();
     },
 };

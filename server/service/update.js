@@ -1,12 +1,16 @@
 /**
  * 更新配置内容
  * 配置存储位置：
- * 1.数据
- * 2.本地内存
+ * 1. 数据库
+ * 2. 本地内存,其他机器镜像
+ * 3. 增加启动更新数据
+ * 4. 更新本地和其他机器
  */
 const SnapshotModel = require('../model/snapshot');
 const MQService = require('./mq');
 const JSON5 = require('json5');
+const ResourceCache = require('../cache/resource');
+const ConfigsModel = require('../model/configs');
 
 //是否发起MQ通知：开发环境关闭
 const IS_MQ_OPEN = process.env.NODE_ENV !== 'development';
@@ -15,38 +19,45 @@ const IS_MQ_OPEN = process.env.NODE_ENV !== 'development';
  * 通知频道更新
  * @param {*} channel 频道
  */
-function updateCatchClause(channel) {
+function updateCacheFromMaster(channel) {
     if (!IS_MQ_OPEN) return;
     MQService.publish('cpm_publish', channel);
 }
+
 /**
  * 将configs的数据转成快照
  * @param {*} model configs的数据
  */
 function transform(model) {
-    const result_data = {
+    const data = {
+        id: model.id,
+        channel: model.channel,
         key: model.key,
-        val: '',
+        proption: model.proption,
+        result_data: '',
+        task_start_time: model.task_start_time,
+        task_end_time: model.task_end_time,
     };
+
     if (model.key_type === 'text') {
-        result_data.val = model.val;
+        data.result_data = model.val;
     }
     if (model.key_type === 'image') {
-        result_data.val = model.val;
+        data.result_data = model.val;
     }
     if (model.key_type === 'number') {
         result_data.val = model.val * 1;
         if (isNaN(result_data.val)) {
-            result_data.val = 0;
+            data.result_data = 0;
         }
     }
     if (model.key_type === 'bool') {
-        result_data.val = model.val === 'true' ? true : false;
+        data.result_data = model.val === 'true' ? true : false;
     }
     if (model.key_type === 'json') {
-        result_data.val = JSON5.parse(model.json_data);
+        data.result_data = JSON5.parse(model.json_data);
     }
-    return result_data;
+    return data;
 }
 
 module.exports = {
@@ -56,35 +67,46 @@ module.exports = {
     async init() {
         try {
             const list = await SnapshotModel.getAll();
-            //TODO
+            ResourceCache.setAll(list);
         } catch (error) {
             console.log(error);
         }
     },
     transform,
     /**
-     * 更新对应id的内容
+     * 更新configs对应id的内容
      * @param {*} id id
      */
     async updateByID(id) {
         try {
-            const data = await SnapshotModel.get(id);
-            //TODO
+            const data = await ConfigsModel.get(id);
+            this.updateByData(transform(data));
         } catch (error) {
             console.log(error);
         }
     },
     /**
-     * 整体更新数据
+     * 更新单个数据
      * @param {*} data 对象数据
      */
     async updateByData(data) {
-        //TODO
+        try {
+            const result = JSON5.parse(data.result_data);
+            ResourceCache.set(data.key, result.val, data.channel);
+            updateCacheFromMaster(data.channel);
+        } catch (error) {
+            console.log(error);
+        }
     },
+    /**
+     * 更新频道数据
+     * @param {*} channel 频道
+     */
     async updateByChannle(channel) {
         try {
-            const data = await SnapshotModel.search(channel);
-            //TODO
+            const list = await SnapshotModel.search(channel);
+            ResourceCache.setAll(list);
+            updateCacheFromMaster(channel);
         } catch (error) {
             console.log(error);
         }
@@ -94,15 +116,28 @@ module.exports = {
      * @param {*} key key
      * @param {*} channel 频道
      */
-    removeByKey(key, channel) {},
+    removeByKey(key, channel) {
+        ResourceCache.delete(key, channel);
+        updateCacheFromMaster(channel);
+    },
     /**
      * 移除整个频道
      * @param {*} channel 频道
      */
-    removeByChannel(channel) {},
+    removeByChannel(channel) {
+        ResourceCache.deleteAll(channel);
+        updateCacheFromMaster(channel);
+    },
     /**
      * 通过id移除内容
      * @param {*} id id
      */
-    removeByID(id) {},
+    async removeByID(id) {
+        try {
+            const data = await SnapshotModel.get(id);
+            this.removeByKey(data.key, data.channel);
+        } catch (error) {
+            console.log(error);
+        }
+    },
 };

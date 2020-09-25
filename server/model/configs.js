@@ -3,11 +3,6 @@ const db = require('../db/mysql');
 const Op = Sequelize.Op;
 
 const MData = {
-    id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-    },
     channel: {
         type: Sequelize.STRING(20),
         defaultValue: 900,
@@ -22,10 +17,6 @@ const MData = {
         type: Sequelize.TINYINT(3),
         defaultValue: 0,
         comment: '百分比',
-    },
-    result_data: {
-        type: Sequelize.TEXT,
-        comment: '发布之后的组合值',
     },
     task_start_time: {
         type: Sequelize.BIGINT,
@@ -42,6 +33,11 @@ const MData = {
 const Configs = db.define(
     'fe_config_configs',
     {
+        id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
         channel_title: {
             type: Sequelize.STRING(20),
             defaultValue: 900,
@@ -121,7 +117,7 @@ module.exports = {
     },
     search(channel) {
         return Configs.findAll({
-            attributes: ['result_data', 'task_start_time', 'task_end_time', 'state', 'proption'],
+            attributes: ['task_start_time', 'task_end_time', 'state', 'proption'],
             where: {
                 channel,
                 [Op.or]: [{ status: 1 }, { status: 2 }],
@@ -179,10 +175,9 @@ module.exports = {
             },
         });
     },
-    use: function (id, result_data, nickname) {
+    use: function (id, nickname) {
         const model = {
             status: 1,
-            result_data,
             nickname,
         };
         return Configs.update(model, {

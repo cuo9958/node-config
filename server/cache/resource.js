@@ -49,4 +49,21 @@ module.exports = {
     get(channel) {
         return Channel_Data.get(channel) || {};
     },
+    /**
+     * 删除单个
+     * @param {*} key key
+     * @param {*} channel 频道
+     */
+    delete(key, channel) {
+        const data = Channel_Data.get(channel) || {};
+        delete data[key];
+        Channel_Data.set(channel, data);
+    },
+    /**
+     * 删除整个频道
+     * @param {*} channel 频道
+     */
+    deleteAll(channel) {
+        Channel_Data.delete(channel);
+    },
 };

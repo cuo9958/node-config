@@ -7,6 +7,7 @@ const Router = require('koa-router');
 const ConfigsModel = require('../model/configs');
 const AuthMiddle = require('../middleware/auth');
 const UpdateService = require('../service/update');
+const SnapshotModel = require('../model/snapshot');
 
 const router = new Router();
 
@@ -70,53 +71,79 @@ router.post('/add', AuthMiddle, async function (ctx, next) {
 router.post('/publish/:id', AuthMiddle, async function (ctx, next) {
     const id = ctx.params.id;
 
-    const model = await ConfigsModel.get(id);
+    try {
+        const model = await ConfigsModel.get(id);
 
-    const nickname = decodeURIComponent(ctx.headers.nickname);
+        const nickname = decodeURIComponent(ctx.headers.nickname);
 
-    const result_data = UpdateService.transform(model);
-    await ConfigsModel.use(id, JSON.stringify(result_data), nickname);
+        await ConfigsModel.use(id, nickname);
 
-    UpdateService.updateByData(model);
-
-    ctx.body = {
-        status: 0,
-        data: {},
-    };
+        const data = UpdateService.transform(model);
+        await SnapshotModel.insert(data);
+        UpdateService.updateByData(data);
+        ctx.body = {
+            status: 0,
+            data: {},
+        };
+    } catch (error) {
+        ctx.body = {
+            status: 1,
+            msg: error.message,
+        };
+    }
 });
 //暂停
 router.post('/pause/:id', AuthMiddle, async function (ctx) {
     const id = ctx.params.id;
     const nickname = decodeURIComponent(ctx.headers.nickname);
 
-    await ConfigsModel.unUse(id, nickname);
-
-    UpdateService.removeByID(id);
-
-    ctx.body = {
-        status: 0,
-        data: {},
-    };
+    try {
+        await ConfigsModel.unUse(id, nickname);
+        await SnapshotModel.del(id);
+        UpdateService.removeByID(id);
+        ctx.body = {
+            status: 0,
+            data: {},
+        };
+    } catch (error) {
+        ctx.body = {
+            status: 1,
+            msg: error.message,
+        };
+    }
 });
 //获取单个
-router.get('/:id', async function (ctx, next) {
+router.get('/:id', async function (ctx) {
     const id = ctx.params.id;
-    const data = await ConfigsModel.get(id);
-    ctx.body = {
-        status: 0,
-        data,
-    };
+    try {
+        const data = await ConfigsModel.get(id);
+        ctx.body = {
+            status: 0,
+            data,
+        };
+    } catch (error) {
+        console.log(error);
+        ctx.body = {
+            status: 1,
+            msg: error.message,
+        };
+    }
 });
 //删除
-router.post('/del/:id', AuthMiddle, async function (ctx, next) {
+router.post('/del/:id', AuthMiddle, async function (ctx) {
     const id = ctx.params.id;
-    await ConfigsModel.del(id);
-
-    UpdateService.removeByID(id);
-
-    ctx.body = {
-        status: 0,
-        data: {},
-    };
+    try {
+        await ConfigsModel.del(id);
+        ctx.body = {
+            status: 0,
+            data: {},
+        };
+    } catch (error) {
+        ctx.body = {
+            status: 1,
+            msg: error.message,
+        };
+    }
 });
+
 module.exports = router;
