@@ -117,10 +117,10 @@ module.exports = {
     },
     search(channel) {
         return Configs.findAll({
-            attributes: ['task_start_time', 'task_end_time', 'state', 'proption'],
+            attributes: ['task_start_time', 'task_end_time', 'proption', 'title', 'key', 'val', 'json_data'],
             where: {
                 channel,
-                [Op.or]: [{ status: 1 }, { status: 2 }],
+                status: 1,
             },
         });
     },

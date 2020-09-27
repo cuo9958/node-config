@@ -112,11 +112,11 @@ router.post('/pause/:id', AuthMiddle, async function (ctx) {
         };
     }
 });
-//获取单个
-router.get('/:id', async function (ctx) {
-    const id = ctx.params.id;
+//频道下的内容
+router.get('/channel/:channelid', async function (ctx) {
+    const channelid = ctx.params.channelid;
     try {
-        const data = await ConfigsModel.get(id);
+        const data = await ConfigsModel.search(channelid);
         ctx.body = {
             status: 0,
             data,
@@ -146,4 +146,21 @@ router.post('/del/:id', AuthMiddle, async function (ctx) {
     }
 });
 
+//获取单个
+router.get('/:id', async function (ctx) {
+    const id = ctx.params.id;
+    try {
+        const data = await ConfigsModel.get(id);
+        ctx.body = {
+            status: 0,
+            data,
+        };
+    } catch (error) {
+        console.log(error);
+        ctx.body = {
+            status: 1,
+            msg: error.message,
+        };
+    }
+});
 module.exports = router;

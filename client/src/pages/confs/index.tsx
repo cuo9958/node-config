@@ -140,7 +140,7 @@ export default class App extends React.Component<any, IState> {
                                     </TableCell>
                                     <TableCell>
                                         {item.status === 1 ? <TagSuccess val="生效" /> : <TagError val="暂停" />}
-                                        <a className="linkto" href={'/api_config/configs/' + item.id} target="_blank" rel="noopener noreferrer">
+                                        <a className="linkto" href={'/api_config/configs/channel/' + item.channel} target="_blank" rel="noopener noreferrer">
                                             预览
                                         </a>
                                     </TableCell>
