@@ -49,7 +49,7 @@ module.exports = {
             },
         });
     },
-    getCount(limit = 1, opts = {}) {
+    getCount(limit = 1) {
         let config = {
             limit: 20,
             offset: (limit - 1) * 20,
