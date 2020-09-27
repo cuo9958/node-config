@@ -8,6 +8,7 @@ const ConfigsModel = require('../model/configs');
 const AuthMiddle = require('../middleware/auth');
 const UpdateService = require('../service/update');
 const SnapshotModel = require('../model/snapshot');
+const LogsService = require('../service/logs');
 
 const router = new Router();
 
@@ -58,6 +59,19 @@ router.post('/add', AuthMiddle, async function (ctx, next) {
     if (data.id && data.id !== '0') {
         // model.status = 2;
         await ConfigsModel.update(model, data.id * 1);
+        const result_data = UpdateService.transform(model);
+        LogsService.changeConfigs(
+            model.title,
+            model.channel,
+            model.key,
+            result_data.result_data,
+            model.proption,
+            model.task_start_time,
+            model.task_end_time,
+            model.remark,
+            0,
+            nickname
+        );
     } else {
         await ConfigsModel.insert(model);
     }
@@ -80,7 +94,11 @@ router.post('/publish/:id', AuthMiddle, async function (ctx, next) {
 
         const data = UpdateService.transform(model);
         await SnapshotModel.insert(data);
+
         UpdateService.updateByData(data);
+
+        LogsService.startConfigs(model.title, model.channel, model.key, data.result_data, model.proption, model.task_start_time, model.task_end_time, nickname);
+
         ctx.body = {
             status: 0,
             data: {},
@@ -100,7 +118,12 @@ router.post('/pause/:id', AuthMiddle, async function (ctx) {
     try {
         await ConfigsModel.unUse(id, nickname);
         const data = await SnapshotModel.del(id);
+
         UpdateService.removeByKey(data.key, data.channel);
+
+        const model = await ConfigsModel.get(id);
+        LogsService.startConfigs(model.title, model.channel, model.key, data.result_data, model.proption, model.task_start_time, model.task_end_time, nickname);
+
         ctx.body = {
             status: 0,
             data: {},

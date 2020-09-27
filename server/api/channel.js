@@ -1,6 +1,7 @@
 const Router = require('koa-router');
 const ChannelModel = require('../model/channel');
 const AuthMiddle = require('../middleware/auth');
+const LogsService = require('../service/logs');
 
 const router = new Router();
 
@@ -42,8 +43,10 @@ router.post('/', AuthMiddle, async function (ctx, next) {
         const nickname = decodeURIComponent(ctx.headers.nickname);
         if (id > 0) {
             await ChannelModel.update({ id, title, key, remark, nickname });
+            LogsService.changeChannel(id, title, key, remark, nickname);
         } else {
             await ChannelModel.insert({ title, key, remark, nickname });
+            LogsService.addChannel(title, key, remark, nickname);
         }
         ctx.body = {
             status: 0,
