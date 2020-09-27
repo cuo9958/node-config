@@ -113,18 +113,14 @@ router.post('/pause/:id', AuthMiddle, async function (ctx) {
     }
 });
 //频道下的内容
-router.get('/channel/:channelid', async function (ctx) {
-    const channelid = ctx.params.channelid;
+router.get('/preview/:id', async function (ctx) {
+    const id = ctx.params.id;
     try {
-        const data = await ConfigsModel.search(channelid);
-        ctx.body = {
-            status: 0,
-            data,
-        };
+        const model = await ConfigsModel.get(id);
+        ctx.body = UpdateService.transform(model);
     } catch (error) {
         console.log(error);
         ctx.body = {
-            status: 1,
             msg: error.message,
         };
     }
