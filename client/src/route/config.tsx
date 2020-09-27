@@ -5,9 +5,11 @@ import Channel from '../pages/channel';
 import Error from '../pages/error';
 import Login from '../pages/login';
 import Detail from '../pages/detail';
+import Logs from '../pages/logs';
 
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import ViewListIcon from '@material-ui/icons/ViewList';
+import AnnouncementIcon from '@material-ui/icons/Announcement';
 
 export interface IRouteConfig {
     /**
@@ -68,6 +70,14 @@ const routes: IRouteConfig[] = [
         Icon: <ViewListIcon fontSize="small" />,
         layout: true,
         page: Channel,
+    },
+    {
+        name: 'logs',
+        title: '日志列表',
+        path: '/logs',
+        Icon: <AnnouncementIcon fontSize="small" />,
+        layout: true,
+        page: Logs,
     },
     {
         name: 'test',
