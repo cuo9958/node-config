@@ -100,6 +100,9 @@ const Configs = db.define(
 
 module.exports = {
     MData,
+    install() {
+        return Configs.sync({ force: true });
+    },
     insert: function (model) {
         return Configs.create(model);
     },

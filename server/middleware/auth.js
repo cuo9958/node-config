@@ -5,6 +5,7 @@ const config = require('config');
 const UserService = require('../service/user');
 
 module.exports = async function (ctx, next) {
+    console.log(ctx.originalUrl)
     if (ctx.headers.token === config.get('login.token')) {
         await next();
     } else {

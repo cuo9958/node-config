@@ -29,6 +29,9 @@ const Snapshot = db.define(
 // Snapshot.sync({ force: true });
 
 module.exports = {
+    install() {
+        return Snapshot.sync({ force: true });
+    },
     insert: function (model) {
         return Snapshot.create(model);
     },

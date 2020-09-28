@@ -39,6 +39,9 @@ const Logs = db.define(
 // Logs.sync({ force: true });
 
 module.exports = {
+    install() {
+        return Logs.sync({ force: true });
+    },
     insert: function (model) {
         return Logs.create(model);
     },
