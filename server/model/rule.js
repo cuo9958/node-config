@@ -14,6 +14,11 @@ const Rule = db.define(
             defaultValue: '',
             comment: '地址匹配规则',
         },
+        method: {
+            type: Sequelize.STRING(7),
+            defaultValue: '',
+            comment: '请求方法',
+        },
         nickname: {
             type: Sequelize.STRING,
             defaultValue: '',
