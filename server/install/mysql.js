@@ -3,6 +3,7 @@ const ConfigsModel = require('../model/configs');
 const LogsModel = require('../model/logs');
 const SnapshotModel = require('../model/snapshot');
 const UserhotModel = require('../model/user');
+const RuleModel = require('../model/rule');
 
 //重新创建频道表
 ChannelModel.install();
@@ -14,3 +15,5 @@ LogsModel.install();
 SnapshotModel.install();
 //重新创建用户表
 UserhotModel.install();
+//重新创建资源规则表
+RuleModel.install();

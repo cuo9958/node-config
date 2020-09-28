@@ -1,28 +1,18 @@
 const Sequelize = require('sequelize');
 const db = require('../db/mysql');
 
-const User = db.define(
-    'fe_config_user',
+const Rule = db.define(
+    'fe_config_rule',
     {
         id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        username: {
+        origin: {
             type: Sequelize.STRING,
             defaultValue: '',
-            comment: '用户名',
-        },
-        pwd: {
-            type: Sequelize.STRING,
-            defaultValue: '',
-            comment: '密码',
-        },
-        qlist: {
-            type: Sequelize.STRING,
-            defaultValue: '',
-            comment: '权限列表',
+            comment: '地址匹配规则',
         },
         nickname: {
             type: Sequelize.STRING,
@@ -41,31 +31,31 @@ const User = db.define(
 );
 
 //强制初始化数据库
-// User.sync({ force: true });
+// Rule.sync({ force: true });
 
 module.exports = {
     install() {
-        return User.sync({ force: true });
+        return Rule.sync({ force: true });
     },
     insert: function (model) {
-        return User.create(model);
+        return Rule.create(model);
     },
-    find: function (username) {
-        return User.findOne({
+    find: function (id) {
+        return Rule.findOne({
             where: {
-                username,
+                id,
             },
         });
     },
     update: function (model, id) {
-        return User.update(model, {
+        return Rule.update(model, {
             where: {
                 id,
             },
         });
     },
     get: function (id) {
-        return User.findOne({
+        return Rule.findOne({
             where: {
                 id,
             },
@@ -80,13 +70,13 @@ module.exports = {
                 ['id', 'desc'],
             ],
         };
-        return User.findAndCountAll(config);
+        return Rule.findAndCountAll(config);
     },
     change: function (status, id) {
         const model = {
             status,
         };
-        return User.update(model, {
+        return Rule.update(model, {
             where: {
                 id,
             },
