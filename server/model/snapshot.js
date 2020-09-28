@@ -54,12 +54,16 @@ module.exports = {
     getAll() {
         return Snapshot.findAll();
     },
-    del(id) {
-        return Snapshot.findOne({
-            where: { id },
-        }).then(function (res) {
-            res.destroy();
-            return res;
-        });
+    async del(id) {
+        try {
+            const model = await Snapshot.findOne({
+                where: { id },
+            });
+            if (!model) return null;
+            await model.destroy();
+            return model;
+        } catch (error) {
+            return null;
+        }
     },
 };

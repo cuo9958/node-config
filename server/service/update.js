@@ -5,6 +5,7 @@
  * 2. 本地内存,其他机器镜像
  * 3. 增加启动更新数据
  * 4. 更新本地和其他机器
+ * 5. 目前采用全量更新频道的方式
  */
 const SnapshotModel = require('../model/snapshot');
 const MQService = require('./mq');
@@ -28,8 +29,11 @@ if (IS_MQ_OPEN) {
  * @param {*} channel 频道
  */
 function updateCacheFromMaster(channel) {
-    if (!IS_MQ_OPEN) return;
-    MQService.publish('cpm_publish', channel);
+    if (!IS_MQ_OPEN) {
+        updateByChannle(channel);
+    } else {
+        MQService.publish('cpm_publish', channel);
+    }
 }
 
 /**
@@ -43,6 +47,7 @@ function transform(model) {
         key: model.key,
         proption: model.proption,
         result_data: '',
+        state: model.state,
         task_start_time: model.task_start_time,
         task_end_time: model.task_end_time,
     };
@@ -79,7 +84,6 @@ async function updateByChannle(channel) {
     try {
         const list = await SnapshotModel.search(channel);
         ResourceCache.setAll(list);
-        updateCacheFromMaster(channel);
     } catch (error) {
         console.log(error);
     }
@@ -116,7 +120,7 @@ module.exports = {
     async updateByData(data) {
         try {
             const result = JSON5.parse(data.result_data);
-            ResourceCache.set(data.key, result.val, data.channel);
+            ResourceCache.set(data.key, result.val, data.channel, data.state, data.proption, data.task_start_time, data.task_end_time);
             updateCacheFromMaster(data.channel);
         } catch (error) {
             console.log(error);

@@ -122,7 +122,7 @@ router.post('/pause/:id', AuthMiddle, async function (ctx) {
         UpdateService.removeByKey(data.key, data.channel);
 
         const model = await ConfigsModel.get(id);
-        LogsService.startConfigs(model.title, model.channel, model.key, data.result_data, model.proption, model.task_start_time, model.task_end_time, nickname);
+        LogsService.pauseConfigs(model.title, data.channel, data.key, data.result_data, data.proption, data.task_start_time, data.task_end_time, nickname);
 
         ctx.body = {
             status: 0,

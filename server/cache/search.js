@@ -153,8 +153,8 @@ const ResourceCache = require('./resource');
 
 module.exports = {
     search(channel, clientid) {
-        const data = ResourceCache.get(channel);
-
+        const data = ResourceCache.get(channel, clientid);
+        console.log(data);
         return data;
     },
 };

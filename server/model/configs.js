@@ -28,6 +28,11 @@ const MData = {
         defaultValue: 0,
         comment: '结束日期',
     },
+    state: {
+        type: Sequelize.TINYINT,
+        defaultValue: 0,
+        comment: '类型',
+    },
 };
 
 const Configs = db.define(
@@ -61,11 +66,6 @@ const Configs = db.define(
         json_data: {
             type: Sequelize.TEXT,
             comment: 'json对象的值',
-        },
-        state: {
-            type: Sequelize.TINYINT,
-            defaultValue: 0,
-            comment: '类型',
         },
         remark: {
             type: Sequelize.STRING,

@@ -6,10 +6,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Pagination from '@material-ui/lab/Pagination';
-import Snackbar from '@material-ui/core/Snackbar';
 import './index.less';
 
-import { get, post } from '../../service/Request';
+import { get } from '../../service/Request';
 import Utils from '../../service/Utils';
 
 interface IModel {
