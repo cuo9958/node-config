@@ -135,8 +135,8 @@ export default class App extends React.Component<any, IState> {
                                     </TableCell>
                                     <TableCell>
                                         {item.state === 0 && <TagInfo val="普通任务" />}
-                                        {item.state === 1 && <TagRem val="定时任务" />}
-                                        {item.state === 2 && <TagBlu val="灰度任务" />}
+                                        {item.state === 1 && <TagRem val={'定时任务'} />}
+                                        {item.state === 2 && <TagBlu val={'灰度' + item.proption + '%'} />}
                                     </TableCell>
                                     <TableCell>
                                         {item.status === 1 ? <TagSuccess val="生效" /> : <TagError val="暂停" />}
