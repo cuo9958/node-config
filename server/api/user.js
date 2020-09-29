@@ -14,7 +14,7 @@ router.post('/login', async function (ctx, next) {
     const type = ctx.request.body.type;
     if (!username || !pwd) {
         return (ctx.body = {
-            status: 1,
+            code: 0,
             msg: '登录账户或者密码为空',
         });
     }
@@ -30,13 +30,13 @@ router.post('/login', async function (ctx, next) {
         const token = UserService.add(obj);
         obj.token = token;
         ctx.body = {
-            status: 0,
+            code: 1,
             data: obj,
         };
     } else {
         //失败
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: '账号密码不正确',
         };
     }
@@ -48,17 +48,17 @@ router.post('/auth', async function (ctx, next) {
         const res = await UserService.check(token, username);
         if (res) {
             ctx.body = {
-                status: 0,
+                code: 1,
             };
         } else {
             ctx.body = {
-                status: 1,
+                code: 0,
                 msg: '登录失效',
             };
         }
     } catch (error) {
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: error.message,
         };
     }
@@ -69,7 +69,7 @@ router.get('/all', async function (ctx, next) {
     const data = await UserModel.getCount(limit);
 
     ctx.body = {
-        status: 0,
+        code: 1,
         data,
     };
 });
@@ -79,7 +79,7 @@ router.post('/change/:id', async function (ctx, next) {
         await UserCache.check(username, UserCache.qlist.USER);
     } catch (error) {
         return (ctx.body = {
-            status: 1,
+            code: 0,
             msg: error.message,
         });
     }
@@ -89,7 +89,7 @@ router.post('/change/:id', async function (ctx, next) {
     const data = await UserModel.change(status, id);
     UserCache.update(id);
     ctx.body = {
-        status: 0,
+        code: 1,
         data,
     };
 });
@@ -99,14 +99,14 @@ router.post('/add', async function (ctx, next) {
         await UserCache.check(user_name, UserCache.qlist.USER);
     } catch (error) {
         return (ctx.body = {
-            status: 1,
+            code: 0,
             msg: error.message,
         });
     }
     const { id = '', username, qlist } = ctx.request.body;
     if (!username) {
         return (ctx.body = {
-            status: 1,
+            code: 0,
             msg: '用户名不能为空',
         });
     }
@@ -124,7 +124,7 @@ router.post('/add', async function (ctx, next) {
         UserCache.update(id);
     }
     ctx.body = {
-        status: 0,
+        code: 1,
         data: {},
     };
 });

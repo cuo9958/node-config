@@ -10,7 +10,7 @@ router.get('/', async function (ctx, next) {
     const data = await ChannelModel.getCount(limit);
 
     ctx.body = {
-        status: 0,
+        code: 1,
         data,
     };
 });
@@ -18,7 +18,7 @@ router.get('/', async function (ctx, next) {
 router.get('/all', async function (ctx, next) {
     const data = await ChannelModel.getAll();
     ctx.body = {
-        status: 0,
+        code: 1,
         data,
     };
 });
@@ -27,14 +27,14 @@ router.post('/', AuthMiddle, async function (ctx, next) {
     const { id = 0, title, key, remark = '' } = ctx.request.body;
     if (!title) {
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: '请填写标题',
         };
         return;
     }
     if (!key) {
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: '请填写key',
         };
         return;
@@ -49,12 +49,12 @@ router.post('/', AuthMiddle, async function (ctx, next) {
             LogsService.addChannel(title, key, remark, nickname);
         }
         ctx.body = {
-            status: 0,
+            code: 1,
             data: {},
         };
     } catch (error) {
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: error.message,
         };
     }
@@ -65,7 +65,7 @@ router.post('/change/:id', AuthMiddle, async function (ctx, next) {
     const { status } = ctx.request.body;
     if (isNaN(status)) {
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: '状态有错',
         };
         return;
@@ -73,12 +73,12 @@ router.post('/change/:id', AuthMiddle, async function (ctx, next) {
     try {
         await ChannelModel.change(status, id);
         ctx.body = {
-            status: 0,
+            code: 1,
             data: {},
         };
     } catch (error) {
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: error.message,
         };
     }

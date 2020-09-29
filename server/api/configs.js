@@ -31,7 +31,7 @@ router.get('/', async function (ctx) {
     const data = await ConfigsModel.getCount(limit, opts, status);
 
     ctx.body = {
-        status: 0,
+        code: 1,
         data,
     };
 });
@@ -77,7 +77,7 @@ router.post('/add', AuthMiddle, async function (ctx, next) {
     }
 
     ctx.body = {
-        status: 0,
+        code: 1,
         data: {},
     };
 });
@@ -100,12 +100,12 @@ router.post('/publish/:id', AuthMiddle, async function (ctx, next) {
         LogsService.startConfigs(model.title, model.channel, model.key, data.result_data, model.proption, model.task_start_time, model.task_end_time, nickname);
 
         ctx.body = {
-            status: 0,
+            code: 1,
             data: {},
         };
     } catch (error) {
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: error.message,
         };
     }
@@ -125,12 +125,12 @@ router.post('/pause/:id', AuthMiddle, async function (ctx) {
         LogsService.pauseConfigs(model.title, data.channel, data.key, data.result_data, data.proption, data.task_start_time, data.task_end_time, nickname);
 
         ctx.body = {
-            status: 0,
+            code: 1,
             data: {},
         };
     } catch (error) {
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: error.message,
         };
     }
@@ -154,12 +154,12 @@ router.post('/del/:id', AuthMiddle, async function (ctx) {
     try {
         await ConfigsModel.del(id);
         ctx.body = {
-            status: 0,
+            code: 1,
             data: {},
         };
     } catch (error) {
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: error.message,
         };
     }
@@ -171,13 +171,13 @@ router.get('/:id', async function (ctx) {
     try {
         const data = await ConfigsModel.get(id);
         ctx.body = {
-            status: 0,
+            code: 1,
             data,
         };
     } catch (error) {
         console.log(error);
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: error.message,
         };
     }

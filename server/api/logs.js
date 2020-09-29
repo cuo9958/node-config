@@ -8,13 +8,13 @@ router.get('/', async function (ctx) {
     try {
         const data = await LogsModel.getCount(limit);
         ctx.body = {
-            status: 0,
+            code: 1,
             data,
         };
     } catch (error) {
         console.log(error);
         ctx.body = {
-            status: 1,
+            code: 0,
             msg: error.message,
         };
     }

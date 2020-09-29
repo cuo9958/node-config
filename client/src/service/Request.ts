@@ -7,11 +7,11 @@ Axios.defaults.timeout = 5000;
 const server = Axios.create();
 
 class RequestError extends Error {
-    constructor(name: string, status: number) {
+    constructor(name: string, code: number) {
         super(name);
-        this.status = status;
+        this.code = code;
     }
-    status: number;
+    code: number;
 }
 
 async function _request(url: string, opts: any) {
@@ -23,18 +23,7 @@ async function _request(url: string, opts: any) {
     return json.data;
 }
 function _checkServerStatus(json: any) {
-    if (json.status === 4002) {
-        console.log('跳转鉴权');
-        throw new Error('需要登录才可以哦');
-    }
-    if (json.status === 403 || json.status === 444) {
-        console.log('跳转鉴权');
-    }
-    if (json.status === 510) {
-        console.log('服务器错误');
-        throw new Error('响应失败，请稍后再试');
-    }
-    if (json.status !== 0) {
+    if (json.code !== 1) {
         console.log('返回状态报错', json.status);
         throw new RequestError(json.msg, json.status);
     }

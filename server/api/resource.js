@@ -3,19 +3,19 @@ const SearchCache = require('../cache/search');
 const fs = require('fs');
 const path = require('path');
 
-
 const router = new Router();
 const HealthcheckPath = path.resolve(__dirname, '../../healthcheck.html');
 
-router.get('/', async function(ctx, next) {
+router.get('/', async function (ctx, next) {
     const data = await SearchCache.search();
     ctx.body = {
         status: 0,
-        data
+        code: 1,
+        data,
     };
 });
 
-router.get('/:channel', async function(ctx, next) {
+router.get('/:channel', async function (ctx, next) {
     const { channel } = ctx.params;
     const { clientid = '', uid = '' } = ctx.header;
 
@@ -23,17 +23,19 @@ router.get('/:channel', async function(ctx, next) {
 
     ctx.body = {
         status: 0,
-        data
+        code: 1,
+        data,
     };
 });
 
-router.all('/check/healthcheck.html', function(ctx) {
+router.all('/check/healthcheck.html', function (ctx) {
     const isAt = fs.existsSync(HealthcheckPath);
     if (!isAt) {
         ctx.status = 404;
     }
     ctx.body = {
-        status: 0
+        status: 0,
+        code: 1,
     };
 });
 
